@@ -7,7 +7,11 @@ var DB_NAME = 'DB_NAME';
 
 var Cloudant = require('cloudant');
 
-var cloudant = Cloudant({account:CLOUDANT_ACCESS, key: CLOUDANT_KEY, password: CLOUDANT_PASSWORD});
+var cloudant = Cloudant({
+    account: CLOUDANT_ACCESS,
+    key: CLOUDANT_KEY,
+    password: CLOUDANT_PASSWORD
+});
 var db = cloudant.db.use(DB_NAME);
 
 function updateStocks() {

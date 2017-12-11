@@ -14,6 +14,32 @@ var cloudant = Cloudant({
 });
 var db = cloudant.db.use(DB_NAME);
 
+function isFunc(func) {
+    return typeof func == "function";
+}
+
+function getDocs(callback) {
+    db.list({
+        //this field is needed to return all doc data
+        include_docs: true
+    }, function(err, data) {
+        if (isFunc(callback)) {
+            callback(err, data.rows);
+        }
+    });
+}
+
+//include _id and _rev of existing doc in the doc to perform an update
+function insertDoc(doc, callback) {
+    db.insert(doc, function(err, body, header) {
+        if (err) {
+            console.log('insertion failed: ', err.message);
+        } else if (isFunc(callback)) {
+            callback(body, header);
+        }
+    });
+}
+
 function updateStocks() {
 
 }

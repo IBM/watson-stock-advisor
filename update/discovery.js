@@ -11,19 +11,19 @@ var discovery = new Discovery({
    password: DISCOVERY_PASSWORD,
    version: DISCOVERY_VERSION,
    version_date: DISCOVERY_VERSION_DATE
- });
+});
  
- var utils = require('./utils.js');
+var utils = require('./utils.js');
 
 //retrieving titles for 5 documents for 'IBM Watson'
 function query(callback) {
-    discovery.query({ environment_id: ENV_ID, collection_id: 'news-en', query: 'IBM Watson', count:5, return:'title' }, function(error, data) {
-        if (utils.isFunc(callback)) {
-            callback(error, data);
-        }
-    });
+  discovery.query({ environment_id: ENV_ID, collection_id: 'news-en', query: 'IBM Watson', count:5, return:'title' }, function(error, data) {
+    if (utils.isFunc(callback)) {
+      callback(error, data);
+    }
+  });
 }
 
 module.exports = {
-    query : query
+  query : query
 }

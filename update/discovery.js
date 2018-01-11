@@ -14,6 +14,15 @@ var discovery = new Discovery({
  });
  
 //retrieving titles for 5 documents for 'IBM Watson'
-discovery.query({ environment_id: ENV_ID, collection_id: 'news-en', query: 'IBM Watson', count:5, return:'title' }, function(error, data) {
-  console.log(JSON.stringify(data, null, 2));
-});
+
+function query(callback) {
+    discovery.query({ environment_id: ENV_ID, collection_id: 'news-en', query: 'IBM Watson', count:5, return:'title' }, function(error, data) {
+        if (typeof callback == "function") {
+            callback(error, data);
+        }
+    });
+}
+
+module.exports = {
+    query : query
+}

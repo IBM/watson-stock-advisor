@@ -16,12 +16,19 @@ var discovery = new Discovery({
 var utils = require('./utils.js');
 
 //retrieving titles for 5 documents for 'IBM Watson'
-function query(callback) {
-  discovery.query({ environment_id: ENV_ID, collection_id: 'news-en', query: 'IBM Watson', count:5, return:'title' }, function(error, data) {
-    if (utils.isFunc(callback)) {
-      callback(error, data);
-    }
+function query(topic) {
+  
+  var promise = new Promise(function(resolve, reject) {
+    discovery.query({ environment_id: ENV_ID, collection_id: 'news-en', query: topic, count:5 }, function(error, data) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(data);
+        }
+    });
   });
+  
+  return promise;
 }
 
 module.exports = {

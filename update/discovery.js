@@ -13,11 +13,12 @@ var discovery = new Discovery({
    version_date: DISCOVERY_VERSION_DATE
  });
  
-//retrieving titles for 5 documents for 'IBM Watson'
+ var utils = require('./utils.js');
 
+//retrieving titles for 5 documents for 'IBM Watson'
 function query(callback) {
     discovery.query({ environment_id: ENV_ID, collection_id: 'news-en', query: 'IBM Watson', count:5, return:'title' }, function(error, data) {
-        if (typeof callback == "function") {
+        if (utils.isFunc(callback)) {
             callback(error, data);
         }
     });

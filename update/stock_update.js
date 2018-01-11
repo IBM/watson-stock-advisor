@@ -6,6 +6,7 @@ var DB_NAME = 'DB_NAME';
 //----------------------------------------------------
 
 var Cloudant = require('cloudant');
+var utils = require('./utils.js');
 
 var cloudant = Cloudant({
     account: CLOUDANT_ACCESS,
@@ -17,16 +18,12 @@ var db = cloudant.db.use(DB_NAME);
 //TODO these should be the companies' tickers
 var companies = ['A', 'B', 'C', 'D'];
 
-function isFunc(func) {
-    return typeof func == 'function';
-}
-
 function getDocs(callback) {
     db.list({
         //this field is needed to return all doc data
         include_docs: true
     }, function(err, data) {
-        if (isFunc(callback)) {
+        if (utils.isFunc(callback)) {
             var docs = data.rows.map(function(row) {
                 return row.doc;
             });
@@ -41,7 +38,7 @@ function insertOrUpdateDoc(doc, callback) {
     db.insert(doc, function(err, body, header) {
         if (err) {
             console.log('insertion failed: ' + err.message);
-        } else if (isFunc(callback)) {
+        } else if (utils.isFunc(callback)) {
             callback(body, header);
         }
     });
@@ -97,7 +94,7 @@ function getArticleDataForCompanies(companies, callback) {
         });
     }
 
-    if (isFunc(callback)) {
+    if (utils.isFunc(callback)) {
         callback(undefined, articleData);
     }
 }

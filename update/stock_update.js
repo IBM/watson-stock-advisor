@@ -22,20 +22,22 @@ function updateStocksData(articleData, stockData) {
   
   for (var i = 0; i < articleData.length; i++) {
     var articleDatum = articleData[i];
-    var stockDatum = findStockDatum(stockData, articleDatum.company);
-    
+    var company = articleDatum.company
+    var articles = articleDatum.articles;
+    var stockDatum = findStockDatum(stockData, company);
     if (stockDatum) {
-      stockDatum.history.unshift(articleDatum.article);
+      stockDatum.history = articles.concat(stockDatum.history);
     } else {
       stockDatum = {
-        ticker: articleDatum.company,
-        history: [articleDatum.article]
+        ticker : company,
+        history : articles
       };
     }
-
+    
     //TODO batch insert?
-    console.log('Inserting into company ' + articleDatum.company + ' article: ' );
-    console.log(articleDatum.article);
+    console.log('Inserting into company: ' + company + ' articles: ' );
+    console.log(articles);
+    console.log();
     stock_db.insertOrUpdateDoc(stockDatum);
   }
 }
@@ -48,15 +50,12 @@ function parseArticle(result) {
   }
 }
 
-function parseResults(results, company) {
-  var articleData = [];
+function parseResults(results) {
+  var articles = [];
   for (var i=0; i<results.length; i++) {
-    articleData.push({
-      article : parseArticle(results[i]),
-      company : company
-    });
+    articles.push(parseArticle(results[i]));
   }
-  return articleData;
+  return articles;
 }
 
 function getArticleDataForCompany(company, callback) {
@@ -66,7 +65,12 @@ function getArticleDataForCompany(company, callback) {
   promise.then(function (data) {
     var results = data.results;
     console.log("Received " + results.length + " articles for: " + company);
-    callback(undefined, parseResults(results, company));
+    var articles = parseResults(results);
+    var data = {
+      company : company,
+      articles : articles
+    }
+    callback(undefined, data);
   }).catch(function (error) {
     callback(error, []);
   });

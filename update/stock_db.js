@@ -5,8 +5,8 @@ var CLOUDANT_ACCESS   = 'someurl-bluemix.cloudant.com'
 var DB_NAME = 'DB_NAME';
 //----------------------------------------------------
 
-var Cloudant = require('cloudant');
-var utils = require('./utils.js');
+const Cloudant = require('cloudant');
+const utils = require('./utils.js');
 
 var cloudant = Cloudant({
   account: CLOUDANT_ACCESS,

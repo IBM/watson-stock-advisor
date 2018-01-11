@@ -1,6 +1,7 @@
 
 const stock_db = require('./stock_db.js');
 const utils = require('./utils.js');
+const discovery = require('./discovery.js');
 
 //TODO these should be the companies' tickers
 var companies = ['A', 'B', 'C', 'D'];
@@ -39,25 +40,65 @@ function updateStocksData(articleData, stockData) {
   }
 }
 
+function parseArticle(result) {
+  return {
+    url: result.url,
+    sentiment: result.enriched_text.sentiment.document.label,
+    date: result.crawl_date
+  }
+}
+
+function parseResults(results) {
+  var articles = [];
+  for (var i=0; i<results.length; i++) {
+    articles.push(parseArticle(results[i]));
+  }
+  return articles;
+}
+
+function getArticleDataForCompany(company, callback) {
+  
+  var promise = discovery.query(company);
+    
+  promise.then(function (data) {
+    var results = data.results;
+    console.log("Received " + results.length + " articles for: " + company);
+    callback(undefined, parseResults(results));
+  }).catch(function (error) {
+    callback(error, []);
+  });
+  
+  return promise;
+}
+
 function getArticleDataForCompanies(companies, callback) {
-
-  //TODO use Watson discovery API to retrieve articles based on companies
-  var articleData = [];
-  var sentiments = ['positive', 'negative', 'neutral'];
-  for (var i = 0; i < companies.length; i++) {
-    articleData.push({
-      article: {
-        url: 'http://example.not-real.com/article' + (i + 1),
-        sentiment: sentiments[i % sentiments.length],
-        date: new Date(),
-      },
-      company: companies[i]
+  
+  var promises = [];
+  var articles = [];
+  var errors = [];
+  
+  for (var i=0; i<companies.length; i++) {
+    var company = companies[i];
+    console.log("Starting discovery for: " + company);
+    var promise = getArticleDataForCompany(company, function(error, articlesForCompany) {
+      if (error) {
+        errors = errors.concat(error);
+      } else {
+        articles = articles.concat(articlesForCompany);
+      }
     });
+    promises.push(promise);
   }
-
-  if (utils.isFunc(callback)) {
-    callback(undefined, articleData);
-  }
+  
+  Promise.all(promises).then(function() {
+    if (utils.isFunc(callback)) {
+      callback(undefined, articles);
+    }
+  }).catch(function(error) {
+    if (utils.isFunc(callback)) {
+      callback(errors.join(), articles);
+    }
+  });
 }
 
 function run() {

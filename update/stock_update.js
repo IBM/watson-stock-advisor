@@ -18,14 +18,34 @@ function findStockDatum(stocks, company) {
   return undefined;
 }
 
+function articleContains(article, articles) {
+  for (var x=0; x<articles.length; x++) {
+    if (article.url === articles[x].url) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function updateStocksData(articleData, stockData) {
   
   for (var i = 0; i < articleData.length; i++) {
+    console.log();
     var articleDatum = articleData[i];
     var company = articleDatum.company
+    console.log('Beginning article insertion for "' + company + '"');
     var articles = articleDatum.articles;
     var stockDatum = findStockDatum(stockData, company);
     if (stockDatum) {
+      //filter existing articles
+      articles = articles.filter(function(article) {
+        var articleExists = articleContains(article, stockDatum.history);
+        if (articleExists) {
+          console.log('Not adding duplicate article: ' + article.url);
+        }
+        return !articleExists;
+      });
+      //add new articles to beginning of list
       stockDatum.history = articles.concat(stockDatum.history);
     } else {
       stockDatum = {
@@ -35,10 +55,15 @@ function updateStocksData(articleData, stockData) {
     }
     
     //TODO batch insert?
-    console.log('Inserting into company: ' + company + ' articles: ' );
-    console.log(articles);
-    console.log();
-    stock_db.insertOrUpdateDoc(stockDatum);
+    if (articles.length > 0) {
+      console.log('Inserting into company "' + company + '" articles: ' );
+      console.log(articles);
+      console.log();
+      stock_db.insertOrUpdateDoc(stockDatum);
+    } else {
+      console.log('No new articles to insert into "' + company + '"');
+      console.log();
+    }
   }
 }
 
@@ -64,7 +89,7 @@ function getArticleDataForCompany(company, callback) {
     
   promise.then(function (data) {
     var results = data.results;
-    console.log("Received " + results.length + " articles for: " + company);
+    console.log('Received ' + results.length + ' articles for "' + company + '"');
     var articles = parseResults(results);
     var data = {
       company : company,
@@ -86,7 +111,7 @@ function getArticleDataForCompanies(companies, callback) {
   
   for (var i=0; i<companies.length; i++) {
     var company = companies[i];
-    console.log("Starting discovery for: " + company);
+    console.log('Starting discovery for "' + company + '"');
     var promise = getArticleDataForCompany(company, function(error, articleDataForCompany) {
       if (error) {
         errors = errors.concat(error);

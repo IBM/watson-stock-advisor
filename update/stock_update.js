@@ -3,7 +3,7 @@ const stock_db = require('./stock_db.js');
 const utils = require('./utils.js');
 const discovery = require('./discovery.js');
 
-//TODO these should be the companies' tickers
+//these should be the companies' names
 var companies = ['A', 'B', 'C', 'D'];
 
 function findStockDatum(stocks, company) {

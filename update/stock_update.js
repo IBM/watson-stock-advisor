@@ -48,12 +48,15 @@ function parseArticle(result) {
   }
 }
 
-function parseResults(results) {
-  var articles = [];
+function parseResults(results, company) {
+  var articleData = [];
   for (var i=0; i<results.length; i++) {
-    articles.push(parseArticle(results[i]));
+    articleData.push({
+      article : parseArticle(results[i]),
+      company : company
+    });
   }
-  return articles;
+  return articleData;
 }
 
 function getArticleDataForCompany(company, callback) {
@@ -63,7 +66,7 @@ function getArticleDataForCompany(company, callback) {
   promise.then(function (data) {
     var results = data.results;
     console.log("Received " + results.length + " articles for: " + company);
-    callback(undefined, parseResults(results));
+    callback(undefined, parseResults(results, company));
   }).catch(function (error) {
     callback(error, []);
   });
@@ -74,17 +77,17 @@ function getArticleDataForCompany(company, callback) {
 function getArticleDataForCompanies(companies, callback) {
   
   var promises = [];
-  var articles = [];
+  var articleData = [];
   var errors = [];
   
   for (var i=0; i<companies.length; i++) {
     var company = companies[i];
     console.log("Starting discovery for: " + company);
-    var promise = getArticleDataForCompany(company, function(error, articlesForCompany) {
+    var promise = getArticleDataForCompany(company, function(error, articleDataForCompany) {
       if (error) {
         errors = errors.concat(error);
       } else {
-        articles = articles.concat(articlesForCompany);
+        articleData = articleData.concat(articleDataForCompany);
       }
     });
     promises.push(promise);
@@ -92,11 +95,11 @@ function getArticleDataForCompanies(companies, callback) {
   
   Promise.all(promises).then(function() {
     if (utils.isFunc(callback)) {
-      callback(undefined, articles);
+      callback(undefined, articleData);
     }
   }).catch(function(error) {
     if (utils.isFunc(callback)) {
-      callback(errors.join(), articles);
+      callback(errors.join(), articleData);
     }
   });
 }

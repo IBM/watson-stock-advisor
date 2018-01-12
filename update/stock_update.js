@@ -18,6 +18,15 @@ function findStockDatum(stocks, company) {
   return undefined;
 }
 
+function sortArticles(articles) {
+  
+  articles.sort(function(a, b) {
+    return new Date(b.date) - new Date(a.date);
+  });
+  
+  return articles;
+}
+
 function articleContains(article, articles) {
   for (var x=0; x<articles.length; x++) {
     if (article.url === articles[x].url) {
@@ -30,34 +39,33 @@ function articleContains(article, articles) {
 function updateStocksData(articleData, stockData) {
   
   for (var i = 0; i < articleData.length; i++) {
-    console.log();
     var articleDatum = articleData[i];
-    var company = articleDatum.company
+    var company = articleDatum.company;
+    console.log();
     console.log('Beginning article insertion for "' + company + '"');
-    var articles = articleDatum.articles;
     var stockDatum = findStockDatum(stockData, company);
-    if (stockDatum) {
-      //filter existing articles
-      articles = articles.filter(function(article) {
-        var articleExists = articleContains(article, stockDatum.history);
-        if (articleExists) {
-          console.log('Not adding duplicate article: ' + article.url);
-        }
-        return !articleExists;
-      });
-      //add new articles to beginning of list
-      stockDatum.history = articles.concat(stockDatum.history);
-    } else {
+    if (!stockDatum) {
       stockDatum = {
         ticker : company,
-        history : articles
-      };
+        history : []
+      }
     }
+    var existingArticles = stockDatum.history || [];
     
+    //filter existing articles
+    var newArticles = articleDatum.articles.filter(function(article) {
+      var articleExists = articleContains(article, existingArticles);
+      if (articleExists) {
+        console.log('Not adding duplicate article: ' + article.url);
+      }
+      return !articleExists;
+    });
+        
     //TODO batch insert?
-    if (articles.length > 0) {
+    if (newArticles.length > 0) {
+      stockDatum.history = sortArticles(existingArticles.concat(newArticles));
       console.log('Inserting into company "' + company + '" articles: ' );
-      console.log(articles);
+      console.log(newArticles);
       console.log();
       stock_db.insertOrUpdateDoc(stockDatum);
     } else {

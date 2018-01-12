@@ -1,19 +1,14 @@
-//---CONFIGURE AUTHENTICATION HERE--------------------
-var CLOUDANT_KEY      = 'XXXXXXXXX';
-var CLOUDANT_PASSWORD = 'YYYYYYYYY';
-var CLOUDANT_ACCESS   = 'someurl-bluemix.cloudant.com'
-var DB_NAME = 'DB_NAME';
-//----------------------------------------------------
 
 const Cloudant = require('cloudant');
 const utils = require('./utils.js');
+const config = require('./config.js');
 
 var cloudant = Cloudant({
-  account: CLOUDANT_ACCESS,
-  key: CLOUDANT_KEY,
-  password: CLOUDANT_PASSWORD
+  account: config.CLOUDANT_ACCESS,
+  key: config.CLOUDANT_KEY,
+  password: config.CLOUDANT_PASSWORD
 });
-var db = cloudant.db.use(DB_NAME);
+var db = cloudant.db.use(config.DB_NAME);
 
 function getDocs(callback) {
   db.list({
@@ -21,6 +16,7 @@ function getDocs(callback) {
     include_docs: true
   }, function(err, data) {
     if (utils.isFunc(callback)) {
+    console.log(err);
       var docs = data.rows.map(function(row) {
         return row.doc;
       });

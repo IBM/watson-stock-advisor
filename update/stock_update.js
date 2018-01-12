@@ -3,6 +3,8 @@ const stock_db = require('./stock_db.js');
 const utils = require('./utils.js');
 const discovery = require('./discovery.js');
 
+const config = require('./config.js');
+
 //TODO these should be the companies' tickers
 var companies = ['A', 'B', 'C', 'D'];
 
@@ -126,3 +128,4 @@ function run() {
 }
 
 run();
+

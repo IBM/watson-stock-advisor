@@ -1,122 +1,128 @@
-//---CONFIGURE AUTHENTICATION HERE--------------------
-var CLOUDANT_KEY      = 'XXXXXXXXX';
-var CLOUDANT_PASSWORD = 'YYYYYYYYY';
-var CLOUDANT_ACCESS   = 'someurl-bluemix.cloudant.com'
-var DB_NAME = 'DB_NAME';
-//----------------------------------------------------
 
-var Cloudant = require('cloudant');
-
-var cloudant = Cloudant({
-    account: CLOUDANT_ACCESS,
-    key: CLOUDANT_KEY,
-    password: CLOUDANT_PASSWORD
-});
-var db = cloudant.db.use(DB_NAME);
+const stock_db = require('./stock_db.js');
+const utils = require('./utils.js');
+const discovery = require('./discovery.js');
 
 //TODO these should be the companies' tickers
 var companies = ['A', 'B', 'C', 'D'];
 
-function isFunc(func) {
-    return typeof func == 'function';
-}
-
-function getDocs(callback) {
-    db.list({
-        //this field is needed to return all doc data
-        include_docs: true
-    }, function(err, data) {
-        if (isFunc(callback)) {
-            var docs = data.rows.map(function(row) {
-                return row.doc;
-            });
-            callback(err, docs);
-        }
-    });
-}
-
-//include _id and _rev of existing doc in the doc to perform an update
-function insertOrUpdateDoc(doc, callback) {
-
-    db.insert(doc, function(err, body, header) {
-        if (err) {
-            console.log('insertion failed: ' + err.message);
-        } else if (isFunc(callback)) {
-            callback(body, header);
-        }
-    });
-}
-
 function findStockDatum(stocks, company) {
 
-    for (var i = 0; i < stocks.length; i++) {
-        var stock = stocks[i];
-        if (stock.ticker == company) {
-            return stock;
-        }
+  for (var i = 0; i < stocks.length; i++) {
+    var stock = stocks[i];
+    if (stock.ticker == company) {
+      return stock;
     }
+  }
 
-    return undefined;
+  return undefined;
 }
 
 function updateStocksData(articleData, stockData) {
-
-    for (var i = 0; i < articleData.length; i++) {
-        var articleDatum = articleData[i];
-        var stockDatum = findStockDatum(stockData, articleDatum.company);
-
-        if (stockDatum) {
-            stockDatum.history.unshift(articleDatum.article);
-        } else {
-            stockDatum = {
-                ticker: articleDatum.company,
-                history: [articleDatum.article]
-            };
-        }
-
-        //TODO batch insert?
-        console.log('Inserting into company ' + articleDatum.company + ' article: ' );
-        console.log(articleDatum.article);
-        insertOrUpdateDoc(stockDatum);
+  
+  for (var i = 0; i < articleData.length; i++) {
+    var articleDatum = articleData[i];
+    var company = articleDatum.company
+    var articles = articleDatum.articles;
+    var stockDatum = findStockDatum(stockData, company);
+    if (stockDatum) {
+      stockDatum.history = articles.concat(stockDatum.history);
+    } else {
+      stockDatum = {
+        ticker : company,
+        history : articles
+      };
     }
+    
+    //TODO batch insert?
+    console.log('Inserting into company: ' + company + ' articles: ' );
+    console.log(articles);
+    console.log();
+    stock_db.insertOrUpdateDoc(stockDatum);
+  }
+}
+
+function parseArticle(result) {
+  return {
+    url: result.url,
+    sentiment: result.enriched_text.sentiment.document.label,
+    date: result.crawl_date
+  }
+}
+
+function parseResults(results) {
+  var articles = [];
+  for (var i=0; i<results.length; i++) {
+    articles.push(parseArticle(results[i]));
+  }
+  return articles;
+}
+
+function getArticleDataForCompany(company, callback) {
+  
+  var promise = discovery.query(company);
+    
+  promise.then(function (data) {
+    var results = data.results;
+    console.log("Received " + results.length + " articles for: " + company);
+    var articles = parseResults(results);
+    var data = {
+      company : company,
+      articles : articles
+    }
+    callback(undefined, data);
+  }).catch(function (error) {
+    callback(error, []);
+  });
+  
+  return promise;
 }
 
 function getArticleDataForCompanies(companies, callback) {
-
-    //TODO use Watson discovery API to retrieve articles based on companies
-    var articleData = [];
-    var sentiments = ['positive', 'negative', 'neutral'];
-    for (var i = 0; i < companies.length; i++) {
-        articleData.push({
-            article: {
-                url: 'http://example.not-real.com/article' + (i + 1),
-                sentiment: sentiments[i % sentiments.length],
-                date: new Date(),
-            },
-            company: companies[i]
-        });
+  
+  var promises = [];
+  var articleData = [];
+  var errors = [];
+  
+  for (var i=0; i<companies.length; i++) {
+    var company = companies[i];
+    console.log("Starting discovery for: " + company);
+    var promise = getArticleDataForCompany(company, function(error, articleDataForCompany) {
+      if (error) {
+        errors = errors.concat(error);
+      } else {
+        articleData = articleData.concat(articleDataForCompany);
+      }
+    });
+    promises.push(promise);
+  }
+  
+  Promise.all(promises).then(function() {
+    if (utils.isFunc(callback)) {
+      callback(undefined, articleData);
     }
-
-    if (isFunc(callback)) {
-        callback(undefined, articleData);
+  }).catch(function(error) {
+    if (utils.isFunc(callback)) {
+      callback(errors.join(), articleData);
     }
+  });
 }
 
 function run() {
 
-    getArticleDataForCompanies(companies, function(articlesErr, articleData) {
-        if (!articlesErr) {
-            getDocs(function(docsErr, stockData) {
-                if (!docsErr) {
-                    updateStocksData(articleData, stockData);
-                } else {
-                    console.log(docsErr);
-                }
-            });
+  getArticleDataForCompanies(companies, function(articlesErr, articleData) {
+    if (!articlesErr) {
+      stock_db.getDocs(function(docsErr, stockData) {
+        if (!docsErr) {
+          updateStocksData(articleData, stockData);
         } else {
-            console.log(articlesErr);
+          console.log(docsErr);
         }
-    });
+      });
+    } else {
+      console.log(articlesErr);
+    }
+  });
 }
 
 run();

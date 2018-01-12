@@ -11,9 +11,26 @@ var discovery = new Discovery({
    password: DISCOVERY_PASSWORD,
    version: DISCOVERY_VERSION,
    version_date: DISCOVERY_VERSION_DATE
- });
- 
-//retrieving titles for 5 documents for 'IBM Watson'
-discovery.query({ environment_id: ENV_ID, collection_id: 'news-en', query: 'IBM Watson', count:5, return:'title' }, function(error, data) {
-  console.log(JSON.stringify(data, null, 2));
 });
+ 
+var utils = require('./utils.js');
+
+//retrieving titles for 5 documents for 'IBM Watson'
+function query(topic) {
+  
+  var promise = new Promise(function(resolve, reject) {
+    discovery.query({ environment_id: ENV_ID, collection_id: 'news-en', query: topic, count:5 }, function(error, data) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(data);
+        }
+    });
+  });
+  
+  return promise;
+}
+
+module.exports = {
+  query : query
+}

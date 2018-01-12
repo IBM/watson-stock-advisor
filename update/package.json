@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/IBM/watson-stock-advisor#readme",
   "dependencies": {
-    "cloudant": "^1.10.0"
+    "cloudant": "^1.10.0",
+    "watson-developer-cloud": "3.0.3"
   }
 }

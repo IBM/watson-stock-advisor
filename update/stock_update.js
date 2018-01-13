@@ -133,18 +133,18 @@ function getArticleDataForCompanies(companies, callback) {
   
   Promise.all(promises).then(function() {
     if (utils.isFunc(callback)) {
-      callback(undefined, articleData);
+      callback(articleData);
     }
   }).catch(function(error) {
     if (utils.isFunc(callback)) {
-      callback(errors.join(), articleData);
+      callback(articleData, errors.join());
     }
   });
 }
 
 function run() {
 
-  getArticleDataForCompanies(companies, function(articlesErr, articleData) {
+  getArticleDataForCompanies(companies, function(articleData, articlesErr) {
     if (!articlesErr) {
       stock_db.getDocs(function(docsErr, stockData) {
         if (!docsErr) {

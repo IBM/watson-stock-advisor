@@ -104,9 +104,9 @@ function getArticleDataForCompany(company, callback) {
       company : company,
       articles : articles
     }
-    callback(undefined, data);
+    callback(data);
   }).catch(function (error) {
-    callback(error, []);
+    callback([], error);
   });
   
   return promise;
@@ -121,7 +121,7 @@ function getArticleDataForCompanies(companies, callback) {
   for (var i=0; i<companies.length; i++) {
     var company = companies[i];
     console.log('Starting discovery for "' + company + '"');
-    var promise = getArticleDataForCompany(company, function(error, articleDataForCompany) {
+    var promise = getArticleDataForCompany(company, function(articleDataForCompany, error) {
       if (error) {
         errors = errors.concat(error);
       } else {

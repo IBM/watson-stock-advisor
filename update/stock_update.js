@@ -39,7 +39,7 @@ function articleContains(article, articles) {
 
 function updateStocksData(articleData, stockData) {
   
-  for (var i = 0; i < articleData.length; i++) {
+  for (var i=0; i<articleData.length; i++) {
     var articleDatum = articleData[i];
     var company = articleDatum.company;
     console.log('Beginning article insertion for "' + company + '"');

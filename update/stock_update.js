@@ -42,7 +42,6 @@ function updateStocksData(articleData, stockData) {
   for (var i = 0; i < articleData.length; i++) {
     var articleDatum = articleData[i];
     var company = articleDatum.company;
-    console.log();
     console.log('Beginning article insertion for "' + company + '"');
     var stockDatum = findStockDatum(stockData, company);
     if (!stockDatum) {
@@ -67,11 +66,9 @@ function updateStocksData(articleData, stockData) {
       stockDatum.history = sortArticles(existingArticles.concat(newArticles));
       console.log('Inserting into company "' + company + '" articles: ' );
       console.log(newArticles);
-      console.log();
       stock_db.insertOrUpdateDoc(stockDatum);
     } else {
       console.log('No new articles to insert into "' + company + '"');
-      console.log();
     }
   }
 }

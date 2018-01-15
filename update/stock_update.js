@@ -9,9 +9,14 @@ var companies = ['A', 'B', 'C', 'D'];
 
 function findStockDatum(stocks, company) {
 
-  for (var i = 0; i < stocks.length; i++) {
+  if (!company) {
+    return undefined;
+  }
+
+  for (var i=0; i<stocks.length; i++) {
     var stock = stocks[i];
-    if (stock.ticker == company) {
+    var name = (stock.ticker && stock.ticker.toLowerCase()) || "";
+    if (name === company.toLowerCase()) {
       return stock;
     }
   }

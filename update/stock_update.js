@@ -9,9 +9,14 @@ var companies = ['A', 'B', 'C', 'D'];
 
 function findStockDatum(stocks, company) {
 
-  for (var i = 0; i < stocks.length; i++) {
+  if (!company) {
+    return undefined;
+  }
+
+  for (var i=0; i<stocks.length; i++) {
     var stock = stocks[i];
-    if (stock.ticker == company) {
+    var name = (stock.ticker && stock.ticker.toLowerCase()) || "";
+    if (name === company.toLowerCase()) {
       return stock;
     }
   }
@@ -39,10 +44,9 @@ function articleContains(article, articles) {
 
 function updateStocksData(articleData, stockData) {
   
-  for (var i = 0; i < articleData.length; i++) {
+  for (var i=0; i<articleData.length; i++) {
     var articleDatum = articleData[i];
     var company = articleDatum.company;
-    console.log();
     console.log('Beginning article insertion for "' + company + '"');
     var stockDatum = findStockDatum(stockData, company);
     if (!stockDatum) {
@@ -67,11 +71,9 @@ function updateStocksData(articleData, stockData) {
       stockDatum.history = sortArticles(existingArticles.concat(newArticles));
       console.log('Inserting into company "' + company + '" articles: ' );
       console.log(newArticles);
-      console.log();
       stock_db.insertOrUpdateDoc(stockDatum);
     } else {
       console.log('No new articles to insert into "' + company + '"');
-      console.log();
     }
   }
 }
@@ -104,9 +106,9 @@ function getArticleDataForCompany(company, callback) {
       company : company,
       articles : articles
     }
-    callback(undefined, data);
+    callback(data);
   }).catch(function (error) {
-    callback(error, []);
+    callback([], error);
   });
   
   return promise;
@@ -121,7 +123,7 @@ function getArticleDataForCompanies(companies, callback) {
   for (var i=0; i<companies.length; i++) {
     var company = companies[i];
     console.log('Starting discovery for "' + company + '"');
-    var promise = getArticleDataForCompany(company, function(error, articleDataForCompany) {
+    var promise = getArticleDataForCompany(company, function(articleDataForCompany, error) {
       if (error) {
         errors = errors.concat(error);
       } else {
@@ -133,18 +135,18 @@ function getArticleDataForCompanies(companies, callback) {
   
   Promise.all(promises).then(function() {
     if (utils.isFunc(callback)) {
-      callback(undefined, articleData);
+      callback(articleData);
     }
   }).catch(function(error) {
     if (utils.isFunc(callback)) {
-      callback(errors.join(), articleData);
+      callback(articleData, errors.join());
     }
   });
 }
 
 function run() {
 
-  getArticleDataForCompanies(companies, function(articlesErr, articleData) {
+  getArticleDataForCompanies(companies, function(articleData, articlesErr) {
     if (!articlesErr) {
       stock_db.getDocs(function(docsErr, stockData) {
         if (!docsErr) {

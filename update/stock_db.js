@@ -4,11 +4,11 @@ const utils = require('./utils.js');
 const config = require('./config.js');
 
 var cloudant = Cloudant({
-  account: config.CLOUDANT_ACCESS,
-  key: config.CLOUDANT_KEY,
-  password: config.CLOUDANT_PASSWORD
+  account  : process.env.CLOUDANT_ACCESS,
+  key      : process.env.CLOUDANT_KEY,
+  password : process.env.CLOUDANT_PASSWORD
 });
-var db = cloudant.db.use(config.DB_NAME);
+var db = cloudant.db.use(process.env.DB_NAME);
 
 function getDocs(callback) {
   db.list({

@@ -10,36 +10,36 @@
 
 ### Configure credentials
 
-    The credentials for IBM Cloud services (Discovery), can be found in the ``Services`` menu in IBM Cloud,
-    by selecting the ``Service Credentials`` option for each service.
+The credentials for IBM Cloud services (Discovery), can be found in the ``Services`` menu in IBM Cloud,
+by selecting the ``Service Credentials`` option for each service.
 
-    The other settings for Discovery were collected during the
-    earlier setup steps (``ENV_ID``).
+The other settings for Discovery were collected during the
+earlier setup steps (``ENV_ID``).
 
-    Copy the [`env.sample`](env.sample) to `.env`.
+Copy the [`env.sample`](env.sample) to `.env`.
 
-    ```
-    $ cp env.sample .env
-    ```
-    Edit the `.env` file with the necessary settings.
+```
+$ cp env.sample .env
+```
+Edit the `.env` file with the necessary settings.
 
-    #### `env.sample:`
+#### `env.sample:`
 
-    ```
-    # Replace the credentials here with your own.
-    # Rename this file to .env before starting the app.
+```
+# Replace the credentials here with your own.
+# Rename this file to .env before starting the app.
 
-    # Watson Discovery
-    DISCOVERY_USERNAME="XXXXXXXX"
-    DISCOVERY_PASSWORD="XXXXXXXXX"
-    DISCOVERY_VERSION="v1"
-    DISCOVERY_VERSION_DATE="2017-11-07"
-    ENV_ID="system"
+# Watson Discovery
+DISCOVERY_USERNAME="XXXXXXXX"
+DISCOVERY_PASSWORD="XXXXXXXXX"
+DISCOVERY_VERSION="v1"
+DISCOVERY_VERSION_DATE="2017-11-07"
+ENV_ID="system"
 
-    # Cloudant
-    CLOUDANT_KEY="XXXXXXXXX"
-    CLOUDANT_PASSWORD="XXXXXXXXXXXXXXX"
-    CLOUDANT_ACCESS="XXXXXXXXXXXXXX-bluemix.cloudant.com"
-    DB_NAME="XXXXXXXXXX"
+# Cloudant
+CLOUDANT_KEY="XXXXXXXXX"
+CLOUDANT_PASSWORD="XXXXXXXXXXXXXXX"
+CLOUDANT_ACCESS="XXXXXXXXXXXXXX-bluemix.cloudant.com"
+DB_NAME="XXXXXXXXXX"
 
-    ```
+```

@@ -12,7 +12,7 @@ var utils = require('./utils.js');
 function query(topic) {
   
   var promise = new Promise(function(resolve, reject) {
-    discovery.query({ environment_id: process.env.ENV_ID, collection_id: 'news-en', query: topic, count:5 }, function(error, data) {
+    discovery.query({ environment_id: process.env.DISCOVERY_ENV_ID, collection_id: 'news-en', query: topic, count:5 }, function(error, data) {
         if (error) {
           reject(error);
         } else {

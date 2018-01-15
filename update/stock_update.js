@@ -1,8 +1,9 @@
 
-const stock_db = require('./stock_db.js');
-const utils = require('./utils.js');
-const discovery = require('./discovery.js');
 const config = require('./config.js');
+const utils  = require('./utils.js');
+
+const stock_db  = config.configured && require('./stock_db.js');
+const discovery = config.configured && require('./discovery.js');
 
 //these should be the companies' names
 var companies = ['A', 'B', 'C', 'D'];
@@ -146,20 +147,23 @@ function getArticleDataForCompanies(companies, callback) {
 
 function run() {
 
-  getArticleDataForCompanies(companies, function(articleData, articlesErr) {
-    if (!articlesErr) {
-      stock_db.getDocs(function(docsErr, stockData) {
-        if (!docsErr) {
-          updateStocksData(articleData, stockData);
-        } else {
-          console.log(docsErr);
-        }
-      });
-    } else {
-      console.log(articlesErr);
-    }
-  });
+  if (config.configured) {
+    getArticleDataForCompanies(companies, function(articleData, articlesErr) {
+      if (!articlesErr) {
+        stock_db.getDocs(function(docsErr, stockData) {
+          if (!docsErr) {
+            updateStocksData(articleData, stockData);
+          } else {
+            console.log(docsErr);
+          }
+        });
+      } else {
+        console.log(articlesErr);
+      }
+    });
+  } else {
+    console.log("Project is not configured correctly...terminating");
+  }
 }
 
 run();
-

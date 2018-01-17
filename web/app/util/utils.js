@@ -1,8 +1,9 @@
 
-function isFunc(func) {
-  return typeof func == 'function';
+class Utils {
+
+  isFunc(func) {
+    return typeof func == 'function';
+  }
 }
 
-module.exports = {
-  isFunc : isFunc
-}
+module.exports = new Utils()

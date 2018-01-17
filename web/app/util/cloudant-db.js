@@ -9,11 +9,9 @@ const cloudant = Cloudant({
 });
 const db = cloudant.db.use(process.env.DB_NAME);
 
-function DB() {
+class DB {
 
-  const self = this;
-
-  self.search = () => {
+  search() {
     return new Promise((resolve, reject) => {
       db.list({ include_docs: true }, (err, result) => {
         if (err) {
@@ -25,7 +23,7 @@ function DB() {
     });
   };
 
-  self.insertOrUpdate = (doc) => {
+  insertOrUpdate(doc) {
     console.log('updating: ', doc);
     return new Promise((resolve, reject) => {
       db.insert(doc, function(err, body, header) {

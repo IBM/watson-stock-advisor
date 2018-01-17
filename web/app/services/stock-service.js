@@ -3,9 +3,9 @@ const db = require('../util/cloudant-db');
 
 class StockService {
 
-    getStocks() {
-        return db.search();
-    }
+  getStocks() {
+    return db.search();
+  }
 
 }
 

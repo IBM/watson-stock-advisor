@@ -1,10 +1,12 @@
 
 class Error {
 
-    constructor(name, reason) {
-        this.name = name;
-        this.reason = reason;
+  constructor(name, reason) {
+    this.error = {
+      name : name,
+      reason : reason
     }
+  }
 
 }
 

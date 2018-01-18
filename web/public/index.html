@@ -28,6 +28,119 @@
     </div>
     <div class="content-wrapper">
       <div class="container-fluid">
+        <div class="row">
+          <!-- Stocks Table-->
+          <div class="col-lg-8">
+            <div class="card mb-3">
+              <div class="card-header">
+                <i class="fa fa-table"></i> My Stocks</div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Company</th>
+                        <th>Ticker</th>
+                        <th>Sentiment</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th>Company</th>
+                        <th>Ticker</th>
+                        <th>Sentiment</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      <tr>
+                        <td>IBM</td>
+                        <td>IBM</td>
+                        <td>Good</td>
+                      </tr>
+                      <tr>
+                        <td>Google</td>
+                        <td>GOOG</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>Apple</td>
+                        <td>AAPL</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>LinkedIn</td>
+                        <td>LNKD</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>SalesForce</td>
+                        <td>SLFC</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>Ford</td>
+                        <td>F</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>Bank of America</td>
+                        <td>BAC</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>Tesla</td>
+                        <td>T</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>BMW</td>
+                        <td>BMW</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>Nike</td>
+                        <td>NIKE</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>Chrysler</td>
+                        <td>C</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>Microsoft</td>
+                        <td>MSFT</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>Oracle</td>
+                        <td>ORC</td>
+                        <td>Bad</td>
+                      </tr>
+                      <tr>
+                        <td>Intel</td>
+                        <td>INTL</td>
+                        <td>Bad</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+            </div>
+          </div>
+          <!-- Pie Chart-->
+          <div class="col-lg-4">
+            <div class="card mb-1">
+                <div class="card-header">
+                  <i class="fa fa-pie-chart"></i> Sentiment Breakdown</div>
+                <div class="card-body">
+                  <canvas id="sentimentPieChart" width="100%" height="100"></canvas>
+                </div>
+                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+              </div>
+          </div>
+        </div>
         <!-- Area Chart-->
         <div class="card mb-3">
           <div class="card-header">
@@ -114,15 +227,6 @@
             <!-- /Card Columns-->
           </div>
           <div class="col-lg-4">
-            <!-- Pie Chart-->
-            <div class="card mb-3">
-              <div class="card-header">
-                <i class="fa fa-pie-chart"></i> Sentiment Breakdown</div>
-              <div class="card-body">
-                <canvas id="sentimentPieChart" width="100%" height="100"></canvas>
-              </div>
-              <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
             <!-- Notifications Card-->
             <div class="card mb-3">
               <div class="card-header">
@@ -174,104 +278,6 @@
               <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
           </div>
-        </div>
-        <!-- Stocks Table-->
-        <div class="card mb-3">
-          <div class="card-header">
-            <i class="fa fa-table"></i> My Stocks</div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                  <tr>
-                    <th>Company</th>
-                    <th>Ticker</th>
-                    <th>Sentiment</th>
-                  </tr>
-                </thead>
-                <tfoot>
-                  <tr>
-                    <th>Company</th>
-                    <th>Ticker</th>
-                    <th>Sentiment</th>
-                  </tr>
-                </tfoot>
-                <tbody>
-                  <tr>
-                    <td>IBM</td>
-                    <td>IBM</td>
-                    <td>Good</td>
-                  </tr>
-                  <tr>
-                    <td>Google</td>
-                    <td>GOOG</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>Apple</td>
-                    <td>AAPL</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>LinkedIn</td>
-                    <td>LNKD</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>SalesForce</td>
-                    <td>SLFC</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>Ford</td>
-                    <td>F</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>Bank of America</td>
-                    <td>BAC</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>Tesla</td>
-                    <td>T</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>BMW</td>
-                    <td>BMW</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>Nike</td>
-                    <td>NIKE</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>Chrysler</td>
-                    <td>C</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>Microsoft</td>
-                    <td>MSFT</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>Oracle</td>
-                    <td>ORC</td>
-                    <td>Bad</td>
-                  </tr>
-                  <tr>
-                    <td>Intel</td>
-                    <td>INTL</td>
-                    <td>Bad</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
       </div>
       <!-- /.container-fluid-->

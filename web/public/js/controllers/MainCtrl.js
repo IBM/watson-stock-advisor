@@ -4,10 +4,14 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     handleStocks(stocks);
   });
 
+  function capitalizeFirstLetterOnly(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  }
+
   function addSentiment(stock) {
     stock.recentSentiment = "None";
     if (stock.history && stock.history.length > 0) {
-      stock.recentSentiment = stock.history[0].sentiment;
+      stock.recentSentiment = capitalizeFirstLetterOnly(stock.history[0].sentiment);
     }
   }
 

@@ -43,86 +43,21 @@
                       <tr>
                         <th>Company</th>
                         <th>Ticker</th>
-                        <th>Sentiment</th>
+                        <th>Last Sentiment</th>
                       </tr>
                     </thead>
                     <tfoot>
                       <tr>
                         <th>Company</th>
                         <th>Ticker</th>
-                        <th>Sentiment</th>
+                        <th>Last Sentiment</th>
                       </tr>
                     </tfoot>
                     <tbody>
-                      <tr>
-                        <td>IBM</td>
-                        <td>IBM</td>
-                        <td>Good</td>
-                      </tr>
-                      <tr>
-                        <td>Google</td>
-                        <td>GOOG</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>Apple</td>
-                        <td>AAPL</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>LinkedIn</td>
-                        <td>LNKD</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>SalesForce</td>
-                        <td>SLFC</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>Ford</td>
-                        <td>F</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>Bank of America</td>
-                        <td>BAC</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>Tesla</td>
-                        <td>T</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>BMW</td>
-                        <td>BMW</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>Nike</td>
-                        <td>NIKE</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>Chrysler</td>
-                        <td>C</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>Microsoft</td>
-                        <td>MSFT</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>Oracle</td>
-                        <td>ORC</td>
-                        <td>Bad</td>
-                      </tr>
-                      <tr>
-                        <td>Intel</td>
-                        <td>INTL</td>
-                        <td>Bad</td>
+                      <tr ng-repeat="stock in stocks" >
+                          <td>{{stock.company}}</td>
+                          <td>{{stock.ticker}}</td>
+                          <td>{{stock.recentSentiment}}</td>
                       </tr>
                     </tbody>
                   </table>

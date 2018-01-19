@@ -8,7 +8,15 @@ module.exports = function(app) {
   app.get('/api/stocks', (req, res) => {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     stockService.getStocks().then((stocks) => {
-      res.send(stocks);
+      var prettyStocks = stocks.map((rawStock) => {
+        var doc = rawStock.doc;
+        return {
+          company : doc.ticker,
+          ticker : "TODO", //TODO
+          history : doc.history || []
+        }
+      })
+      res.send(prettyStocks);
     }).catch((error) => {
       console.log(error);
       res.send(new Error('Stocks Error', 'There was an error retrieving stocks'));

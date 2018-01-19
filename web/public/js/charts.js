@@ -51,15 +51,3 @@ var myLineChart = new Chart(ctx, {
     }
   }
 });
-// -- Pie Chart
-var ctx = document.getElementById("sentimentPieChart");
-var myPieChart = new Chart(ctx, {
-  type: 'pie',
-  data: {
-    labels: ["Negative", "Neutral", "Positive"],
-    datasets: [{
-      data: [15.58, 11.25, 8.32],
-      backgroundColor: ['#dc3545', '#ffc107', '#28a745'],
-    }],
-  },
-});

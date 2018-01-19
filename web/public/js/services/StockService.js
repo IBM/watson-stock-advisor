@@ -1,4 +1,6 @@
-angular.module('StockService', []).factory('Stock', ['$http', function($http) {
+angular.module('MainModule').factory('StockService', ['$http', function($http) {
 
+  var service = {};
 
+  return service;
 }]);

@@ -1,1 +1,1 @@
-angular.module('stockApp', ['ngRoute', 'appRoutes', 'MainCtrl', 'StockService']);
+angular.module('stockApp', ['ngRoute', 'appRoutes', 'MainModule']);

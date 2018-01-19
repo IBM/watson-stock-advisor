@@ -1,3 +1,3 @@
-angular.module('MainCtrl', []).controller('MainController', function($scope) {
+angular.module('MainModule', []).controller('MainController',['$scope', 'StockService', function($scope, StockService) {
 
-});
+}]);

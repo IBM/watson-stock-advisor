@@ -1,5 +1,10 @@
 # watson-stock-advisor
 
+# Web
+
+The web page is adapted from a [template](https://startbootstrap.com/template-overviews/sb-admin/ "Start Boostrap SB Admin") from [Start Boostrap](https://startbootstrap.com/ "Start Bootstrap") by [Blackrock Digital](https://github.com/BlackrockDigital "Blackrock Digital").
+You can find the repository for the template [here](https://github.com/BlackrockDigital/startbootstrap-sb-admin "SB Admin Repo"), including its [License](https://github.com/BlackrockDigital/startbootstrap-sb-admin/blob/master/LICENSE "SB Admin License").
+
 # Provision NoSQL DB TODO add pics
     1. Navigate to console.bluemix.net
     2. Click 'Create Resource'

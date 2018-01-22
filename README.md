@@ -1,4 +1,4 @@
-# watson-stock-advisor
+# Watson Stock Advisor
 
 # Web
 

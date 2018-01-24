@@ -1,17 +1,9 @@
 # Watson Stock Advisor
 
-# Web
+## Web
 
 The web page is adapted from a [template](https://startbootstrap.com/template-overviews/sb-admin/ "Start Boostrap SB Admin") from [Start Boostrap](https://startbootstrap.com/ "Start Bootstrap") by [Blackrock Digital](https://github.com/BlackrockDigital "Blackrock Digital").
 You can find the repository for the template [here](https://github.com/BlackrockDigital/startbootstrap-sb-admin "SB Admin Repo"), including its [License](https://github.com/BlackrockDigital/startbootstrap-sb-admin/blob/master/LICENSE "SB Admin License").
-
-# Provision NoSQL DB TODO add pics
-    1. Navigate to console.bluemix.net
-    2. Click 'Create Resource'
-    3. Search for 'cloudant nosql'
-    4. Select the only search result under 'Data & Analytics' called 'Cloudant NoSQL DB'
-    5. Specify the settings you want
-    6. Click 'Create' in the bottom right
 
 ### Configure credentials
 
@@ -31,15 +23,6 @@ Edit the `.env` file with the necessary settings.
 #### `env.sample:`
 
 ```
-# Replace the credentials here with your own.
-# Rename this file to .env before starting the app.
-
-# Watson Discovery
-DISCOVERY_USERNAME="XXXXXXXX"
-DISCOVERY_PASSWORD="XXXXXXXXX"
-DISCOVERY_VERSION="v1"
-DISCOVERY_VERSION_DATE="2017-11-07"
-DISCOVERY_ENV_ID="system"
 
 # Cloudant
 CLOUDANT_KEY="XXXXXXXXX"
@@ -48,3 +31,14 @@ CLOUDANT_ACCESS="XXXXXXXXXXXXXX-bluemix.cloudant.com"
 DB_NAME="XXXXXXXXXX"
 
 ```
+
+### Run the portal
+
+In this directory, "web", run
+
+```
+$ npm install
+$ bower install
+$ npm start
+```
+The portal should now be accessible on port 8080 (or another port specified by PORT in .env)

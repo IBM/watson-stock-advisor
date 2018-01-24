@@ -1,0 +1,23 @@
+{
+  "name": "watson-stock-web",
+  "version": "0.0.1",
+  "description": "Watson Stock Advisor",
+  "main": "server.js",
+  "bugs": {
+    "url": "https://github.com/IBM/watson-stock-advisor/issues"
+  },
+  "homepage": "https://github.com/IBM/watson-stock-advisor#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IBM/watson-stock-advisor.git"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "app-root-path": "^2.0.1",
+    "body-parser": "~1.4.2",
+    "cloudant": "^1.10.0",
+    "dotenv": "^4.0.0",
+    "express": "~4.5.1",
+    "method-override": "~2.0.2"
+  }
+}

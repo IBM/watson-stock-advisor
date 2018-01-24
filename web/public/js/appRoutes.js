@@ -23,6 +23,9 @@ angular.module('appRoutes', []).config(['$routeProvider', '$locationProvider', f
       controller: 'MainController'
     })*/
 
+  /**
+   * See https://docs.angularjs.org/api/ng/provider/$locationProvider for configuration docs
+   */
   $locationProvider.html5Mode({
     enabled: true,
     requireBase: false

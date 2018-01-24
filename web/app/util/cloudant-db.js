@@ -27,6 +27,10 @@ const db = cloudant.db.use(process.env.DB_NAME);
 
 class DB {
 
+  /**
+   * Retrieves all data in the cloudant DB
+   * @returns {promise} - A promise representing the query to the DB
+   */
   search() {
     return new Promise((resolve, reject) => {
       db.list({ include_docs: true }, (err, result) => {
@@ -39,6 +43,10 @@ class DB {
     });
   };
 
+  /**
+   * Inserts (or updates, if exists) the doc into the DB
+   * @returns {promise} - A promise representing the query to the DB
+   */
   insertOrUpdate(doc) {
     console.log('updating: ', doc);
     return new Promise((resolve, reject) => {

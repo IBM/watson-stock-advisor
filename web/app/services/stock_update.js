@@ -23,6 +23,13 @@ const discovery = config.configured && require('./discovery');
 //these should be the companies' names
 var companies = ['A', 'B', 'C', 'D'];
 
+/**
+ * Searches the stocks for a ticker matching (case-insensitive) the company.
+ * Returns undefined if not found
+ * @param {stock[]} stocks - The list of stocks
+ * @param {string} company - The name of the company to look for
+ * @returns {stock|undefined}
+ */
 function findStockDatum(stocks, company) {
 
   if (!company) {
@@ -40,6 +47,11 @@ function findStockDatum(stocks, company) {
   return undefined;
 }
 
+/**
+ * Sorts and returns the articles from most to least recent by date
+ * @param {article[]} articles
+ * @returns {article[]}
+ */
 function sortArticles(articles) {
   
   articles.sort(function(a, b) {
@@ -49,6 +61,12 @@ function sortArticles(articles) {
   return articles;
 }
 
+/**
+ * Searches for the given article in the list of articles
+ * @param {article} article
+ * @param {article[]} articles
+ * @returns {boolean} True if the article is found, false otherwise
+ */
 function articleContains(article, articles) {
   for (var x=0; x<articles.length; x++) {
     if (article.url === articles[x].url) {
@@ -58,6 +76,13 @@ function articleContains(article, articles) {
   return false;
 }
 
+/**
+ * Updates the database with the article data. New (unique) articles
+ * are inserted into the database. Duplicates are removed. The articles
+ * are sorted from most to least recent for each before updating DB.
+ * @param {article[]} articleData
+ * @param {stocks[]} stockData
+ */
 function updateStocksData(articleData, stockData) {
   
   for (var i=0; i<articleData.length; i++) {
@@ -94,6 +119,11 @@ function updateStocksData(articleData, stockData) {
   }
 }
 
+/**
+ * Parses a single discovery result for the relevant data
+ * @param {discoveryResult} result
+ * @returns a simplified JSON object with relevant data
+ */
 function parseArticle(result) {
   return {
     url: result.url,
@@ -102,6 +132,11 @@ function parseArticle(result) {
   }
 }
 
+/**
+ * Parses raw Watson Discovery Results for articles
+ * @param {result[]} results
+ * @returns {article[]} - The parsed articles
+ */
 function parseResults(results) {
   var articles = [];
   for (var i=0; i<results.length; i++) {
@@ -110,6 +145,12 @@ function parseResults(results) {
   return articles;
 }
 
+/**
+ * Retrieves article data for the given company
+ * @param {string} company
+ * @param {function} callback - Called after retrieval and parsing complete
+ * @param {promise} - The promise for the request to Watson Discovery
+ */
 function getArticleDataForCompany(company, callback) {
   
   var promise = discovery.query(company);
@@ -130,6 +171,11 @@ function getArticleDataForCompany(company, callback) {
   return promise;
 }
 
+/**
+ * Retrieves article data for the given company
+ * @param {string[]} companies - The list of companies to retrieve articles for
+ * @param {function} callback - Called after retrieval and parsing complete
+ */
 function getArticleDataForCompanies(companies, callback) {
   
   var promises = [];
@@ -160,6 +206,9 @@ function getArticleDataForCompanies(companies, callback) {
   });
 }
 
+/**
+ * Performs the update operation
+ */
 function run() {
 
   if (config.configured) {

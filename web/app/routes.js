@@ -20,6 +20,10 @@ const Error = require('./models/error');
 module.exports = function(app) {
 
   // server routes
+
+  /**
+   * Retrieves the stock data
+   */
   app.get('/api/stocks', (req, res) => {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     stockService.getStocks().then((stocks) => {
@@ -30,7 +34,7 @@ module.exports = function(app) {
           ticker : "TODO", //TODO
           history : doc.history || []
         }
-      })
+      });
       res.send(prettyStocks);
     }).catch((error) => {
       console.log(error);
@@ -39,6 +43,10 @@ module.exports = function(app) {
   });
 
   // frontend routes
+
+  /**
+   * Returns the homepage
+   */
   app.get('*', function(req, res) {
     res.sendFile('./public/index.html');
   });

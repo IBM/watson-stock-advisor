@@ -31,6 +31,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
   }
 
+  /**
+   * Handles all page population with stock data
+   * @param {stock[]} stocks
+   */
   function handleStocks(stocks) {
     $scope.$apply(() => {
       for (var i=0 ; i<stocks.length; i++) {
@@ -42,6 +46,9 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     });
   }
 
+  /**
+   * Updates the table
+   */
   function updateTable() {
     // Call the dataTables jQuery plugin
     $(document).ready(function() {
@@ -49,6 +56,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     });
   }
 
+  /**
+   * Updates the pie chart
+   * @param {stock[]} stocks
+   */
   function updatePieChart(stocks) {
     var ctx = document.getElementById("sentimentPieChart");
 

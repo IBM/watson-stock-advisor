@@ -23,6 +23,11 @@ var discovery = new Discovery({
  
 var utils = require('../util/utils');
 
+/**
+ * Query for 5 documents using the Watson Discovery Service
+ * @param {string} topic - The topic to query for
+ * @returns {promise}
+ */
 function query(topic) {
   
   var promise = new Promise(function(resolve, reject) {

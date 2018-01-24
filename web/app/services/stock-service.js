@@ -18,6 +18,10 @@ const db = require('../util/cloudant-db');
 
 class StockService {
 
+  /**
+   * Retrieves all the stock data and their associated articles
+   * @returns {proimse} - the promise from the cloudant DB
+   */
   getStocks() {
     return db.search();
   }

@@ -16,6 +16,11 @@
 
 class Utils {
 
+  /**
+   * Checks if the given 'func' is a functions
+   * @param {*} func
+   * @returns {boolean} - true if the type of the arg is a function, false otherwise
+   */
   isFunc(func) {
     return typeof func == 'function';
   }

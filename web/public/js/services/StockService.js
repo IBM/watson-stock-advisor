@@ -18,6 +18,10 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
 
   var service = {};
 
+  /**
+   * Fetches the stock data from the API
+   * @returns The promise representing the fetch
+   */
   service.getStocks = function() {
     return new Promise((resolve, reject) => {
         $http.get('/api/stocks').then((result) => {

@@ -14,6 +14,9 @@
  * the License.
  */
 
+/**
+ * Perform startup configuration
+ */
 (function($) {
   "use strict";
   // show scroll to top button

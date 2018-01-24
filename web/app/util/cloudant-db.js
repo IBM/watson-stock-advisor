@@ -30,7 +30,7 @@ class DB {
         if (err) {
           console.log('insertion failed: ' + err.message);
           reject(err);
-        } else if (utils.isFunc(callback)) {
+        } else {
           resolve(body, header);
         }
       });

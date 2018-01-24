@@ -20,7 +20,9 @@ app.use(express.static(__dirname + '/public'));
 
 // pass application into routes
 require('./app/routes')(app);
+
 require('./app/util/cloudant-db');
+require('./app/jobs/update')
 
 // start app
 app.listen(port);

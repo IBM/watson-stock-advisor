@@ -10,6 +10,8 @@
 require('../../config')
 
 var CronJob = require('cron').CronJob;
+var updateTask = require('../services/stock_update');
+var task = new updateTask();
 
   /*
    * Runs every day at 01:00:00 AM.
@@ -17,6 +19,7 @@ var CronJob = require('cron').CronJob;
 var job = new CronJob('00 00 01 * * 0-6', function() {
 
     console.log("Beginning stock update task");
+    task.run();
   }, function () {
     /* This function is executed when the job stops */
     console.log("stock update task stopped");

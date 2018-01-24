@@ -1,3 +1,19 @@
+/**
+ * Copyright 2018 IBM Corp. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the 'License'); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 angular.module('MainModule', []).controller('MainController',['$scope', 'StockService', function($scope, StockService) {
 
   StockService.getStocks().then((stocks) => {
@@ -15,6 +31,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
   }
 
+  /**
+   * Handles all page population with stock data
+   * @param {stock[]} stocks
+   */
   function handleStocks(stocks) {
     $scope.$apply(() => {
       for (var i=0 ; i<stocks.length; i++) {
@@ -26,6 +46,9 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     });
   }
 
+  /**
+   * Updates the table
+   */
   function updateTable() {
     // Call the dataTables jQuery plugin
     $(document).ready(function() {
@@ -33,6 +56,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     });
   }
 
+  /**
+   * Updates the pie chart
+   * @param {stock[]} stocks
+   */
   function updatePieChart(stocks) {
     var ctx = document.getElementById("sentimentPieChart");
 

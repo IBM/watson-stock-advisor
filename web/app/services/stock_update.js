@@ -145,26 +145,30 @@ function getArticleDataForCompanies(companies, callback) {
   });
 }
 
-function run() {
+class StockUpdate {
+  
+  run() {
 
-  if (config.configured) {
-    getArticleDataForCompanies(companies, function(articleData, articlesErr) {
-      if (!articlesErr) {
-        stock_db.search().then((rows)  => {
-          var docs = rows.map(function(row) {
-            return row.doc;
+    if (config.configured) {
+      getArticleDataForCompanies(companies, function(articleData, articlesErr) {
+        if (!articlesErr) {
+          stock_db.search().then((rows)  => {
+            var docs = rows.map(function(row) {
+              return row.doc;
+            });
+            updateStocksData(articleData, docs);
+          }).catch((docsErr) => {
+            console.log(docsErr);
           });
-          updateStocksData(articleData, docs);
-        }).catch((docsErr) => {
-          console.log(docsErr);
-        });
-      } else {
-        console.log(articlesErr);
-      }
-    });
-  } else {
-    console.log("Project is not configured correctly...terminating");
+        } else {
+          console.log(articlesErr);
+        }
+      });
+    } else {
+      console.log("Project is not configured correctly...terminating");
+    }
   }
 }
 
-run();
+module.exports = StockUpdate;
+

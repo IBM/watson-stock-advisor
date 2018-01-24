@@ -1,9 +1,9 @@
 
-const config = require('./config.js');
-const utils  = require('./utils.js');
+const config = require('../../config');
+const utils  = require('../util/utils');
 
-const stock_db  = config.configured && require('./stock_db.js');
-const discovery = config.configured && require('./discovery.js');
+const stock_db  = config.configured && require('../util/cloudant-db');
+const discovery = config.configured && require('./discovery');
 
 //these should be the companies' names
 var companies = ['A', 'B', 'C', 'D'];
@@ -72,7 +72,7 @@ function updateStocksData(articleData, stockData) {
       stockDatum.history = sortArticles(existingArticles.concat(newArticles));
       console.log('Inserting into company "' + company + '" articles: ' );
       console.log(newArticles);
-      stock_db.insertOrUpdateDoc(stockDatum);
+      stock_db.insertOrUpdate(stockDatum);
     } else {
       console.log('No new articles to insert into "' + company + '"');
     }
@@ -150,12 +150,13 @@ function run() {
   if (config.configured) {
     getArticleDataForCompanies(companies, function(articleData, articlesErr) {
       if (!articlesErr) {
-        stock_db.getDocs(function(docsErr, stockData) {
-          if (!docsErr) {
-            updateStocksData(articleData, stockData);
-          } else {
-            console.log(docsErr);
-          }
+        stock_db.search().then((rows)  => {
+          var docs = rows.map(function(row) {
+            return row.doc;
+          });
+          updateStocksData(articleData, docs);
+        }).catch((docsErr) => {
+          console.log(docsErr);
         });
       } else {
         console.log(articlesErr);

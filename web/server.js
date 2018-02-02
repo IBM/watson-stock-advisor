@@ -21,6 +21,8 @@ var methodOverride = require('method-override');
 
 var port = process.env.PORT || 8080; // set our port
 
+const publicRoot = __dirname + '/public/'
+
 // parse application/json
 app.use(bodyParser.json());
 // parse application/vnd.api+json as json
@@ -32,10 +34,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 // set static files location
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(publicRoot));
 
 // pass application into routes
-require('./app/routes')(app);
+require('./app/routes')(app, publicRoot);
 
 require('./app/util/cloudant-db');
 require('./app/jobs/update')

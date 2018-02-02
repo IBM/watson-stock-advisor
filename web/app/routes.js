@@ -17,7 +17,7 @@
 const stockService = require('./services/stock-service');
 const Error = require('./models/error');
 
-module.exports = function(app) {
+module.exports = function(app, publicRoot) {
 
   // server routes
 
@@ -48,7 +48,7 @@ module.exports = function(app) {
    * Returns the homepage
    */
   app.get('*', function(req, res) {
-    res.sendFile('./public/index.html');
+    res.sendFile('index.html', { root: publicRoot});
   });
 
 };

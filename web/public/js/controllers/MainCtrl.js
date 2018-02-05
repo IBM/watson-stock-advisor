@@ -43,6 +43,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       $scope.stocks = stocks;
       updateTable();
       updatePieChart(stocks);
+      updateLineChart(stocks);
     });
   }
 
@@ -83,6 +84,96 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
         }],
       },
+    });
+  }
+
+  /**
+   * Updates the line chart
+   * @param {stock[]} stocks
+   */
+  function updateLineChart(stocks) {
+    var ctx = document.getElementById("trendChart");
+    var history = stocks[0].history;
+
+    //has over all sentiment of the day for a particular stock
+    var sentimentMap = {};
+    //has article count of the day for a particular stock
+    var articleCountmap = {};
+
+    for (var i=0; i<history.length; i++) {
+      var sentiment = history[i].sentiment.toLowerCase();
+      var sentimentInt = 0;
+      if (sentiment === "positive"){
+        sentimentInt = 1;
+      }
+      else if (sentiment === "negative"){
+        sentimentInt = -1;
+      }
+      
+      var index = history[i].date.substr(0,10);
+      if(index in sentimentMap){
+        sentimentMap[index] += sentimentInt;
+        articleCountmap[index] += 1
+      }
+      else{
+        sentimentMap[index] = sentimentInt;
+        articleCountmap[index] = 1;
+      }
+    }
+
+    //distinct dates found in history
+    var labels = Object.keys(sentimentMap);
+
+    var data = [];
+    for (var y=0; y<labels.length; y++) { data.push((sentimentMap[labels[y]]/articleCountmap[labels[y]])) }
+    
+    var myLineChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Sessions",
+          lineTension: 0.3,
+          backgroundColor: "rgba(2,117,216,0.2)",
+          borderColor: "rgba(2,117,216,1)",
+          pointRadius: 5,
+          pointBackgroundColor: "rgba(2,117,216,1)",
+          pointBorderColor: "rgba(255,255,255,0.8)",
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: "rgba(2,117,216,1)",
+          pointHitRadius: 20,
+          pointBorderWidth: 2,
+          data: data,
+        }],
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            time: {
+              unit: 'date'
+            },
+            gridLines: {
+              display: false
+            },
+            ticks: {
+              maxTicksLimit: labels.length
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              min: -2,
+              max: +2,
+              maxTicksLimit: 10
+            },
+            gridLines: {
+              color: "rgba(0, 0, 0, .125)",
+            }
+          }],
+        },
+        legend: {
+          display: false
+        }
+      }
     });
   }
 

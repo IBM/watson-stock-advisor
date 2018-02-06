@@ -14,7 +14,7 @@
  * the License.
  */
 
-const stockService = require('./services/stock-service');
+const stockService = require('./services/stockService');
 const Error = require('./models/error');
 
 module.exports = function(app, publicRoot) {

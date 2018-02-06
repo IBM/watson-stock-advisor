@@ -14,7 +14,7 @@
  * the License.
  */
 
-const db = require('../util/cloudant-db');
+const db = require('../util/cloudantDb');
 
 class StockService {
 

@@ -17,7 +17,7 @@
 const config = require('../../config');
 const utils  = require('../util/utils');
 
-const stock_db  = config.configured && require('../util/cloudant-db');
+const stock_db  = config.configured && require('../util/cloudantDb');
 const discovery = config.configured && require('./discovery');
 
 //these should be the companies' names

@@ -24,7 +24,7 @@
 require('../../config')
 
 var CronJob = require('cron').CronJob;
-var updateTask = require('../services/stock_update');
+var updateTask = require('../services/stockUpdate');
 var task = new updateTask();
 
   /*

@@ -20,9 +20,6 @@ const utils  = require('../util/utils');
 const stock_db  = config.configured && require('../util/cloudantDb');
 const discovery = config.configured && require('./discovery');
 
-//these should be the companies' names
-var companies = ['A', 'B', 'C', 'D'];
-
 /**
  * Searches the stocks for a ticker matching (case-insensitive) the company.
  * Returns undefined if not found
@@ -208,26 +205,36 @@ function getArticleDataForCompanies(companies, callback) {
 
 class StockUpdate {
   
-  run() {
+  /**
+   * Retrieve new date for the given companies
+   * @param {string[]} companies
+   */
+  run(companies) {
 
-    if (config.configured) {
-      getArticleDataForCompanies(companies, function(articleData, articlesErr) {
-        if (!articlesErr) {
-          stock_db.search().then((rows)  => {
-            var docs = rows.map(function(row) {
-              return row.doc;
-            });
-            updateStocksData(articleData, docs);
-          }).catch((docsErr) => {
-            console.log(docsErr);
-          });
-        } else {
-          console.log(articlesErr);
-        }
-      });
-    } else {
+    if (!config.configured) {
       console.log("Project is not configured correctly...terminating");
+      return;
     }
+    
+    if (!companies || companies.length == 0) {
+      console.log("No companies provided to update");
+      return;
+    }
+
+    getArticleDataForCompanies(companies, function(articleData, articlesErr) {
+      if (!articlesErr) {
+        stock_db.search().then((rows)  => {
+          var docs = rows.map(function(row) {
+            return row.doc;
+          });
+          updateStocksData(articleData, docs);
+        }).catch((docsErr) => {
+          console.log(docsErr);
+        });
+      } else {
+        console.log(articlesErr);
+      }
+    });
   }
 }
 

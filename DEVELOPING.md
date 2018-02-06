@@ -12,10 +12,10 @@ Below is a general overview of the most important directories and files in the p
     │   ├── routes.js                  # Specifies the valid http paths for the app
     │   ├── services
     │   │   ├── discovery.js           # Service to abstract interacting with Watson Discvoery
-    │   │   ├── stock-service.js       # Service to abstract interaction with DB
-    │   │   └── stock_update.js        # Update task for discovering and storing new articles
+    │   │   ├── stockService.js        # Service to abstract interaction with DB
+    │   │   └── stockUpdate.js         # Update task for discovering and storing new articles
     │   └── util
-    │       ├── cloudant-db.js         # Utility class for performing database operations
+    │       ├── cloudantDb.js          # Utility class for performing database operations
     │       └── utils.js               # Various utilities
     ├── bower.json                     # Defines dependencies for the client side of the web portal
     ├── config.js                      # Performs setup for node application, loading environment vars

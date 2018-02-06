@@ -124,7 +124,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     //distinct dates found in history
     var labels1 = Object.keys(sentimentMap);
     var labels = labels1.sort(function(a, b) {
-    return new Date(a) - new Date(b);
+      return new Date(a) - new Date(b);
     });
 
 

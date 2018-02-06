@@ -27,13 +27,17 @@ var CronJob = require('cron').CronJob;
 var updateTask = require('../services/stockUpdate');
 var task = new updateTask();
 
+//these should be the companies' names
+//TODO retrieve these dynamically from DB
+const companies = ['A', 'B', 'C', 'D'];
+
   /*
    * Runs every day at 01:00:00 AM.
    */
 var job = new CronJob('00 00 01 * * 0-6', function() {
 
     console.log("Beginning stock update task");
-    task.run();
+    task.run(companies);
   }, function () {
     /* This function is executed when the job stops */
     console.log("stock update task stopped");

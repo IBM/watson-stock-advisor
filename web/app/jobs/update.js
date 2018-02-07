@@ -26,10 +26,7 @@ require('../../config')
 var CronJob = require('cron').CronJob;
 var updateTask = require('../services/stockUpdate');
 var task = new updateTask();
-
-//these should be the companies' names
-//TODO retrieve these dynamically from DB
-const companies = ['A', 'B', 'C', 'D'];
+var stockService = require('../services/stockService');
 
   /*
    * Runs every day at 01:00:00 AM.
@@ -37,7 +34,13 @@ const companies = ['A', 'B', 'C', 'D'];
 var job = new CronJob('00 00 01 * * 0-6', function() {
 
     console.log("Beginning stock update task");
-    task.run(companies);
+
+    stockService.getCompanyNames().then((companyNames) => {
+       task.run(companyNames);
+    }).catch((error) => {
+        console.log(error);
+    });
+
   }, function () {
     /* This function is executed when the job stops */
     console.log("stock update task stopped");
@@ -45,3 +48,4 @@ var job = new CronJob('00 00 01 * * 0-6', function() {
   true, /* Start the job right now */
   process.env.TIME_ZONE || 'America/Los_Angeles' /* Time zone of this job. */
 );
+

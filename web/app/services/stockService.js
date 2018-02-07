@@ -15,6 +15,8 @@
  */
 
 const db = require('../util/cloudantDb');
+var update = require('../services/stockUpdate');
+var stockUpdate = new update();
 
 class StockService {
 
@@ -24,6 +26,14 @@ class StockService {
    */
   getStocks() {
     return db.search();
+  }
+
+  getCompanyNames() {
+    return db.getCompanyNames();
+  }
+
+  addCompany(companyName) {
+    stockUpdate.run([companyName]);
   }
 
 }

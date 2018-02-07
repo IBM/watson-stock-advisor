@@ -43,6 +43,19 @@ class DB {
     });
   };
 
+  getCompanyNames() {
+      return new Promise((resolve, reject) => {
+         this.search().then((rows) => {
+            var tickers = rows.map(function(row) {
+              return row.doc.ticker;
+            })
+            resolve(tickers);
+          }).catch((error) => {
+            reject(error);
+          });
+      });
+  }
+
   /**
    * Inserts (or updates, if exists) the doc into the DB
    * @returns {promise} - A promise representing the query to the DB

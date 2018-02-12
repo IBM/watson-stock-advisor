@@ -49,6 +49,16 @@ for (var x=0; x<dataFiles.length; x++) {
   companies = companies.concat(loadCompanies(file));
 }
 
+//sort companies by name
+companies = companies.sort(function(a, b) {
+  if (a.name < b.name) {
+    return -1;
+  } else if (a.name > b.name) {
+    return 1
+  }
+  return 0;
+});
+
 var configured = false;
 
 if (fs.existsSync(env_path)) {

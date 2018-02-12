@@ -28,10 +28,6 @@ class StockService {
     return db.search();
   }
 
-  getCompanyNames() {
-    return db.getCompanyNames();
-  }
-
   addCompany(companyName) {
     stockUpdate.run([companyName]);
   }

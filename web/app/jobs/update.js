@@ -34,13 +34,7 @@ var stockService = require('../services/stockService');
 var job = new CronJob('00 00 01 * * 0-6', function() {
 
     console.log("Beginning stock update task");
-
-    stockService.getCompanyNames().then((companyNames) => {
-       task.run(companyNames);
-    }).catch((error) => {
-        console.log(error);
-    });
-
+    task.run();
   }, function () {
     /* This function is executed when the job stops */
     console.log("stock update task stopped");

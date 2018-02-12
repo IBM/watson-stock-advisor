@@ -206,7 +206,7 @@ function getArticleDataForCompanies(companies, callback) {
 class StockUpdate {
   
   /**
-   * Retrieve new date for the given companies
+   * Retrieve new data for the given companies
    * @param {string[]} companies
    */
   run(companies) {
@@ -215,25 +215,31 @@ class StockUpdate {
       console.log("Project is not configured correctly...terminating");
       return;
     }
-    
-    if (!companies || companies.length == 0) {
-      console.log("No companies provided to update");
-      return;
-    }
 
-    getArticleDataForCompanies(companies, function(articleData, articlesErr) {
-      if (!articlesErr) {
-        stock_db.search().then((rows)  => {
-          var docs = rows.map(function(row) {
-            return row.doc;
-          });
-          updateStocksData(articleData, docs);
-        }).catch((docsErr) => {
-          console.log(docsErr);
+    stock_db.search().then((rows)  => {
+      var docs = rows.map(function(row) {
+        return row.doc;
+      });
+
+      //if no companies provided, update all in DB
+      if (!companies) {
+        companies = docs.map(function(doc) {
+          return doc.ticker;
+        });
+      }
+      if (companies && companies.length > 0) {
+        getArticleDataForCompanies(companies, function(articleData, articlesErr) {
+          if (!articlesErr) {
+            updateStocksData(articleData, docs);
+          } else {
+            console.log(articlesErr);
+          }
         });
       } else {
-        console.log(articlesErr);
+        console.log('No companies to update');
       }
+    }).catch((docsErr) => {
+      console.log(docsErr);
     });
   }
 }

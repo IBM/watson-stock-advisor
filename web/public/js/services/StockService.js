@@ -18,18 +18,42 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
 
   var service = {};
 
+  function handlePromise(promise) {
+    return new Promise((resolve, reject) => {
+      promise.then((result) => {
+        resolve(result.data);
+      }).catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+    });
+  }
+
+  function get(path) {
+    var promise = $http.get(path);
+    return handlePromise(promise);
+  }
+
+  function post(path, params) {
+    var promise = $http.post(path, params);
+    return handlePromise(promise);
+  }
+
   /**
    * Fetches the stock data from the API
    * @returns The promise representing the fetch
    */
   service.getStocks = function() {
-    return new Promise((resolve, reject) => {
-        $http.get('/api/stocks').then((result) => {
-          resolve(result.data);
-        }).catch((error) => {
-          console.log(error);
-          reject(error);
-        });
+    return get('/api/stocks');
+  }
+
+  service.getAllCompanies = function() {
+    return get('/api/companies');
+  }
+
+  service.add = function(company) {
+    return post('/api/companies/add', {
+      name : company
     });
   }
 

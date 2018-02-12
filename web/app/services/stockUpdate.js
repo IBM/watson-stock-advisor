@@ -150,12 +150,25 @@ function parseResults(results) {
  */
 function getArticleDataForCompany(company, callback) {
   
+  var filterDuplicates = function(articles) {
+    var seen = {};
+    return articles.filter(function(article) {
+      var wasSeen = seen.hasOwnProperty(article.url);
+      if (!wasSeen) {
+        seen[article.url] = true;
+      } else {
+        console.log('Received duplicate article ' + article.url + ' from Discovery');
+      }
+      return !wasSeen;
+    });
+  }
+
   var promise = discovery.query(company);
     
   promise.then(function (data) {
     var results = data.results;
-    console.log('Received ' + results.length + ' articles for "' + company + '"');
-    var articles = parseResults(results);
+    var articles = filterDuplicates(parseResults(results));
+    console.log('Received ' + articles.length + ' unique articles for "' + company + '" from Discovery');
     var data = {
       company : company,
       articles : articles

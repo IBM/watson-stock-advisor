@@ -89,13 +89,33 @@
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
       
-        <!--
+        <!--Recent News-->
         <div class="row">
           <div class="col-lg-8">
             <div class="mb-0">
               <i class="fa fa-newspaper-o"></i> Recent News</div>
             <hr class="mt-2">
             <div class="card-columns">
+
+              <!--New stuff-->
+              <div ng-repeat="article in articles" class="card mb-3">
+                <a href="#">
+                  <img class="card-img-top img-fluid w-100" src="" alt="">
+                </a>
+                <div class="card-body">
+                  <h6 class="card-title mb-1"><a href="{{article.url}}">{{article.title}}</a></h6>
+                  <p class="card-text small">
+                    Source: {{article.source}}
+                    <br>Company: {{article.company}}
+                    <br>Sentiment: {{article.sentiment}}
+                    <br><a href="{{article.url}}">View Article</a>
+                  </p>
+                </div>
+                <hr class="my-0">
+                <hr class="my-0">
+                <div class="card-footer small text-muted">Posted {{article.formattedDate}}</div>
+              </div>
+              <!--Old stuff
               <div class="card mb-3">
                 <a href="#">
                   <img class="card-img-top img-fluid w-100" src="" alt="">
@@ -159,7 +179,8 @@
                 <div class="card-footer small text-muted">Posted yesterday</div>
               </div>
             </div>
-          
+
+          <!--News Feed 
           </div>
           <div class="col-lg-4">
             <div class="card mb-3">

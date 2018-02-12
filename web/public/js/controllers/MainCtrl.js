@@ -44,6 +44,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       updateTable();
       updatePieChart(stocks);
       updateLineChart(stocks);
+      updateArticles(stocks);
     });
   }
 
@@ -85,6 +86,55 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         }],
       },
     });
+  }
+
+
+  function updateArticles(stocks) {
+
+    var articles = [];
+
+    for (var i = 0; i < stocks.length; i++) {
+
+        companyArticles = stocks[i].history; 
+        companyName = stocks[i].company;
+
+        for (var j = 0; j < companyArticles.length; j++) {
+          
+          //console.log(companyArticles[j]);
+          // TODO get source and article title from discovery 
+
+          // date pattern "yyyy-MM-dd'T'HH:mm:ssZ";
+          var month = companyArticles[j].date.slice(5,7);
+          var day = companyArticles[j].date.slice(8,10); 
+          var year = companyArticles[j].date.slice(0,4);  
+          var hour = companyArticles[j].date.slice(11,13);
+          var minute = companyArticles[j].date.slice(14,16);
+          var ampm = "" ; 
+
+          // assigning AM/PM to date and time 
+          if (parseInt(hour) >= 12) {
+            ampm = "PM"; 
+            hour = hour - 12; 
+          }
+          else {
+            ampm = "AM"
+          }
+
+          if (hour == 0) {
+            hour = 12; 
+          }
+
+          var articleDate = month + "-" + day + "-" + year + " at " + hour + ":" + minute + ampm;
+          companyArticles[j].formattedDate = articleDate; 
+          companyArticles[j].company = companyName; 
+        }
+
+        articles = articles.concat(stocks[i].history);
+    } 
+
+    // TODO: sorting articles by date 
+    $scope.articles = articles; 
+
   }
 
   /**

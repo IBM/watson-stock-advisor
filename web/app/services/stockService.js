@@ -41,6 +41,30 @@ class StockService {
     stockUpdate.run([companyName]);
   }
 
+  /**
+   * Deletes the entry in the DB with doc.company = companyName
+   * @param {string} companyName
+   */
+  deleteCompany(companyName) {
+
+    return new Promise((resolve, reject) => {
+      this.getStockByCompanyName(companyName).then((stocks) => {
+        var companyDoc = stocks.docs[0];
+        if (companyDoc) {
+          db.delete(companyDoc).then((data) => {
+            resolve();
+          }).catch((error) => {
+            console.log(error);
+            reject()
+          })
+        }
+      }).catch((error) => {
+        console.log(error);
+        reject();
+      });
+    });
+  }
+
   getAllCompanies() {
     return config.companies;
   }

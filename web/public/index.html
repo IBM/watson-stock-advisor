@@ -61,7 +61,12 @@
                     </tfoot>
                     <tbody>
                       <tr ng-repeat="stock in stocks" >
-                          <td>{{stock.company}}</td>
+                          <td>{{stock.company}}
+                            <span class="pull-right">
+                                <button ng-click="remove(stock.company)" class="btn btn-danger">
+                                  <strong>Delete</strong>
+                                </a></button>
+                          </td>
                           <td>{{stock.ticker}}</td>
                           <td>{{stock.recentSentiment}}</td>
                       </tr>

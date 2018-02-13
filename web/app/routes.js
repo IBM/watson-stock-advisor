@@ -62,6 +62,17 @@ module.exports = function(app, publicRoot) {
     res.send(companyName);
   });
 
+  /**
+   * Deletes a company by name
+   */
+  app.post('/api/companies/delete', (req, res) => {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    var companyName = req.body.name;
+    console.log('Deleting company "' + companyName + '"');
+    stockService.deleteCompany(companyName);
+    res.send(companyName);
+  });
+
   // frontend routes
 
   /**

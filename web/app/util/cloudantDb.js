@@ -79,7 +79,25 @@ class DB {
       });
     });
   };
-  
+
+  /**
+   * Deletes the doc from the DB
+   * @returns {promise} - A promise representing the query to the DB
+   */
+  delete(doc) {
+    console.log('deleting: ', doc);
+    return new Promise((resolve, reject) => {
+      db.destroy(doc._id, doc._rev, function(err, data) {
+        if (err) {
+          console.log('deletion failed: ' + err.message);
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  };
+
   /**
    * Finds the entry with a company of the given name
    * @param {string} name

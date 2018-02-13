@@ -23,6 +23,18 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
   }
 
+  $scope.remove = function(companyName) {
+    StockService.delete(companyName);
+    var stocks = $scope.stocks;
+    for (var i=0; i<stocks.length; i++) {
+      var stock = stocks[i];
+      if (stock.company === companyName) {
+        stocks.splice(i, 1);
+        break;
+      }
+    }
+  }
+
   StockService.getStocks().then((stocks) => {
     handleStocks(stocks);
   });

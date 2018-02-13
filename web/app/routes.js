@@ -42,6 +42,26 @@ module.exports = function(app, publicRoot) {
     });
   });
 
+  /**
+   * Retrieves the list of all companies
+   */
+  app.get('/api/companies', (req, res) => {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    var companies = stockService.getAllCompanies();
+    res.send(companies);
+  });
+
+  /**
+   * Retrieves the list of all companies
+   */
+  app.post('/api/companies/add', (req, res) => {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    var companyName = req.body.name;
+    console.log('Adding company "' + companyName + '"');
+    stockService.addCompany(companyName);
+    res.send(companyName);
+  });
+
   // frontend routes
 
   /**

@@ -14,7 +14,8 @@
   <link rel="stylesheet" href="./libs/components-font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="./libs/dataTables.net-bs4/css/dataTables.bootstrap4.css">
   <link rel="stylesheet" href="./css/style.css">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+  
   <!-- ANGULAR -->
   <script src="./libs/angular/angular.min.js"></script>
   <script src="./libs/angular-route/angular-route.min.js"></script>
@@ -36,7 +37,11 @@
           <div class="col-lg-8">
             <div class="card mb-3">
               <div class="card-header">
-                <i class="fa fa-table"></i> My Stocks</div>
+                <i class="fa fa-table"></i> My Stocks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select id="selectpicker" class="selectpicker" data-show-subtext="true" data-live-search="true">
+                </select>
+                <button ng-click="addStock()" type="button" class="btn btn-success">Add Stock</button>
+              </div>
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -248,12 +253,19 @@
         <i class="fa fa-angle-up"></i>
       </a>
         <!-- JS -->
+        <!-- There are some dependency incompatibilites so we have multiple jquery dependencies -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <!-- Popper is required for bootstrap select -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="./libs/jquery/dist/jquery.min.js"></script>
         <script src="./libs/jquery.easing/js/jquery.easing.min.js"></script>
         <script src="./libs/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="./libs/datatables.net/js/jquery.dataTables.js"></script>
         <script src="./libs/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
         <script src="./libs/chart.js/dist/Chart.bundle.min.js"></script>
+
+        <!-- This must be loaded after jquery etc -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
         <!-- Custom scripts-->
         <script src="./js/main.js"></script>
         <script src="./js/charts.js"></script>

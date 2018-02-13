@@ -16,8 +16,19 @@
 
 angular.module('MainModule', []).controller('MainController',['$scope', 'StockService', function($scope, StockService) {
 
+  $scope.addStock = function() {
+    var selectedCompany = $("#selectpicker").find("option:selected").text();
+    if (selectedCompany && selectedCompany.trim() !== '') {
+      StockService.add(selectedCompany);
+    }
+  }
+
   StockService.getStocks().then((stocks) => {
     handleStocks(stocks);
+  });
+
+  StockService.getAllCompanies().then((companies) => {
+    handleCompanies(companies);
   });
 
   function capitalizeFirstLetterOnly(string) {
@@ -46,6 +57,23 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       updateLineChart(stocks);
       updateArticles(stocks);
     });
+  }
+
+  /**
+   * Handles all page population with stock data
+   * @param {stock[]} stocks
+   */
+  function handleCompanies(companies) {
+    
+    var picker = $("#selectpicker");
+    var newItems = '';
+
+    for (var i=0; i<companies.length; i++) {
+      var company = companies[i];
+      newItems += ('<option data-subtext="' + company.ticker + '">' + company.name + '</option>');
+    }
+    picker.append(newItems);
+    picker.selectpicker('refresh');
   }
 
   /**

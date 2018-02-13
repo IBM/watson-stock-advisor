@@ -17,6 +17,7 @@
 const db = require('../util/cloudantDb');
 var update = require('../services/stockUpdate');
 var stockUpdate = new update();
+const config = require('../../config');
 
 class StockService {
 
@@ -30,6 +31,10 @@ class StockService {
 
   addCompany(companyName) {
     stockUpdate.run([companyName]);
+  }
+
+  getAllCompanies() {
+    return config.companies;
   }
 
 }

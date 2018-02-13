@@ -25,6 +25,25 @@ const cloudant = Cloudant({
 });
 const db = cloudant.db.use(process.env.DB_NAME);
 
+/**
+ * Searches for docs with the given value for the given key
+ * @param {*} key
+ * @param {*} value
+ */
+function getBy(key, value) {
+  return new Promise((resolve, reject) => {
+    var selector = {};
+    selector[key] = value
+    db.find({selector: selector}, function(err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+
 class DB {
 
   /**
@@ -60,6 +79,14 @@ class DB {
       });
     });
   };
+  
+  /**
+   * Finds the entry with a company of the given name
+   * @param {string} name
+   */
+  getByCompanyName(name) {
+    return getBy('company', name);
+  }
 }
 
 module.exports = new DB();

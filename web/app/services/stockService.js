@@ -29,6 +29,14 @@ class StockService {
     return db.search();
   }
 
+  /**
+   * Finds the entr(y/ies) with a company of the given name
+   * @param {string} companyName
+   */
+  getStockByCompanyName(companyName) {
+    return db.getByCompanyName(companyName);
+  }
+
   addCompany(companyName) {
     stockUpdate.run([companyName]);
   }

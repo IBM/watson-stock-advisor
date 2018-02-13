@@ -31,7 +31,7 @@ module.exports = function(app, publicRoot) {
         var doc = rawStock.doc;
         return {
           company : doc.company,
-          ticker : "TODO", //TODO
+          ticker  : doc.ticker,
           history : doc.history || []
         }
       });

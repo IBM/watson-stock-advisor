@@ -90,6 +90,7 @@ function updateStocksData(articleData, stockData) {
     if (!stockDatum) {
       stockDatum = {
         company : company,
+        ticker  : findTickerForCompanyWithName(company) || 'No Ticker Found',
         history : []
       }
     }
@@ -216,6 +217,17 @@ function getArticleDataForCompanies(companies, callback) {
       callback(articleData, errors.join());
     }
   });
+}
+
+function findTickerForCompanyWithName(name) {
+
+  for (var i=0; i<config.companies.length; i++) {
+    var company = config.companies[i];
+    if (name === company.name) {
+      return company.ticker;
+    }
+  }
+  return undefined;
 }
 
 class StockUpdate {

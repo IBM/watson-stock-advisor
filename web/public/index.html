@@ -63,7 +63,7 @@
                       <tr ng-repeat="stock in stocks" >
                           <td>{{stock.company}}
                             <span class="pull-right">
-                                <button ng-click="remove(stock.company)" class="btn btn-danger">
+                                <button ng-click="confirmDelete(stock.company)" class="btn btn-danger">
                                   <strong>Delete</strong>
                                 </a></button>
                           </td>
@@ -275,6 +275,25 @@
         <script src="./js/main.js"></script>
         <script src="./js/charts.js"></script>
     </div>
+    <div class="modal fade" id="deletionModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Delete Stock</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to delete this stock? The accumulated article history will be deleted. This cannot be undone.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" ng-click="deleteStock()" class="btn btn-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </body>
 
 </html>

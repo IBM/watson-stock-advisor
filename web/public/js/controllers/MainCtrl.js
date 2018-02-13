@@ -16,6 +16,8 @@
 
 angular.module('MainModule', []).controller('MainController',['$scope', 'StockService', function($scope, StockService) {
 
+  var companyNamePendingDeletion = undefined;
+
   $scope.addStock = function() {
     var selectedCompany = $("#selectpicker").find("option:selected").text();
     if (selectedCompany && selectedCompany.trim() !== '') {
@@ -23,16 +25,29 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
   }
 
-  $scope.remove = function(companyName) {
-    StockService.delete(companyName);
+  $scope.confirmDelete = function(companyName) {
+    companyNamePendingDeletion = companyName;
+    $('#deletionModal').modal('show')
+  }
+
+  $scope.deleteStock = function() {
+
+    $('#deletionModal').modal('hide')
+
+    if (!companyNamePendingDeletion) {
+      return;
+    }
+
+    StockService.delete(companyNamePendingDeletion);
     var stocks = $scope.stocks;
     for (var i=0; i<stocks.length; i++) {
       var stock = stocks[i];
-      if (stock.company === companyName) {
+      if (stock.company === companyNamePendingDeletion) {
         stocks.splice(i, 1);
         break;
       }
     }
+    companyNamePendingDeletion = undefined;
   }
 
   StockService.getStocks().then((stocks) => {

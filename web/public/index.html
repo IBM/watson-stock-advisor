@@ -62,7 +62,7 @@
                     </tfoot>
                     <tbody>
                       <tr ng-repeat="stock in stocks" >
-                          <td>{{stock.company}}
+                          <td ng-click= selectCompany(stock)>{{stock.company}}
                             <span class="pull-right">
                                 <button ng-click="confirmDelete(stock.company)" class="btn btn-danger">
                                   <strong>Delete</strong>
@@ -191,7 +191,7 @@
               </div>
             </div>
 
-          <!--News Feed 
+          News Feed 
           </div>
           <div class="col-lg-4">
             <div class="card mb-3">

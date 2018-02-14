@@ -17,6 +17,14 @@
 const stockService = require('./services/stockService');
 const Error = require('./models/error');
 
+function prepareDocForClient(doc) {
+  return {
+    company : doc.company,
+    ticker  : doc.ticker,
+    history : doc.history || []
+  }
+}
+
 module.exports = function(app, publicRoot) {
 
   // server routes
@@ -28,12 +36,7 @@ module.exports = function(app, publicRoot) {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     stockService.getStocks().then((stocks) => {
       var prettyStocks = stocks.map((rawStock) => {
-        var doc = rawStock.doc;
-        return {
-          company : doc.company,
-          ticker  : doc.ticker,
-          history : doc.history || []
-        }
+        return prepareDocForClient(rawStock.doc);
       });
       res.send(prettyStocks);
     }).catch((error) => {
@@ -58,7 +61,26 @@ module.exports = function(app, publicRoot) {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     var companyName = req.body.name;
     console.log('Adding company "' + companyName + '"');
-    stockService.addCompany(companyName);
+    stockService.addCompany(companyName).then((result) => {
+      if (result) {
+        res.send(prepareDocForClient(result));
+      } else {
+        res.send(new Error('Add Error', 'There was an error getting the new company data'))
+      }
+    }).catch((error) => {
+      console.log(error);
+      res.send(new Error('Add Error', 'There was an error adding the company'));
+    });
+  });
+
+  /**
+   * Deletes a company by name
+   */
+  app.post('/api/companies/delete', (req, res) => {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    var companyName = req.body.name;
+    console.log('Deleting company "' + companyName + '"');
+    stockService.deleteCompany(companyName);
     res.send(companyName);
   });
 

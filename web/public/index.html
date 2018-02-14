@@ -40,7 +40,8 @@
                 <i class="fa fa-table"></i> My Stocks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <select id="selectpicker" class="selectpicker" data-show-subtext="true" data-live-search="true">
                 </select>
-                <button ng-click="addStock()" type="button" class="btn btn-success">Add Stock</button>
+                <div class="align-middle" id="loader"></div>
+                <button id="addStockButton" ng-click="addStock()" type="button" class="btn btn-success">Add Stock</button>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -61,7 +62,12 @@
                     </tfoot>
                     <tbody>
                       <tr ng-repeat="stock in stocks" >
-                          <td>{{stock.company}}</td>
+                          <td>{{stock.company}}
+                            <span class="pull-right">
+                                <button ng-click="confirmDelete(stock.company)" class="btn btn-danger">
+                                  <strong>Delete</strong>
+                                </a></button>
+                          </td>
                           <td>{{stock.ticker}}</td>
                           <td>{{stock.recentSentiment}}</td>
                       </tr>
@@ -69,7 +75,7 @@
                   </table>
                 </div>
               </div>
-              <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+              <div class="card-footer small text-muted">&nbsp;</div>
             </div>
           </div>
           <!-- Pie Chart-->
@@ -80,7 +86,7 @@
                 <div class="card-body">
                   <canvas id="sentimentPieChart" width="100%" height="100"></canvas>
                 </div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                <div class="card-footer small text-muted">Updated {{updateDate}}</div>
               </div>
           </div>
         </div>
@@ -91,7 +97,7 @@
           <div class="card-body">
             <canvas id="trendChart" width="100%" height="30"></canvas>
           </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          <div class="card-footer small text-muted">Updated {{updateDate}}</div>
         </div>
       
         <!--Recent News-->
@@ -241,13 +247,6 @@
         </div>
       -->
       </div>
-      <footer class="sticky-footer">
-        <div class="container">
-          <div class="text-center">
-            <small>Copyright © IBM 2018</small>
-          </div>
-        </div>
-      </footer>
       <!-- Scroll to Top Button-->
       <a class="scroll-to-top rounded" href="#page-top">
         <i class="fa fa-angle-up"></i>
@@ -270,6 +269,32 @@
         <script src="./js/main.js"></script>
         <script src="./js/charts.js"></script>
     </div>
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © IBM 2018</small>
+        </div>
+      </div>
+    </footer>
+    <div class="modal fade" id="deletionModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Delete Stock</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to delete this stock? The accumulated article history will be deleted. This cannot be undone.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" ng-click="deleteStock()" class="btn btn-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </body>
 
 </html>

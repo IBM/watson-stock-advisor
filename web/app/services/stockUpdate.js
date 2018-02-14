@@ -82,6 +82,8 @@ function articleContains(article, articles) {
  */
 function updateStocksData(articleData, stockData) {
   
+  var results = stockData;
+
   for (var i=0; i<articleData.length; i++) {
     var articleDatum = articleData[i];
     var company = articleDatum.company;
@@ -93,6 +95,7 @@ function updateStocksData(articleData, stockData) {
         ticker  : findTickerForCompanyWithName(company) || 'No Ticker Found',
         history : []
       }
+      results.push(stockDatum);
     }
     var existingArticles = stockDatum.history || [];
     
@@ -115,6 +118,7 @@ function updateStocksData(articleData, stockData) {
       console.log('No new articles to insert into "' + company + '"');
     }
   }
+  return results;
 }
 
 /**
@@ -238,35 +242,41 @@ class StockUpdate {
    */
   run(companies) {
 
-    if (!config.configured) {
-      console.log("Project is not configured correctly...terminating");
-      return;
-    }
+    return new Promise((resolve, reject) => {
+      if (!config.configured) {
+        console.log("Project is not configured correctly...terminating");
+        reject();
+      }
 
-    stock_db.search().then((rows)  => {
-      var docs = rows.map(function(row) {
-        return row.doc;
+      stock_db.search().then((rows)  => {
+        var docs = rows.map(function(row) {
+          return row.doc;
+        });
+
+        //if no companies provided, update all in DB
+        if (!companies) {
+          companies = docs.map(function(doc) {
+            return doc.company;
+          });
+        }
+        if (companies && companies.length > 0) {
+          getArticleDataForCompanies(companies, function(articleData, articlesErr) {
+            if (!articlesErr) {
+              var results = updateStocksData(articleData, docs);
+              resolve(results);
+            } else {
+              console.log(articlesErr);
+              reject();
+            }
+          });
+        } else {
+          console.log('No companies to update');
+          reject();
+        }
+      }).catch((docsErr) => {
+        console.log(docsErr);
+        reject();
       });
-
-      //if no companies provided, update all in DB
-      if (!companies) {
-        companies = docs.map(function(doc) {
-          return doc.company;
-        });
-      }
-      if (companies && companies.length > 0) {
-        getArticleDataForCompanies(companies, function(articleData, articlesErr) {
-          if (!articlesErr) {
-            updateStocksData(articleData, docs);
-          } else {
-            console.log(articlesErr);
-          }
-        });
-      } else {
-        console.log('No companies to update');
-      }
-    }).catch((docsErr) => {
-      console.log(docsErr);
     });
   }
 }

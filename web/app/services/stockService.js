@@ -29,8 +29,63 @@ class StockService {
     return db.search();
   }
 
+  /**
+   * Finds the entr(y/ies) with a company of the given name
+   * @param {string} companyName
+   */
+  getStockByCompanyName(companyName) {
+    return db.getByCompanyName(companyName);
+  }
+
   addCompany(companyName) {
-    stockUpdate.run([companyName]);
+    return new Promise((resolve, reject) => {
+
+      this.getStockByCompanyName(companyName).then((stocks) => {
+        var docs = stocks.docs;
+        if (docs && docs.length > 0) {
+          reject('This company is already being watched');
+        } else {
+          stockUpdate.run([companyName]).then((results) => {
+
+            var newResult = undefined;
+            for (var i=0; i<results.length; i++) {
+              var result = results[i];
+              if (result.company === companyName) {
+                newResult = result;
+                break;
+              }
+            }
+            resolve(newResult)
+          }).catch((error) => {
+            reject(error);
+          });
+        }
+      });
+    });
+  }
+
+  /**
+   * Deletes the entry in the DB with doc.company = companyName
+   * @param {string} companyName
+   */
+  deleteCompany(companyName) {
+
+    return new Promise((resolve, reject) => {
+      this.getStockByCompanyName(companyName).then((stocks) => {
+        var companyDoc = stocks.docs[0];
+        if (companyDoc) {
+          db.delete(companyDoc).then((data) => {
+            resolve();
+          }).catch((error) => {
+            console.log(error);
+            reject()
+          })
+        }
+      }).catch((error) => {
+        console.log(error);
+        reject();
+      });
+    });
   }
 
   getAllCompanies() {

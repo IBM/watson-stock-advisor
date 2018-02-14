@@ -16,11 +16,65 @@
 
 angular.module('MainModule', []).controller('MainController',['$scope', 'StockService', function($scope, StockService) {
 
+  var companyNamePendingDeletion = undefined;
+
+  $scope.stocks = [];
+
+  var loader = $('#loader');
+  loader.hide();
+
   $scope.addStock = function() {
+
     var selectedCompany = $("#selectpicker").find("option:selected").text();
-    if (selectedCompany && selectedCompany.trim() !== '') {
-      StockService.add(selectedCompany);
+
+    if (stockExists(selectedCompany)) {
+      alert('You are already watching this company.');
+      return;
     }
+
+    var addStockButton = $('#addStockButton');
+    addStockButton.hide();
+    loader.show();
+    if (selectedCompany && selectedCompany.trim() !== '') {
+      StockService.add(selectedCompany).then((result) => {
+        addStockButton.show();
+        loader.hide();
+        $scope.$apply(() => {
+          var stocks = $scope.stocks;
+          stocks.push(result);
+          sortStocks(stocks);
+        });
+      }).catch((error) => {
+        addStockButton.show();
+        loader.hide();
+        alert(error);
+      })
+    }
+  }
+
+  $scope.confirmDelete = function(companyName) {
+    companyNamePendingDeletion = companyName;
+    $('#deletionModal').modal('show')
+  }
+
+  $scope.deleteStock = function() {
+
+    $('#deletionModal').modal('hide')
+
+    if (!companyNamePendingDeletion) {
+      return;
+    }
+
+    StockService.delete(companyNamePendingDeletion);
+    var stocks = $scope.stocks;
+    for (var i=0; i<stocks.length; i++) {
+      var stock = stocks[i];
+      if (stock.company === companyNamePendingDeletion) {
+        stocks.splice(i, 1);
+        break;
+      }
+    }
+    companyNamePendingDeletion = undefined;
   }
 
   StockService.getStocks().then((stocks) => {
@@ -33,6 +87,29 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   function capitalizeFirstLetterOnly(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  }
+
+  function sortStocks(stocks) {
+    stocks.sort(function(a, b) {
+      if (a.company < b.company) {
+        return -1;
+      } else if (a.company > b.company) {
+        return 1
+      }
+      return 0;
+    });
+  }
+
+  function stockExists(companyName) {
+
+    var stocks = $scope.stocks;
+    for (var i=0; i<stocks.length; i++) {
+      if (stocks[i].company === companyName) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   function addSentiment(stock) {
@@ -48,9 +125,20 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    */
   function handleStocks(stocks) {
     $scope.$apply(() => {
+      var mostRecent = undefined;
       for (var i=0 ; i<stocks.length; i++) {
-        addSentiment(stocks[i]);
+        var stock = stocks[i];
+        addSentiment(stock);
+        for (var x=0; x<stock.history.length; x++) {
+          var article = stock.history[x];
+          var date = new Date(article.date);
+          if (!mostRecent || (date.getTime() > mostRecent.getTime())) {
+            mostRecent = date;
+          }
+        }
       }
+      $scope.updateDate = mostRecent ? mostRecent.toLocaleString() : "";
+      sortStocks(stocks)
       $scope.stocks = stocks;
       updateTable();
       updatePieChart(stocks);
@@ -60,8 +148,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   }
 
   /**
-   * Handles all page population with stock data
-   * @param {stock[]} stocks
+   * Handles adding companies to the company dropdown
+   * @param {company[]} companies
    */
   function handleCompanies(companies) {
     

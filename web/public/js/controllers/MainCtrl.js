@@ -18,10 +18,20 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   var companyNamePendingDeletion = undefined;
 
+  $scope.stocks = [];
+
   $scope.addStock = function() {
     var selectedCompany = $("#selectpicker").find("option:selected").text();
     if (selectedCompany && selectedCompany.trim() !== '') {
-      StockService.add(selectedCompany);
+      StockService.add(selectedCompany).then((result) => {
+        $scope.$apply(() => {
+          var stocks = $scope.stocks;
+          stocks.push(result);
+          sortStocks(stocks);
+        });
+      }).catch((error) => {
+        alert(error);
+      })
     }
   }
 
@@ -62,6 +72,17 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
   }
 
+  function sortStocks(stocks) {
+    stocks.sort(function(a, b) {
+      if (a.company < b.company) {
+        return -1;
+      } else if (a.company > b.company) {
+        return 1
+      }
+      return 0;
+    });
+  }
+
   function addSentiment(stock) {
     stock.recentSentiment = "None";
     if (stock.history && stock.history.length > 0) {
@@ -78,6 +99,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       for (var i=0 ; i<stocks.length; i++) {
         addSentiment(stocks[i]);
       }
+      sortStocks(stocks)
       $scope.stocks = stocks;
       updateTable();
       updatePieChart(stocks);

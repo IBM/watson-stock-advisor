@@ -39,6 +39,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       StockService.add(selectedCompany).then((result) => {
         addStockButton.show();
         loader.hide();
+        addSentiment(result);
         $scope.$apply(() => {
           var stocks = $scope.stocks;
           stocks.push(result);

@@ -125,9 +125,19 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    */
   function handleStocks(stocks) {
     $scope.$apply(() => {
+      var mostRecent = undefined;
       for (var i=0 ; i<stocks.length; i++) {
-        addSentiment(stocks[i]);
+        var stock = stocks[i];
+        addSentiment(stock);
+        for (var x=0; x<stock.history.length; x++) {
+          var article = stock.history[x];
+          var date = new Date(article.date);
+          if (!mostRecent || (date.getTime() > mostRecent.getTime())) {
+            mostRecent = date;
+          }
+        }
       }
+      $scope.updateDate = mostRecent ? mostRecent.toLocaleString() : "";
       sortStocks(stocks)
       $scope.stocks = stocks;
       updateTable();

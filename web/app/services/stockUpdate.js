@@ -131,8 +131,8 @@ function parseArticle(result) {
     url: result.url,
     sentiment: result.enriched_text.sentiment.document.label,
     date: result.crawl_date,
-    title: result.enriched_title.relations.sentence, 
-    source: result.enriched_title.entities.text
+    title: result.title,
+    source: result.forum_title
   }
 }
 

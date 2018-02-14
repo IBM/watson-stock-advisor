@@ -138,8 +138,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   }
 
   /**
-   * Handles all page population with stock data
-   * @param {stock[]} stocks
+   * Handles adding companies to the company dropdown
+   * @param {company[]} companies
    */
   function handleCompanies(companies) {
     

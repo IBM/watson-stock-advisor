@@ -30,8 +30,8 @@ module.exports = function(app, publicRoot) {
       var prettyStocks = stocks.map((rawStock) => {
         var doc = rawStock.doc;
         return {
-          company : doc.ticker,
-          ticker : "TODO", //TODO
+          company : doc.company,
+          ticker  : doc.ticker,
           history : doc.history || []
         }
       });

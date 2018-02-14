@@ -40,7 +40,7 @@ function loadCompanies(fileName) {
 }
 
 //load the companies from files
-const dataPath = './app/data/';
+const dataPath = appRoot + '/app/data/';
 const dataFiles = ['NASDAQ_mapping.txt', 'NYSE_mapping.txt'];
 var companies = [];
 

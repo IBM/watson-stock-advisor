@@ -21,7 +21,7 @@ const stock_db  = config.configured && require('../util/cloudantDb');
 const discovery = config.configured && require('./discovery');
 
 /**
- * Searches the stocks for a ticker matching (case-insensitive) the company.
+ * Searches the stocks for a company name matching (case-insensitive) the company.
  * Returns undefined if not found
  * @param {stock[]} stocks - The list of stocks
  * @param {string} company - The name of the company to look for
@@ -35,7 +35,7 @@ function findStockDatum(stocks, company) {
 
   for (var i=0; i<stocks.length; i++) {
     var stock = stocks[i];
-    var name = (stock.ticker && stock.ticker.toLowerCase()) || "";
+    var name = (stock.company && stock.company.toLowerCase()) || "";
     if (name === company.toLowerCase()) {
       return stock;
     }
@@ -89,7 +89,8 @@ function updateStocksData(articleData, stockData) {
     var stockDatum = findStockDatum(stockData, company);
     if (!stockDatum) {
       stockDatum = {
-        ticker : company,
+        company : company,
+        ticker  : findTickerForCompanyWithName(company) || 'No Ticker Found',
         history : []
       }
     }
@@ -218,6 +219,17 @@ function getArticleDataForCompanies(companies, callback) {
   });
 }
 
+function findTickerForCompanyWithName(name) {
+
+  for (var i=0; i<config.companies.length; i++) {
+    var company = config.companies[i];
+    if (name === company.name) {
+      return company.ticker;
+    }
+  }
+  return undefined;
+}
+
 class StockUpdate {
   
   /**
@@ -239,7 +251,7 @@ class StockUpdate {
       //if no companies provided, update all in DB
       if (!companies) {
         companies = docs.map(function(doc) {
-          return doc.ticker;
+          return doc.company;
         });
       }
       if (companies && companies.length > 0) {

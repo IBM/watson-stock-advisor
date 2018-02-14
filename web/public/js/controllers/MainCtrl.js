@@ -78,6 +78,18 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     companyNamePendingDeletion = undefined;
   }
 
+  $scope.selectCompany = function(stock) {
+    var newLineChartData = getLineChartData(stock);
+    $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
+    $scope.myLineChart.data.labels = newLineChartData.labels;
+    $scope.myLineChart.update();
+
+    var newPieChartData = getPieChartData(stock);
+    $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
+    $scope.myPieChart.data.labels = newPieChartData.labels;
+    $scope.myPieChart.update();
+  }
+
   StockService.getStocks().then((stocks) => {
     handleStocks(stocks);
   });
@@ -142,8 +154,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       sortStocks(stocks)
       $scope.stocks = stocks;
       updateTable();
-      updatePieChart(stocks);
-      updateLineChart(stocks);
+      updatePieChart(stocks[0]);
+      updateLineChart(stocks[0]);
       updateArticles(stocks);
     });
   }
@@ -179,24 +191,33 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    * Updates the pie chart
    * @param {stock[]} stocks
    */
-  function updatePieChart(stocks) {
-    var ctx = document.getElementById("sentimentPieChart");
+  function updatePieChart(stock) {
+    var pieChartData = getPieChartData(stock);
+    makeNewPieChart(pieChartData.labels, pieChartData.data);
+  }
 
+  function getPieChartData(stock){
     var keys = ["Positive", "Neutral", "Negative"]
 
     var dataMap = {};
     for (var x=0; x<keys.length; x++) { dataMap[keys[x].toLowerCase()] = 0; }
 
-    for (var i=0; i<stocks.length; i++) {
-      dataMap[stocks[i].recentSentiment.toLowerCase()] += 1;
-    }
+    var history = stock.history;
+    for (var i=0; i<history.length; i++) {dataMap[history[i].sentiment.toLowerCase()] += 1}
+
     var data = [];
     for (var y=0; y<keys.length; y++) { data.push(dataMap[keys[y].toLowerCase()]) }
 
-    var myPieChart = new Chart(ctx, {
+    var pieData = { data: data , labels: keys}
+    return pieData;
+  }
+
+  function makeNewPieChart(labels,data){
+    var ctx = document.getElementById("sentimentPieChart");
+    $scope.myPieChart = new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: keys,
+        labels: labels,
         datasets: [{
           data: data,
           backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
@@ -204,7 +225,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       },
     });
   }
-
 
   function updateArticles(stocks) {
 
@@ -258,14 +278,15 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    * Updates the line chart
    * @param {stock[]} stocks
    */
-  function updateLineChart(stocks) {
-    var ctx = document.getElementById("trendChart");
-    var history = stocks[0].history;
+  function updateLineChart(stock) {
+    var lineChartData = getLineChartData(stock)
+    makeNewChart(lineChartData.labels, lineChartData.data);
+  }
 
-    //has over all sentiment of the day for a particular stock
-    var sentimentMap = {};
-    //has article count of the day for a particular stock
-    var articleCountmap = {};
+  function getLineChartData(stock) {
+    var history = stock.history;
+    var sentimentMap = {};//has over all sentiment of the day for a particular stock
+    var articleCountmap = {};//has article count of the day for a particular stock
 
     for (var i=0; i<history.length; i++) {
       var sentiment = history[i].sentiment.toLowerCase();
@@ -288,31 +309,37 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
     }
 
-    //distinct dates found in history
+    //distinct dates found in history and sort them
     var labels1 = Object.keys(sentimentMap);
     var labels = labels1.sort(function(a, b) {
       return new Date(a) - new Date(b);
     });
 
-
     var data = [];
     for (var y=0; y<labels.length; y++) { data.push((sentimentMap[labels[y]]/articleCountmap[labels[y]])) }
     
-    var myLineChart = new Chart(ctx, {
+    var lineChartData = { data: data , labels: labels}
+    return lineChartData;
+
+  }
+
+  function makeNewChart(labels,data){
+    var ctx = document.getElementById("trendChart");
+    $scope.myLineChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: labels,
         datasets: [{
-          label: "Sessions",
-          lineTension: 0.3,
-          backgroundColor: "rgba(2,117,216,0.2)",
+          label: "Sentiment value per day",
+          lineTension: 0.0,
+          backgroundColor: "rgba(2,117,216,0)",
           borderColor: "rgba(2,117,216,1)",
           pointRadius: 5,
           pointBackgroundColor: "rgba(2,117,216,1)",
           pointBorderColor: "rgba(255,255,255,0.8)",
           pointHoverRadius: 5,
           pointHoverBackgroundColor: "rgba(2,117,216,1)",
-          pointHitRadius: 20,
+          pointHitRadius: 5,
           pointBorderWidth: 2,
           data: data,
         }],

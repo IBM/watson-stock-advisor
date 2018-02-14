@@ -40,7 +40,8 @@
                 <i class="fa fa-table"></i> My Stocks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <select id="selectpicker" class="selectpicker" data-show-subtext="true" data-live-search="true">
                 </select>
-                <button ng-click="addStock()" type="button" class="btn btn-success">Add Stock</button>
+                <div class="align-middle" id="loader"></div>
+                <button id="addStockButton" ng-click="addStock()" type="button" class="btn btn-success">Add Stock</button>
               </div>
               <div class="card-body">
                 <div class="table-responsive">

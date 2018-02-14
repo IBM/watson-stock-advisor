@@ -20,16 +20,26 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   $scope.stocks = [];
 
+  var loader = $('#loader');
+  loader.hide();
+
   $scope.addStock = function() {
+    var addStockButton = $('#addStockButton');
+    addStockButton.hide();
+    loader.show();
     var selectedCompany = $("#selectpicker").find("option:selected").text();
     if (selectedCompany && selectedCompany.trim() !== '') {
       StockService.add(selectedCompany).then((result) => {
+        addStockButton.show();
+        loader.hide();
         $scope.$apply(() => {
           var stocks = $scope.stocks;
           stocks.push(result);
           sortStocks(stocks);
         });
       }).catch((error) => {
+        addStockButton.show();
+        loader.hide();
         alert(error);
       })
     }

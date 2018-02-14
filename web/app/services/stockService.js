@@ -39,19 +39,27 @@ class StockService {
 
   addCompany(companyName) {
     return new Promise((resolve, reject) => {
-      stockUpdate.run([companyName]).then((results) => {
 
-        var newResult = undefined;
-        for (var i=0; i<results.length; i++) {
-          var result = results[i];
-          if (result.company === companyName) {
-            newResult = result;
-            break;
-          }
+      this.getStockByCompanyName(companyName).then((stocks) => {
+        var docs = stocks.docs;
+        if (docs && docs.length > 0) {
+          reject('This company is already being watched');
+        } else {
+          stockUpdate.run([companyName]).then((results) => {
+
+            var newResult = undefined;
+            for (var i=0; i<results.length; i++) {
+              var result = results[i];
+              if (result.company === companyName) {
+                newResult = result;
+                break;
+              }
+            }
+            resolve(newResult)
+          }).catch((error) => {
+            reject(error);
+          });
         }
-        resolve(newResult)
-      }).catch((error) => {
-        reject(error);
       });
     });
   }

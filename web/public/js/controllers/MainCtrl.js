@@ -24,10 +24,17 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   loader.hide();
 
   $scope.addStock = function() {
+
+    var selectedCompany = $("#selectpicker").find("option:selected").text();
+
+    if (stockExists(selectedCompany)) {
+      alert('You are already watching this company.');
+      return;
+    }
+
     var addStockButton = $('#addStockButton');
     addStockButton.hide();
     loader.show();
-    var selectedCompany = $("#selectpicker").find("option:selected").text();
     if (selectedCompany && selectedCompany.trim() !== '') {
       StockService.add(selectedCompany).then((result) => {
         addStockButton.show();
@@ -91,6 +98,18 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
       return 0;
     });
+  }
+
+  function stockExists(companyName) {
+
+    var stocks = $scope.stocks;
+    for (var i=0; i<stocks.length; i++) {
+      if (stocks[i].company === companyName) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   function addSentiment(stock) {

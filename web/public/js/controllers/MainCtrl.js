@@ -14,7 +14,7 @@
  * the License.
  */
 
-angular.module('MainModule', []).controller('MainController',['$scope', 'StockService', function($scope, StockService) {
+angular.module('MainModule', []).controller('MainController',['$scope', 'StockService', '$timeout', function($scope, StockService, $timeout) {
 
   var companyNamePendingDeletion = undefined;
 
@@ -153,10 +153,11 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       $scope.updateDate = mostRecent ? mostRecent.toLocaleString() : "";
       sortStocks(stocks)
       $scope.stocks = stocks;
-      updateTable();
       updatePieChart(stocks[0]);
-      updateLineChart(stocks[0]);
-      updateArticles(stocks);
+      //space out page updates to prevent lag
+      $timeout(updateTable(), 1000);
+      $timeout(updateLineChart(stocks[0]), 2000);
+      $timeout(updateArticles(stocks), 3000);
     });
   }
 

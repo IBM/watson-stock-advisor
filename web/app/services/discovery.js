@@ -15,13 +15,13 @@
  */
 
 const config = require('../../config');
-var Discovery = require('watson-developer-cloud/discovery/v1');
-var discovery = new Discovery({
+const Discovery = require('watson-developer-cloud/discovery/v1');
+const discovery = new Discovery({
    version      : process.env.DISCOVERY_VERSION,
    version_date : process.env.DISCOVERY_VERSION_DATE
 });
- 
-var utils = require('../util/utils');
+
+const utils = require('../util/utils');
 
 /**
  * Query for 5 documents using the Watson Discovery Service

@@ -15,8 +15,8 @@
  */
 
 const db = require('../util/cloudantDb');
-var update = require('../services/stockUpdate');
-var stockUpdate = new update();
+const update = require('../services/stockUpdate');
+const stockUpdate = new update();
 const config = require('../../config');
 
 class StockService {

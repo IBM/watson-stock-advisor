@@ -19,6 +19,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   var companyNamePendingDeletion = undefined;
 
   $scope.stocks = [];
+  $scope.showBanner = false;
 
   var loader = $('#loader');
   loader.hide();
@@ -91,7 +92,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   }
 
   StockService.getStocks().then((stocks) => {
-    handleStocks(stocks);
+    handleStocks(stocks || []);
   });
 
   StockService.getAllCompanies().then((companies) => {
@@ -151,12 +152,18 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         }
       }
       $scope.updateDate = mostRecent ? mostRecent.toLocaleString() : "";
+      var haveStocks = stocks.length > 0;
+      $scope.showBanner = !haveStocks;
       sortStocks(stocks)
       $scope.stocks = stocks;
-      updatePieChart(stocks[0]);
+      if (haveStocks) {
+        updatePieChart(stocks[0]);
+      }
       //space out page updates to prevent lag
       $timeout(updateTable(), 1000);
-      $timeout(updateLineChart(stocks[0]), 2000);
+      if (haveStocks) {
+        $timeout(updateLineChart(stocks[0]), 2000);
+      }
       $timeout(updateArticles(stocks), 3000);
     });
   }

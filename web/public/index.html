@@ -31,6 +31,9 @@
       <h1>Watson Stock Advisor</h1>
     </div>
     <div class="content-wrapper">
+      <div ng-show="showBanner" id="alert" class="alert alert-info">
+        <strong>Welcome!</strong> Start by adding your first stock below.
+      </div>
       <div class="container-fluid">
         <div class="row">
           <!-- Stocks Table-->
@@ -80,7 +83,7 @@
           </div>
           <!-- Pie Chart-->
           <div class="col-lg-4">
-            <div class="card mb-1">
+            <div ng-show="stocks.length > 0" class="card mb-1">
                 <div class="card-header">
                   <i class="fa fa-pie-chart"></i> Sentiment Breakdown</div>
                 <div class="card-body">
@@ -91,7 +94,7 @@
           </div>
         </div>
         <!-- Area Chart -->
-        <div class="card mb-3">
+        <div ng-show="stocks.length > 0" class="card mb-3">
           <div class="card-header">
             <i class="fa fa-area-chart"></i> Trend Over Time</div>
           <div class="card-body">
@@ -101,7 +104,7 @@
         </div>
       
         <!--Recent News-->
-        <div class="row">
+        <div ng-show="stocks.length > 0" class="row">
           <div class="col-lg-8">
             <div class="mb-0">
               <i class="fa fa-newspaper-o"></i> Recent News</div>

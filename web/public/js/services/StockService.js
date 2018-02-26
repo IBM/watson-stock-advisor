@@ -18,6 +18,12 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
 
   var service = {};
 
+  /**
+   * Extracts data from the result of the promise if successful,
+   * otherwise logs the error and rejects
+   * @param {promise}
+   * @returns {promise}
+   */
   function handlePromise(promise) {
     return new Promise((resolve, reject) => {
       promise.then((result) => {
@@ -29,11 +35,23 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
     });
   }
 
+  /**
+   * Performs an HTTP GET
+   * @param {string} path
+   * @param {object} params
+   * @returns {promise}
+   */
   function get(path) {
     var promise = $http.get(path);
     return handlePromise(promise);
   }
 
+  /**
+   * Performs an HTTP POST
+   * @param {string} path
+   * @param {object} params
+   * @returns {promise}
+   */
   function post(path, params) {
     var promise = $http.post(path, params);
     return handlePromise(promise);
@@ -41,7 +59,7 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
 
   /**
    * Fetches the stock data from the API
-   * @returns The promise representing the fetch
+   * @returns {promise}
    */
   service.getStocks = function() {
     return get('/api/stocks');
@@ -49,6 +67,7 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
 
   /**
    * Retrives the list of all available companies and their tickers
+   * @returns {promise}
    */
   service.getAllCompanies = function() {
     return get('/api/companies');
@@ -57,6 +76,7 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
   /**
    * Sends a request to add company to list of tracked companies
    * @param {company} company
+   * @returns {promise}
    */
   service.add = function(company) {
     return post('/api/companies/add', {
@@ -67,6 +87,7 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
   /**
    * Sends a request to delete company from the list of tracked companies
    * @param {company} company
+   * @returns {promise}
    */
   service.delete = function(company) {
     return post('/api/companies/delete', {

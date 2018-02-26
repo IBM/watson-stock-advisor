@@ -15,13 +15,14 @@
  */
 
 const config = require('../../config');
-var Discovery = require('watson-developer-cloud/discovery/v1');
-var discovery = new Discovery({
+const Discovery = require('watson-developer-cloud/discovery/v1');
+const discovery = new Discovery({
    version      : process.env.DISCOVERY_VERSION,
    version_date : process.env.DISCOVERY_VERSION_DATE
 });
- 
-var utils = require('../util/utils');
+
+const utils = require('../util/utils');
+const NUM_DOCS_TO_QUERY = 5;
 
 /**
  * Query for 5 documents using the Watson Discovery Service
@@ -31,7 +32,12 @@ var utils = require('../util/utils');
 function query(topic) {
   
   var promise = new Promise(function(resolve, reject) {
-    discovery.query({ environment_id: process.env.DISCOVERY_ENV_ID, collection_id: 'news-en', query: topic, count:5 }, function(error, data) {
+    discovery.query({
+                      environment_id : process.env.DISCOVERY_ENV_ID,
+                      collection_id  : 'news-en',
+                      query          : topic,
+                      count          : NUM_DOCS_TO_QUERY
+      }, function(error, data) {
         if (error) {
           reject(error);
         } else {

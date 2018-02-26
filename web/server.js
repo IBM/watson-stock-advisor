@@ -39,7 +39,7 @@ app.use(express.static(publicRoot));
 // pass application into routes
 require('./app/routes')(app, publicRoot);
 
-require('./app/util/cloudantDb');
+//start update cron job
 require('./app/jobs/update')
 
 // start app

@@ -14,11 +14,12 @@
  * the License.
  */
 
-angular.module('MainModule', []).controller('MainController',['$scope', 'StockService', function($scope, StockService) {
+angular.module('MainModule', []).controller('MainController',['$scope', 'StockService', '$timeout', function($scope, StockService, $timeout) {
 
   var companyNamePendingDeletion = undefined;
 
   $scope.stocks = [];
+  $scope.showBanner = false;
 
   var loader = $('#loader');
   loader.hide();
@@ -91,7 +92,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   }
 
   StockService.getStocks().then((stocks) => {
-    handleStocks(stocks);
+    handleStocks(stocks || []);
   });
 
   StockService.getAllCompanies().then((companies) => {
@@ -151,12 +152,19 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         }
       }
       $scope.updateDate = mostRecent ? mostRecent.toLocaleString() : "";
+      var haveStocks = stocks.length > 0;
+      $scope.showBanner = !haveStocks;
       sortStocks(stocks)
       $scope.stocks = stocks;
-      updateTable();
-      updatePieChart(stocks[0]);
-      updateLineChart(stocks[0]);
-      updateArticles(stocks);
+      if (haveStocks) {
+        updatePieChart(stocks[0]);
+      }
+      //space out page updates to prevent lag
+      $timeout(updateTable(), 1000);
+      if (haveStocks) {
+        $timeout(updateLineChart(stocks[0]), 2000);
+      }
+      $timeout(updateArticles(stocks), 3000);
     });
   }
 

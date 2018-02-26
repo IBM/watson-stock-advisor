@@ -47,7 +47,7 @@ function findStockDatum(stocks, company) {
 /**
  * Sorts and returns the articles from most to least recent by date
  * @param {article[]} articles
- * @returns {article[]}
+ * @returns {article[]} - the sorted articles
  */
 function sortArticles(articles) {
   
@@ -62,7 +62,7 @@ function sortArticles(articles) {
  * Searches for the given article in the list of articles
  * @param {article} article
  * @param {article[]} articles
- * @returns {boolean} True if the article is found, false otherwise
+ * @returns {boolean} - True if the article is found, false otherwise
  */
 function articleContains(article, articles) {
   for (var x=0; x<articles.length; x++) {
@@ -79,6 +79,7 @@ function articleContains(article, articles) {
  * are sorted from most to least recent for each before updating DB.
  * @param {article[]} articleData
  * @param {stocks[]} stockData
+ * @returns {stocks[]} - the updated results
  */
 function updateStocksData(articleData, stockData) {
   
@@ -124,7 +125,7 @@ function updateStocksData(articleData, stockData) {
 /**
  * Parses a single discovery result for the relevant data
  * @param {discoveryResult} result
- * @returns a simplified JSON object with relevant data
+ * @returns {object} - a simplified JSON object with relevant data
  */
 function parseArticle(result) {
   return {
@@ -153,7 +154,7 @@ function parseResults(results) {
  * Retrieves article data for the given company
  * @param {string} company
  * @param {function} callback - Called after retrieval and parsing complete
- * @param {promise} - The promise for the request to Watson Discovery
+ * @returns {promise} - The promise for the request to Watson Discovery
  */
 function getArticleDataForCompany(company, callback) {
   
@@ -223,6 +224,11 @@ function getArticleDataForCompanies(companies, callback) {
   });
 }
 
+/**
+ * Finds the corresponding ticker for a company with the given name.
+ * @param {name} name
+ * @returns {string} - the ticker, or undefined if no such company exists
+ */
 function findTickerForCompanyWithName(name) {
 
   for (var i=0; i<config.companies.length; i++) {
@@ -239,6 +245,7 @@ class StockUpdate {
   /**
    * Retrieve new data for the given companies
    * @param {string[]} companies
+   * @returns {promise}
    */
   run(companies) {
 

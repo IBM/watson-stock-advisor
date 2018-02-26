@@ -23,15 +23,15 @@
 
 require('../../config')
 
-var CronJob = require('cron').CronJob;
-var updateTask = require('../services/stockUpdate');
-var task = new updateTask();
-var stockService = require('../services/stockService');
+const CronJob = require('cron').CronJob;
+const updateTask = require('../services/stockUpdate');
+const task = new updateTask();
+const stockService = require('../services/stockService');
 
   /*
    * Runs every day at 01:00:00 AM.
    */
-var job = new CronJob('00 00 01 * * 0-6', function() {
+const job = new CronJob('00 00 01 * * 0-6', function() {
 
     console.log("Beginning stock update task");
     task.run();

@@ -234,6 +234,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     });
   }
 
+  /**
+   * Updates the articles displayed 
+   * @param {stock[]} stocks
+   */
   function updateArticles(stocks) {
 
     var articles = [];
@@ -245,15 +249,15 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
         for (var j = 0; j < companyArticles.length; j++) {
           
-          //console.log(companyArticles[j]);
-          // TODO get source and article title from discovery 
+          //console.log(companyArticles[j]); 
 
-          // date pattern "yyyy-MM-dd'T'HH:mm:ssZ";
+          // date pattern "yyyy-MM-dd'T'HH:mm:ssZ"; 
+          var year = companyArticles[j].date.slice(0,4);
           var month = companyArticles[j].date.slice(5,7);
-          var day = companyArticles[j].date.slice(8,10); 
-          var year = companyArticles[j].date.slice(0,4);  
+          var day = companyArticles[j].date.slice(8,10);  
           var hour = companyArticles[j].date.slice(11,13);
           var minute = companyArticles[j].date.slice(14,16);
+          var sortingDate = parseInt(year + month + day + hour + minute); 
           var ampm = "" ; 
 
           // assigning AM/PM to date and time 
@@ -271,13 +275,14 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
           var articleDate = month + "-" + day + "-" + year + " at " + hour + ":" + minute + ampm;
           companyArticles[j].formattedDate = articleDate; 
+          companyArticles[j].sortingDate = sortingDate; 
           companyArticles[j].company = companyName; 
         }
 
         articles = articles.concat(stocks[i].history);
     } 
 
-    // TODO: sorting articles by date 
+    articles = articles.sort(function(a, b){return b.sortingDate - a.sortingDate}); 
     $scope.articles = articles; 
 
   }

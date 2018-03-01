@@ -18,7 +18,7 @@
  * Perform startup configuration
  */
 (function($) {
-  "use strict";
+  'use strict';
   // show scroll to top button
   $(document).scroll(function() {
     var scrollDistance = $(this).scrollTop();
@@ -29,7 +29,7 @@
     }
   });
   // configure tooltips globally
-  $('[data-toggle="tooltip"]').tooltip()
+  $('[data-toggle="tooltip"]').tooltip();
   // smooth scrolling using jQuery easing
   $(document).on('click', 'a.scroll-to-top', function(event) {
     var $anchor = $(this);

@@ -53,7 +53,7 @@ class StockService {
         });
 
         if (docs.length >= config.MAX_COMPANIES) {
-          reject('No more than ' + config.MAX_COMPANIES + ' companies may be watched.')
+          reject('No more than ' + config.MAX_COMPANIES + ' companies may be watched.');
         } else {
           //check that the company is not already being watched
           if (utils.findStockDatum(docs, companyName)) {
@@ -61,7 +61,7 @@ class StockService {
           } else {
             stockUpdate.run([companyName]).then((results) => {
               var newResult = utils.findStockDatum(results, companyName);
-              resolve(newResult)
+              resolve(newResult);
             }).catch((error) => {
               reject(error);
             });
@@ -86,8 +86,8 @@ class StockService {
             resolve();
           }).catch((error) => {
             console.log(error);
-            reject()
-          })
+            reject();
+          });
         }
       }).catch((error) => {
         console.log(error);

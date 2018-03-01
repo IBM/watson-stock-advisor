@@ -26,7 +26,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   $scope.addStock = function() {
 
-    var selectedCompany = $("#selectpicker").find("option:selected").text();
+    var selectedCompany = $('#selectpicker').find('option:selected').text();
 
     if (stockExists(selectedCompany)) {
       alert('You are already watching this company.');
@@ -41,12 +41,12 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       var showButton = function() {
         addStockButton.show();
         loader.hide();
-      }
+      };
 
       var fail = function(error) {
         showButton();
         alert(error.reason);
-      }
+      };
 
       var success = function(result) {
         showButton();
@@ -56,7 +56,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           stocks.push(result);
           sortStocks(stocks);
         });
-      }
+      };
 
       StockService.add(selectedCompany).then((result) => {
         if (result.error) {
@@ -66,18 +66,18 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         }
       }).catch((error) => {
         fail(error);
-      })
+      });
     }
-  }
+  };
 
   $scope.confirmDelete = function(companyName) {
     companyNamePendingDeletion = companyName;
-    $('#deletionModal').modal('show')
-  }
+    $('#deletionModal').modal('show');
+  };
 
   $scope.deleteStock = function() {
 
-    $('#deletionModal').modal('hide')
+    $('#deletionModal').modal('hide');
 
     if (!companyNamePendingDeletion) {
       return;
@@ -93,7 +93,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
     }
     companyNamePendingDeletion = undefined;
-  }
+  };
 
   $scope.selectCompany = function(stock) {
     var newLineChartData = getLineChartData(stock);
@@ -107,7 +107,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     $scope.myPieChart.update();
 
     updateArticles([stock]);
-  }
+  };
 
   StockService.getStocks().then((stocks) => {
     handleStocks(stocks || []);
@@ -126,7 +126,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       if (a.company < b.company) {
         return -1;
       } else if (a.company > b.company) {
-        return 1
+        return 1;
       }
       return 0;
     });
@@ -140,7 +140,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    * @param {article[]} articles
    */
   function sortArticles(articles) {
-    var sorted = articles.sort(function(a, b) { return b.sortingDate - a.sortingDate } );
+    var sorted = articles.sort(function(a, b) { return b.sortingDate - a.sortingDate; } );
     var split = [];
     for (var i=0; i<sorted.length; i+=2) {
       split.push(sorted[i]);
@@ -165,7 +165,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   }
 
   function addSentiment(stock) {
-    stock.recentSentiment = "None";
+    stock.recentSentiment = 'None';
     if (stock.history && stock.history.length > 0) {
       stock.recentSentiment = capitalizeFirstLetterOnly(stock.history[0].sentiment);
     }
@@ -189,10 +189,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           }
         }
       }
-      $scope.updateDate = mostRecent ? mostRecent.toLocaleString() : "";
+      $scope.updateDate = mostRecent ? mostRecent.toLocaleString() : '';
       var haveStocks = stocks.length > 0;
       $scope.showBanner = !haveStocks;
-      sortStocks(stocks)
+      sortStocks(stocks);
       $scope.stocks = stocks;
       if (haveStocks) {
         updatePieChart(stocks[0]);
@@ -211,7 +211,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    */
   function handleCompanies(companies) {
     
-    var picker = $("#selectpicker");
+    var picker = $('#selectpicker');
     var newItems = '';
 
     for (var i=0; i<companies.length; i++) {
@@ -232,23 +232,23 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   }
 
   function getPieChartData(stock){
-    var keys = ["Positive", "Neutral", "Negative"]
+    var keys = ['Positive', 'Neutral', 'Negative'];
 
     var dataMap = {};
     for (var x=0; x<keys.length; x++) { dataMap[keys[x].toLowerCase()] = 0; }
 
     var history = stock.history;
-    for (var i=0; i<history.length; i++) {dataMap[history[i].sentiment.toLowerCase()] += 1}
+    for (var i=0; i<history.length; i++) {dataMap[history[i].sentiment.toLowerCase()] += 1;}
 
     var data = [];
-    for (var y=0; y<keys.length; y++) { data.push(dataMap[keys[y].toLowerCase()]) }
+    for (var y=0; y<keys.length; y++) { data.push(dataMap[keys[y].toLowerCase()]); }
 
-    var pieData = { data: data , labels: keys}
+    var pieData = { data: data , labels: keys};
     return pieData;
   }
 
   function makeNewPieChart(labels,data){
-    var ctx = document.getElementById("sentimentPieChart");
+    var ctx = document.getElementById('sentimentPieChart');
     $scope.myPieChart = new Chart(ctx, {
       type: 'pie',
       data: {
@@ -286,21 +286,21 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         var hour = article.date.slice(11,13);
         var minute = article.date.slice(14,16);
         var sortingDate = parseInt(year + month + day + hour + minute);
-        var ampm = "" ;
+        var ampm = '' ;
 
         // assigning AM/PM to date and time
         if (parseInt(hour) >= 12) {
-          ampm = "PM";
+          ampm = 'PM';
           hour = hour - 12;
         } else {
-          ampm = "AM"
+          ampm = 'AM';
         }
 
         if (hour == 0) {
           hour = 12;
         }
 
-        var articleDate = month + "-" + day + "-" + year + " at " + hour + ":" + minute + ampm;
+        var articleDate = month + '-' + day + '-' + year + ' at ' + hour + ':' + minute + ampm;
         article.formattedDate = articleDate;
         article.sortingDate = sortingDate;
         article.company = companyName;
@@ -309,7 +309,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       articles = articles.concat(companyArticles);
     }
 
-    $scope.articles = sortArticles(articles)
+    $scope.articles = sortArticles(articles);
   }
 
   /**
@@ -317,7 +317,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    * @param {stock[]} stocks
    */
   function updateLineChart(stock) {
-    var lineChartData = getLineChartData(stock)
+    var lineChartData = getLineChartData(stock);
     makeNewChart(lineChartData.labels, lineChartData.data);
   }
 
@@ -329,17 +329,17 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     for (var i=0; i<history.length; i++) {
       var sentiment = history[i].sentiment.toLowerCase();
       var sentimentInt = 0;
-      if (sentiment === "positive"){
+      if (sentiment === 'positive'){
         sentimentInt = 1;
       }
-      else if (sentiment === "negative"){
+      else if (sentiment === 'negative'){
         sentimentInt = -1;
       }
       
       var index = history[i].date.substr(0,10);
       if(index in sentimentMap){
         sentimentMap[index] += sentimentInt;
-        articleCountmap[index] += 1
+        articleCountmap[index] += 1;
       }
       else{
         sentimentMap[index] = sentimentInt;
@@ -354,29 +354,29 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     });
 
     var data = [];
-    for (var y=0; y<labels.length; y++) { data.push((sentimentMap[labels[y]]/articleCountmap[labels[y]])) }
+    for (var y=0; y<labels.length; y++) { data.push((sentimentMap[labels[y]]/articleCountmap[labels[y]])); }
     
-    var lineChartData = { data: data , labels: labels}
+    var lineChartData = { data: data , labels: labels};
     return lineChartData;
 
   }
 
   function makeNewChart(labels,data){
-    var ctx = document.getElementById("trendChart");
+    var ctx = document.getElementById('trendChart');
     $scope.myLineChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: labels,
         datasets: [{
-          label: "Sentiment value per day",
+          label: 'Sentiment value per day',
           lineTension: 0.0,
-          backgroundColor: "rgba(2,117,216,0)",
-          borderColor: "rgba(2,117,216,1)",
+          backgroundColor: 'rgba(2,117,216,0)',
+          borderColor: 'rgba(2,117,216,1)',
           pointRadius: 5,
-          pointBackgroundColor: "rgba(2,117,216,1)",
-          pointBorderColor: "rgba(255,255,255,0.8)",
+          pointBackgroundColor: 'rgba(2,117,216,1)',
+          pointBorderColor: 'rgba(255,255,255,0.8)',
           pointHoverRadius: 5,
-          pointHoverBackgroundColor: "rgba(2,117,216,1)",
+          pointHoverBackgroundColor: 'rgba(2,117,216,1)',
           pointHitRadius: 5,
           pointBorderWidth: 2,
           data: data,
@@ -402,7 +402,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
               maxTicksLimit: 10
             },
             gridLines: {
-              color: "rgba(0, 0, 0, .125)",
+              color: 'rgba(0, 0, 0, .125)',
             }
           }],
         },

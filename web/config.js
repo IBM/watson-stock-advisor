@@ -16,8 +16,8 @@
 
 const fs = require('fs');
 const appRoot = require('app-root-path');
-const env_path  = appRoot + '/.env'
-require('dotenv').config({path: env_path})
+const env_path  = appRoot + '/.env';
+require('dotenv').config({path: env_path});
 
 /**
  * Reads the contents of the given fileName and tries to parse them into companies
@@ -33,7 +33,7 @@ function loadCompanies(fileName) {
       companies.push({
         ticker: components[0],
         name: components[1]
-      })
+      });
     }
   }
   return companies;
@@ -54,7 +54,7 @@ companies = companies.sort(function(a, b) {
   if (a.name < b.name) {
     return -1;
   } else if (a.name > b.name) {
-    return 1
+    return 1;
   }
   return 0;
 });
@@ -64,7 +64,7 @@ var configured = false;
 if (fs.existsSync(env_path)) {
   configured = true;
 } else {
-  console.log(".env file not found")
+  console.log('.env file not found');
 }
 
 module.exports = {
@@ -72,4 +72,4 @@ module.exports = {
   companies                : companies,
   MAX_ARTICLES_PER_COMPANY : process.env.MAX_ARTICLES_PER_COMPANY || 100,
   MAX_COMPANIES            : process.env.MAX_COMPANIES
-}
+};

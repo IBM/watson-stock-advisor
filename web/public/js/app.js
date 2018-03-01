@@ -14,7 +14,7 @@
  * the License.
  */
 
- /**
+/**
   * Initialize the app module
   */
 angular.module('stockApp', ['ngRoute', 'appRoutes', 'MainModule']);

@@ -41,8 +41,7 @@
           <div class="card mb-3">
             <div class="card-header">
               <i class="fa fa-table"></i> My Stocks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <select id="selectpicker" class="selectpicker" data-show-subtext="true" data-live-search="true">
-                </select>
+              <select id="selectpicker" class="selectpicker" data-show-subtext="true" data-live-search="true"></select>
               <div class="align-middle" id="loader"></div>
               <button id="addStockButton" ng-click="addStock()" type="button" class="btn btn-success">Add Stock</button>
             </div>
@@ -60,10 +59,10 @@
                     <tr ng-repeat="stock in stocks">
                       <td ng-click=s electCompany(stock)>{{stock.company}}
                         <span class="pull-right">
-                                <button ng-click="$event.stopPropagation(); confirmDelete(stock.company)" class="btn btn-danger">
-                                  <strong>Delete</strong>
-                                </button>
-                              </span>
+                          <button ng-click="$event.stopPropagation(); confirmDelete(stock.company)" class="btn btn-danger">
+                            <strong>Delete</strong>
+                          </button>
+                        </span>
                       </td>
                       <td>{{stock.ticker}}</td>
                       <td>{{stock.recentSentiment}}</td>
@@ -167,7 +166,7 @@
           <h5 class="modal-title">Delete Stock</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
-              </button>
+          </button>
         </div>
         <div class="modal-body">
           Are you sure you want to delete this stock? The accumulated article history will be deleted. This cannot be undone.

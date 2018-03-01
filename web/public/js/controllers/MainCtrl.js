@@ -106,9 +106,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     $scope.myPieChart.data.labels = newPieChartData.labels;
     $scope.myPieChart.update();
 
-    // conversion to array for updateArticles expected params 
-    var stockArray = [stock];
-    updateArticles(stockArray);
+    updateArticles([stock]);
   }
 
   StockService.getStocks().then((stocks) => {

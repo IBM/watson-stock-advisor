@@ -251,49 +251,47 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
     var articles = [];
 
-    for (var i = 0; i < stocks.length; i++) {
+    for (var i=0; i<stocks.length; i++) {
 
-        companyArticles = stocks[i].history; 
-        companyName = stocks[i].company;
+      var stock = stocks[i];
+      var companyArticles = stock.history;
+      var companyName = stock.company;
 
-        for (var j = 0; j < companyArticles.length; j++) {
-          
-          //console.log(companyArticles[j]); 
+      for (var j=0; j<companyArticles.length; j++) {
 
-          // date pattern "yyyy-MM-dd'T'HH:mm:ssZ"; 
-          var year = companyArticles[j].date.slice(0,4);
-          var month = companyArticles[j].date.slice(5,7);
-          var day = companyArticles[j].date.slice(8,10);  
-          var hour = companyArticles[j].date.slice(11,13);
-          var minute = companyArticles[j].date.slice(14,16);
-          var sortingDate = parseInt(year + month + day + hour + minute); 
-          var ampm = "" ; 
+        var article = companyArticles[j];
+        
+        // date pattern "yyyy-MM-dd'T'HH:mm:ssZ";
+        var year = article.date.slice(0,4);
+        var month = article.date.slice(5,7);
+        var day = article.date.slice(8,10);
+        var hour = article.date.slice(11,13);
+        var minute = article.date.slice(14,16);
+        var sortingDate = parseInt(year + month + day + hour + minute);
+        var ampm = "" ;
 
-          // assigning AM/PM to date and time 
-          if (parseInt(hour) >= 12) {
-            ampm = "PM"; 
-            hour = hour - 12; 
-          }
-          else {
-            ampm = "AM"
-          }
-
-          if (hour == 0) {
-            hour = 12; 
-          }
-
-          var articleDate = month + "-" + day + "-" + year + " at " + hour + ":" + minute + ampm;
-          companyArticles[j].formattedDate = articleDate; 
-          companyArticles[j].sortingDate = sortingDate; 
-          companyArticles[j].company = companyName; 
+        // assigning AM/PM to date and time
+        if (parseInt(hour) >= 12) {
+          ampm = "PM";
+          hour = hour - 12;
+        } else {
+          ampm = "AM"
         }
 
-        articles = articles.concat(stocks[i].history);
-    } 
+        if (hour == 0) {
+          hour = 12;
+        }
 
-    articles = articles.sort(function(a, b){return b.sortingDate - a.sortingDate}); 
-    $scope.articles = articles; 
+        var articleDate = month + "-" + day + "-" + year + " at " + hour + ":" + minute + ampm;
+        article.formattedDate = articleDate;
+        article.sortingDate = sortingDate;
+        article.company = companyName;
+      }
 
+      articles = articles.concat(companyArticles);
+    }
+
+    $scope.articles = articles.sort(function(a, b) { return b.sortingDate - a.sortingDate } );
   }
 
   /**

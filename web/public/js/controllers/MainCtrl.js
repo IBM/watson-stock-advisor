@@ -89,6 +89,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
     $scope.myPieChart.data.labels = newPieChartData.labels;
     $scope.myPieChart.update();
+
+    // conversion to array for updateArticles expected params 
+    var stockArray = [stock];
+    updateArticles(stockArray);
   }
 
   StockService.getStocks().then((stocks) => {

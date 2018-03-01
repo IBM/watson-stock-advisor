@@ -180,7 +180,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         updatePieChart(stocks[0]);
       }
       //space out page updates to prevent lag
-      $timeout(updateTable(), 1000);
       if (haveStocks) {
         $timeout(updateLineChart(stocks[0]), 2000);
       }
@@ -203,16 +202,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
     picker.append(newItems);
     picker.selectpicker('refresh');
-  }
-
-  /**
-   * Updates the table
-   */
-  function updateTable() {
-    // Call the dataTables jQuery plugin
-    $(document).ready(function() {
-      $('#dataTable').DataTable();
-    });
   }
 
   /**

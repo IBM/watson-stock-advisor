@@ -21,30 +21,6 @@ const stock_db  = config.configured && require('../util/cloudantDb');
 const discovery = config.configured && require('./discovery');
 
 /**
- * Searches the stocks for a company name matching (case-insensitive) the company.
- * Returns undefined if not found
- * @param {stock[]} stocks - The list of stocks
- * @param {string} company - The name of the company to look for
- * @returns {stock|undefined}
- */
-function findStockDatum(stocks, company) {
-
-  if (!company) {
-    return undefined;
-  }
-
-  for (var i=0; i<stocks.length; i++) {
-    var stock = stocks[i];
-    var name = (stock.company && stock.company.toLowerCase()) || "";
-    if (name === company.toLowerCase()) {
-      return stock;
-    }
-  }
-
-  return undefined;
-}
-
-/**
  * Sorts and returns the articles from most to least recent by date
  * @param {article[]} articles
  * @returns {article[]} - the sorted articles
@@ -89,7 +65,7 @@ function updateStocksData(articleData, stockData) {
     var articleDatum = articleData[i];
     var company = articleDatum.company;
     console.log('Beginning article insertion for "' + company + '"');
-    var stockDatum = findStockDatum(stockData, company);
+    var stockDatum = utils.findStockDatum(stockData, company);
     if (!stockDatum) {
       stockDatum = {
         company : company,

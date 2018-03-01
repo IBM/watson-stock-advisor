@@ -134,6 +134,26 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     });
   }
 
+  /**
+   * Sort the articles. The articles are rendered in 2 columns, so we have to split
+   * the array by odds and evens to get the most recent to be at the top of both
+   * columns rather than the top of the left column and the top of the right column being
+   * halfway down the list of most recent
+   * @param {article[]} articles
+   */
+  function sortArticles(articles) {
+    var sorted = articles.sort(function(a, b) { return b.sortingDate - a.sortingDate } );
+    var split = [];
+    for (var i=0; i<sorted.length; i+=2) {
+      split.push(sorted[i]);
+    }
+    for (var x=1; x<sorted.length; x+=2) {
+      split.push(sorted[x]);
+    }
+
+    return split;
+  }
+
   function stockExists(companyName) {
 
     var stocks = $scope.stocks;
@@ -291,7 +311,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       articles = articles.concat(companyArticles);
     }
 
-    $scope.articles = articles.sort(function(a, b) { return b.sortingDate - a.sortingDate } );
+    $scope.articles = sortArticles(articles)
   }
 
   /**

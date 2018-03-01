@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,7 +15,7 @@
   <link rel="stylesheet" href="./libs/components-font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="./css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-  
+
   <!-- ANGULAR -->
   <script src="./libs/angular/angular.min.js"></script>
   <script src="./libs/angular-route/angular-route.min.js"></script>
@@ -26,156 +27,158 @@
 </head>
 
 <body ng-app="stockApp" ng-controller="MainController" class="fixed-nav sticky-footer bg-dark" id="page-top">
-    <div id="header">
-      <h1>Watson Stock Advisor</h1>
+  <div id="header">
+    <h1>Watson Stock Advisor</h1>
+  </div>
+  <div class="content-wrapper">
+    <div ng-show="showBanner" id="alert" class="alert alert-info">
+      <strong>Welcome!</strong> Start by adding your first stock below.
     </div>
-    <div class="content-wrapper">
-      <div ng-show="showBanner" id="alert" class="alert alert-info">
-        <strong>Welcome!</strong> Start by adding your first stock below.
-      </div>
-      <div class="container-fluid">
-        <div class="row">
-          <!-- Stocks Table-->
-          <div class="col-lg-8">
-            <div class="card mb-3">
-              <div class="card-header">
-                <i class="fa fa-table"></i> My Stocks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <select id="selectpicker" class="selectpicker" data-show-subtext="true" data-live-search="true">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Stocks Table-->
+        <div class="col-lg-8">
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-table"></i> My Stocks&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <select id="selectpicker" class="selectpicker" data-show-subtext="true" data-live-search="true">
                 </select>
-                <div class="align-middle" id="loader"></div>
-                <button id="addStockButton" ng-click="addStock()" type="button" class="btn btn-success">Add Stock</button>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered table-hover" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                        <th>Company</th>
-                        <th>Ticker</th>
-                        <th>Last Sentiment</th>
-                      </tr>
-                    </thead>
-                    <tfoot>
-                      <tr>
-                        <th>Company</th>
-                        <th>Ticker</th>
-                        <th>Last Sentiment</th>
-                      </tr>
-                    </tfoot>
-                    <tbody>
-                      <tr ng-repeat="stock in stocks" >
-                          <td ng-click= selectCompany(stock)>{{stock.company}}
-                            <span class="pull-right">
+              <div class="align-middle" id="loader"></div>
+              <button id="addStockButton" ng-click="addStock()" type="button" class="btn btn-success">Add Stock</button>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Company</th>
+                      <th>Ticker</th>
+                      <th>Last Sentiment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="stock in stocks">
+                      <td ng-click=s electCompany(stock)>{{stock.company}}
+                        <span class="pull-right">
                                 <button ng-click="$event.stopPropagation(); confirmDelete(stock.company)" class="btn btn-danger">
                                   <strong>Delete</strong>
-                                </a></button>
-                          </td>
-                          <td>{{stock.ticker}}</td>
-                          <td>{{stock.recentSentiment}}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                                </button>
+                              </span>
+                      </td>
+                      <td>{{stock.ticker}}</td>
+                      <td>{{stock.recentSentiment}}</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th>Company</th>
+                      <th>Ticker</th>
+                      <th>Last Sentiment</th>
+                    </tr>
+                  </tfoot>
+                </table>
               </div>
-              <div class="card-footer small text-muted">&nbsp;</div>
             </div>
-          </div>
-          <!-- Pie Chart-->
-          <div class="col-lg-4">
-            <div ng-show="stocks.length > 0" class="card mb-1">
-                <div class="card-header">
-                  <i class="fa fa-pie-chart"></i> Sentiment Breakdown</div>
-                <div class="card-body">
-                  <canvas id="sentimentPieChart" width="100%" height="100"></canvas>
-                </div>
-                <div class="card-footer small text-muted">Updated {{updateDate}}</div>
-              </div>
+            <div class="card-footer small text-muted">&nbsp;</div>
           </div>
         </div>
-        <!-- Area Chart -->
-        <div ng-show="stocks.length > 0" class="card mb-3">
-          <div class="card-header">
-            <i class="fa fa-area-chart"></i> Trend Over Time</div>
-          <div class="card-body">
-            <canvas id="trendChart" width="100%" height="30"></canvas>
-          </div>
-          <div class="card-footer small text-muted">Updated {{updateDate}}</div>
-        </div>
-      
-        <!--Recent News-->
-        <div ng-show="stocks.length > 0" class="row">
-          <div class="col-lg-8">
-            <div class="mb-0">
-              <i class="fa fa-newspaper-o"></i> Recent News
+        <!-- Pie Chart-->
+        <div class="col-lg-4">
+          <div ng-show="stocks.length > 0" class="card mb-1">
+            <div class="card-header">
+              <i class="fa fa-pie-chart"></i> Sentiment Breakdown</div>
+            <div class="card-body">
+              <canvas id="sentimentPieChart" width="100%" height="100"></canvas>
             </div>
-            <hr class="mt-2">
-            <div class="card-columns">
-              <div ng-repeat="article in articles" class="card mb-3">
-                <a href="#">
+            <div class="card-footer small text-muted">Updated {{updateDate}}</div>
+          </div>
+        </div>
+      </div>
+      <!-- Area Chart -->
+      <div ng-show="stocks.length > 0" class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-area-chart"></i> Trend Over Time</div>
+        <div class="card-body">
+          <canvas id="trendChart" width="100%" height="30"></canvas>
+        </div>
+        <div class="card-footer small text-muted">Updated {{updateDate}}</div>
+      </div>
+
+      <!--Recent News-->
+      <div ng-show="stocks.length > 0" class="row">
+        <div class="col-lg-8">
+          <div class="mb-0">
+            <i class="fa fa-newspaper-o"></i> Recent News
+          </div>
+          <hr class="mt-2">
+          <div class="card-columns">
+            <div ng-repeat="article in articles" class="card mb-3">
+              <a href="#">
                   <img class="card-img-top img-fluid w-100" src="" alt="">
                 </a>
-                <div class="card-body">
-                  <h6 class="card-title mb-1"><a href="{{article.url}}">{{article.title}}</a></h6>
-                  <p class="card-text small">
-                    Source: {{article.source}}
-                    <br>Company: {{article.company}}
-                    <br>Sentiment: {{article.sentiment}}
-                    <br><a href="{{article.url}}">View Article</a>
-                  </p>
-                </div>
-                <hr class="my-0">
-                <hr class="my-0">
-                <div class="card-footer small text-muted">Posted {{article.formattedDate}}</div>
+              <div class="card-body">
+                <h6 class="card-title mb-1"><a href="{{article.url}}">{{article.title}}</a></h6>
+                <p class="card-text small">
+                  Source: {{article.source}}
+                  <br>Company: {{article.company}}
+                  <br>Sentiment: {{article.sentiment}}
+                  <br><a href="{{article.url}}">View Article</a>
+                </p>
               </div>
+              <hr class="my-0">
+              <hr class="my-0">
+              <div class="card-footer small text-muted">Posted {{article.formattedDate}}</div>
             </div>
+          </div>
         </div>
       </div>
       <!-- Scroll to Top Button-->
       <a class="scroll-to-top rounded" href="#page-top">
         <i class="fa fa-angle-up"></i>
       </a>
-        <!-- JS -->
-        <!-- There are some dependency incompatibilites so we have multiple jquery dependencies -->
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <!-- Popper is required for bootstrap select -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="./libs/jquery/dist/jquery.min.js"></script>
-        <script src="./libs/jquery.easing/js/jquery.easing.min.js"></script>
-        <script src="./libs/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="./libs/chart.js/dist/Chart.bundle.min.js"></script>
+      <!-- JS -->
+      <!-- There are some dependency incompatibilites so we have multiple jquery dependencies -->
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <!-- Popper is required for bootstrap select -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="./libs/jquery/dist/jquery.min.js"></script>
+      <script src="./libs/jquery.easing/js/jquery.easing.min.js"></script>
+      <script src="./libs/bootstrap/dist/js/bootstrap.min.js"></script>
+      <script src="./libs/chart.js/dist/Chart.bundle.min.js"></script>
 
-        <!-- This must be loaded after jquery etc -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-        <!-- Custom scripts-->
-        <script src="./js/main.js"></script>
-        <script src="./js/charts.js"></script>
+      <!-- This must be loaded after jquery etc -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+      <!-- Custom scripts-->
+      <script src="./js/main.js"></script>
+      <script src="./js/charts.js"></script>
     </div>
-    <footer class="sticky-footer">
-      <div class="container">
-        <div class="text-center">
-          <small>Copyright © IBM 2018</small>
-        </div>
+  </div>
+  <footer class="sticky-footer">
+    <div class="container">
+      <div class="text-center">
+        <small>Copyright © IBM 2018</small>
       </div>
-    </footer>
-    <div class="modal fade" id="deletionModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Delete Stock</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    </div>
+  </footer>
+  <div class="modal fade" id="deletionModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Stock</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
-            </div>
-            <div class="modal-body">
-              Are you sure you want to delete this stock? The accumulated article history will be deleted. This cannot be undone.
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" ng-click="deleteStock()" class="btn btn-danger">Delete</button>
-            </div>
-          </div>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this stock? The accumulated article history will be deleted. This cannot be undone.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" ng-click="deleteStock()" class="btn btn-danger">Delete</button>
         </div>
       </div>
+    </div>
+  </div>
 </body>
 
 </html>

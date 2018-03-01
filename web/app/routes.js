@@ -60,7 +60,7 @@ module.exports = function(app, publicRoot) {
   app.post('/api/companies/add', (req, res) => {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     var companyName = req.body.name;
-    console.log('Adding company "' + companyName + '"');
+    console.log('Trying to add company "' + companyName + '"');
     stockService.addCompany(companyName).then((result) => {
       if (result) {
         res.send(prepareDocForClient(result));
@@ -69,7 +69,7 @@ module.exports = function(app, publicRoot) {
       }
     }).catch((error) => {
       console.log(error);
-      res.send(new Error('Add Error', 'There was an error adding the company'));
+      res.send(new Error('Add Error', error));
     });
   });
 

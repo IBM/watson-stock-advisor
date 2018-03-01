@@ -17,6 +17,7 @@
 const db = require('../util/cloudantDb');
 const update = require('../services/stockUpdate');
 const stockUpdate = new update();
+const utils = require('../util/utils');
 const config = require('../../config');
 
 class StockService {
@@ -46,27 +47,25 @@ class StockService {
    */
   addCompany(companyName) {
     return new Promise((resolve, reject) => {
+      db.search().then((rows)  => {
+        var docs = rows.map(function(row) {
+          return row.doc;
+        });
 
-      //check that the company is not already being watched
-      this.getStockByCompanyName(companyName).then((stocks) => {
-        var docs = stocks.docs;
-        if (docs && docs.length > 0) {
-          reject('This company is already being watched');
+        if (docs.length >= config.MAX_COMPANIES) {
+          reject('No more than ' + config.MAX_COMPANIES + ' companies may be watched.')
         } else {
-          stockUpdate.run([companyName]).then((results) => {
-
-            var newResult = undefined;
-            for (var i=0; i<results.length; i++) {
-              var result = results[i];
-              if (result.company === companyName) {
-                newResult = result;
-                break;
-              }
-            }
-            resolve(newResult)
-          }).catch((error) => {
-            reject(error);
-          });
+          //check that the company is not already being watched
+          if (utils.findStockDatum(docs, companyName)) {
+            reject('This company is already being watched');
+          } else {
+            stockUpdate.run([companyName]).then((results) => {
+              var newResult = utils.findStockDatum(results, companyName);
+              resolve(newResult)
+            }).catch((error) => {
+              reject(error);
+            });
+          }
         }
       });
     });

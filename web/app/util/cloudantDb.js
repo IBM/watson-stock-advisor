@@ -33,7 +33,7 @@ const db = cloudant.db.use(process.env.DB_NAME);
 function getBy(key, value) {
   return new Promise((resolve, reject) => {
     var selector = {};
-    selector[key] = value
+    selector[key] = value;
     db.find({selector: selector}, function(err, data) {
       if (err) {
         reject(err);
@@ -60,7 +60,7 @@ class DB {
         }
       });
     });
-  };
+  }
 
   /**
    * Inserts (or updates, if exists) the doc into the DB
@@ -78,7 +78,7 @@ class DB {
         }
       });
     });
-  };
+  }
 
   /**
    * Deletes the doc from the DB
@@ -96,7 +96,7 @@ class DB {
         }
       });
     });
-  };
+  }
 
   /**
    * Finds the entry with a company of the given name

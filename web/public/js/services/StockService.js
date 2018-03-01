@@ -63,7 +63,7 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
    */
   service.getStocks = function() {
     return get('/api/stocks');
-  }
+  };
 
   /**
    * Retrives the list of all available companies and their tickers
@@ -71,7 +71,7 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
    */
   service.getAllCompanies = function() {
     return get('/api/companies');
-  }
+  };
 
   /**
    * Sends a request to add company to list of tracked companies
@@ -82,7 +82,7 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
     return post('/api/companies/add', {
       name : company
     });
-  }
+  };
 
   /**
    * Sends a request to delete company from the list of tracked companies
@@ -92,8 +92,8 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
   service.delete = function(company) {
     return post('/api/companies/delete', {
       name : company
-    })
-  }
+    });
+  };
 
   return service;
 }]);

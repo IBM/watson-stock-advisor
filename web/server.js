@@ -21,7 +21,7 @@ var methodOverride = require('method-override');
 
 var port = process.env.PORT || 8080; // set our port
 
-const publicRoot = __dirname + '/public/'
+const publicRoot = __dirname + '/public/';
 
 // parse application/json
 app.use(bodyParser.json());
@@ -40,7 +40,7 @@ app.use(express.static(publicRoot));
 require('./app/routes')(app, publicRoot);
 
 //start update cron job
-require('./app/jobs/update')
+require('./app/jobs/update');
 
 // start app
 app.listen(port);

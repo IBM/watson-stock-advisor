@@ -71,7 +71,7 @@ function updateStocksData(articleData, stockData) {
         company : company,
         ticker  : findTickerForCompanyWithName(company) || 'No Ticker Found',
         history : []
-      }
+      };
       results.push(stockDatum);
     }
     var existingArticles = stockDatum.history || [];
@@ -116,7 +116,7 @@ function parseArticle(result) {
     date: result.crawl_date,
     title: result.title,
     source: result.forum_title
-  }
+  };
 }
 
 /**
@@ -151,7 +151,7 @@ function getArticleDataForCompany(company, callback) {
       }
       return !wasSeen;
     });
-  }
+  };
 
   var promise = discovery.query(company);
     
@@ -162,7 +162,7 @@ function getArticleDataForCompany(company, callback) {
     var data = {
       company : company,
       articles : articles
-    }
+    };
     callback(data);
   }).catch(function (error) {
     callback([], error);
@@ -233,7 +233,7 @@ class StockUpdate {
 
     return new Promise((resolve, reject) => {
       if (!config.configured) {
-        console.log("Project is not configured correctly...terminating");
+        console.log('Project is not configured correctly...terminating');
         reject();
       }
 

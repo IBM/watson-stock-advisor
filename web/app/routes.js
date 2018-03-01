@@ -22,7 +22,7 @@ function prepareDocForClient(doc) {
     company : doc.company,
     ticker  : doc.ticker,
     history : doc.history || []
-  }
+  };
 }
 
 module.exports = function(app, publicRoot) {
@@ -65,7 +65,7 @@ module.exports = function(app, publicRoot) {
       if (result) {
         res.send(prepareDocForClient(result));
       } else {
-        res.send(new Error('Add Error', 'There was an error getting the new company data'))
+        res.send(new Error('Add Error', 'There was an error getting the new company data'));
       }
     }).catch((error) => {
       console.log(error);

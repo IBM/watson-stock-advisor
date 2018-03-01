@@ -17,8 +17,8 @@
 const config = require('../../config');
 const Discovery = require('watson-developer-cloud/discovery/v1');
 const discovery = new Discovery({
-   version      : process.env.DISCOVERY_VERSION,
-   version_date : process.env.DISCOVERY_VERSION_DATE
+  version      : process.env.DISCOVERY_VERSION,
+  version_date : process.env.DISCOVERY_VERSION_DATE
 });
 
 const utils = require('../util/utils');
@@ -33,16 +33,16 @@ function query(topic) {
   
   var promise = new Promise(function(resolve, reject) {
     discovery.query({
-                      environment_id : process.env.DISCOVERY_ENV_ID,
-                      collection_id  : 'news-en',
-                      query          : topic,
-                      count          : NUM_DOCS_TO_QUERY
-      }, function(error, data) {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(data);
-        }
+      environment_id : process.env.DISCOVERY_ENV_ID,
+      collection_id  : 'news-en',
+      query          : topic,
+      count          : NUM_DOCS_TO_QUERY
+    }, function(error, data) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(data);
+      }
     });
   });
   
@@ -51,4 +51,4 @@ function query(topic) {
 
 module.exports = {
   query : query
-}
+};

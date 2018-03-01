@@ -21,7 +21,7 @@ class Error {
     this.error = {
       name : name,
       reason : reason
-    }
+    };
   }
 
 }

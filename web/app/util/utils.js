@@ -40,7 +40,7 @@ class Utils {
 
     for (var i=0; i<stocks.length; i++) {
       var stock = stocks[i];
-      var name = (stock.company && stock.company.toLowerCase()) || "";
+      var name = (stock.company && stock.company.toLowerCase()) || '';
       if (name === company.toLowerCase()) {
         return stock;
       }
@@ -51,4 +51,4 @@ class Utils {
 
 }
 
-module.exports = new Utils()
+module.exports = new Utils();

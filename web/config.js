@@ -69,5 +69,6 @@ if (fs.existsSync(env_path)) {
 
 module.exports = {
   configured : configured,
-  companies  : companies
+  companies  : companies,
+  MAX_ARTICLES_PER_COMPANY : process.env.MAX_ARTICLES_PER_COMPANY || 100
 }

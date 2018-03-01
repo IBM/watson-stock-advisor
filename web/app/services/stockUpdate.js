@@ -111,7 +111,13 @@ function updateStocksData(articleData, stockData) {
         
     //TODO batch insert?
     if (newArticles.length > 0) {
-      stockDatum.history = sortArticles(existingArticles.concat(newArticles));
+      var updatedArticles = sortArticles(existingArticles.concat(newArticles));
+      if (updatedArticles.length > config.MAX_ARTICLES_PER_COMPANY) {
+        console.log('"' + company + '" has exceeded article max of ' + config.MAX_ARTICLES_PER_COMPANY + '...');
+        console.log('Removing ' + (updatedArticles.length - config.MAX_ARTICLES_PER_COMPANY) + ' oldest article(s) from "' + company + '" history...');
+        updatedArticles = updatedArticles.slice(0, config.MAX_ARTICLES_PER_COMPANY);
+      }
+      stockDatum.history = updatedArticles;
       console.log('Inserting into company "' + company + '" articles: ' );
       console.log(newArticles);
       stock_db.insertOrUpdate(stockDatum);

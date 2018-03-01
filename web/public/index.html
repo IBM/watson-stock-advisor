@@ -57,7 +57,7 @@
                   </thead>
                   <tbody>
                     <tr ng-repeat="stock in stocks">
-                      <td ng-click=s electCompany(stock)>{{stock.company}}
+                      <td ng-click=selectCompany(stock)>{{stock.company}}
                         <span class="pull-right">
                           <button ng-click="$event.stopPropagation(); confirmDelete(stock.company)" class="btn btn-danger">
                             <strong>Delete</strong>

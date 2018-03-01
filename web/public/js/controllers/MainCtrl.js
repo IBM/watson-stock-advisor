@@ -37,19 +37,35 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     addStockButton.hide();
     loader.show();
     if (selectedCompany && selectedCompany.trim() !== '') {
-      StockService.add(selectedCompany).then((result) => {
+
+      var showButton = function() {
         addStockButton.show();
         loader.hide();
+      }
+
+      var fail = function(error) {
+        showButton();
+        alert(error.reason);
+      }
+
+      var success = function(result) {
+        showButton();
         addSentiment(result);
         $scope.$apply(() => {
           var stocks = $scope.stocks;
           stocks.push(result);
           sortStocks(stocks);
         });
+      }
+
+      StockService.add(selectedCompany).then((result) => {
+        if (result.error) {
+          fail(result.error);
+        } else {
+          success(result);
+        }
       }).catch((error) => {
-        addStockButton.show();
-        loader.hide();
-        alert(error);
+        fail(error);
       })
     }
   }

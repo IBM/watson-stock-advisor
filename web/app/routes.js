@@ -69,7 +69,7 @@ module.exports = function(app, publicRoot) {
       }
     }).catch((error) => {
       console.log(error);
-      res.send(new Error('Add Error', 'There was an error adding the company'));
+      res.send(new Error('Add Error', error));
     });
   });
 

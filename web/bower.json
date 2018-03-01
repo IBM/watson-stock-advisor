@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "bootstrap": "^4.0.0-beta.2",
-    "angular": "latest",
-    "angular-route": "latest",
+    "angular": "^1.6.9",
+    "angular-route": "^1.6.8",
     "chart.js": "^2.7.1",
     "datatables.net-bs4": "1.10.16",
     "jquery.easing": "^1.3.1",

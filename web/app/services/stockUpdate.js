@@ -167,7 +167,9 @@ function updateStocksData(articleData, stockData) {
           console.log('Inserting into company "' + company + '" articles: ' );
           console.log(newArticles);
           //TODO batch insert?
-          stock_db.insertOrUpdate(stockDatum);
+          stock_db.insertOrUpdate(stockDatum).catch((error) => {
+            console.log(error);
+          })
           res();
         }).catch(() => {
           res();

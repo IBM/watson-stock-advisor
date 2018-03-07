@@ -112,9 +112,9 @@
           <hr class="mt-2">
           <div class="card-columns">
             <div ng-repeat="article in articles" class="card mb-3">
-              <a href="#">
-                  <img class="card-img-top img-fluid w-100" src="" alt="">
-                </a>
+              <a ng-if="article.url" href="{{article.url}}" target="_blank">
+                <img class="card-img-top img-fluid w-100" src="{{article.imageURL}}" alt="">
+              </a>
               <div class="card-body">
                 <h6 class="card-title mb-1"><a href="{{article.url}}">{{article.title}}</a></h6>
                 <p class="card-text small">

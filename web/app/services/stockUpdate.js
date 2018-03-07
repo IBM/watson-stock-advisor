@@ -120,30 +120,31 @@ function updateStocksData(articleData, stockData) {
   var catches = [];
 
   for (var i=0; i<articleData.length; i++) {
-    var articleDatum = articleData[i];
-    var company = articleDatum.company;
-    console.log('Beginning article insertion for "' + company + '"');
-    var stockDatum = utils.findStockDatum(stockData, company);
-    if (!stockDatum) {
-      stockDatum = {
-        company : company,
-        ticker  : findTickerForCompanyWithName(company) || 'No Ticker Found',
-        history : []
-      };
-      results.push(stockDatum);
-    }
-    var existingArticles = stockDatum.history || [];
     
-    //filter existing articles
-    var newArticles = articleDatum.articles.filter(function(article) {
-      var articleExists = articleContains(article, existingArticles);
-      if (articleExists) {
-        console.log('Not adding duplicate article: ' + article.url);
-      }
-      return !articleExists;
-    });
-        
     var promise = new Promise((res, rej) => {
+      var articleDatum = articleData[i];
+      var company = articleDatum.company;
+      console.log('Beginning article insertion for "' + company + '"');
+      var stockDatum = utils.findStockDatum(stockData, company);
+      if (!stockDatum) {
+        stockDatum = {
+          company : company,
+          ticker  : findTickerForCompanyWithName(company) || 'No Ticker Found',
+          history : []
+        };
+        results.push(stockDatum);
+      }
+      var existingArticles = stockDatum.history || [];
+      
+      //filter existing articles
+      var newArticles = articleDatum.articles.filter(function(article) {
+        var articleExists = articleContains(article, existingArticles);
+        if (articleExists) {
+          console.log('Not adding duplicate article: ' + article.url);
+        }
+        return !articleExists;
+      });
+
       if (newArticles.length > 0) {
         getImages(newArticles).then((imgResults) => {
           for (var x=0; x<imgResults.length; x++) {

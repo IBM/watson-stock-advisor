@@ -52,6 +52,33 @@ function articleContains(article, articles) {
 }
 
 /**
+ * Finds the image for the given article
+ * @param {article} article
+ * @returns {promise} - The result will be of the form {url: url, imageURL: imageURL},
+ * or undefined if no image found
+ */
+function getImageForArticle(article) {
+  return new Promise((res, rej) => {
+    var url = article.url;
+    request(url, function(error, response, html) {
+      if (!error){
+        var $ = cheerio.load(html);
+        var imageURL = $('body').find('img').attr('src');
+        if (imageURL && imageURL.startsWith('http')) {
+          console.log('image url (' + imageURL + ') found for article with url: (' + url + ')');
+          res({url: url, imageURL: imageURL});
+        } else {
+          console.log('no image url found for article with url: (' + url + ')');
+          res();
+        }
+      } else {
+        rej();
+      }
+    });
+  });
+}
+
+/**
  * Try to find and add image urls to each article
  * @param {article[]} articles
  */
@@ -62,24 +89,7 @@ function getImages(articles) {
 
     for (var i=0; i<articles.length; i++) {
       var article = articles[i];
-      var url = article.url;
-      var promise = new Promise((res, rej) => {
-        request(url, function(error, response, html) {
-          if (!error){
-            var $ = cheerio.load(html);
-            var imageURL = $('body').find('img').attr('src');
-            if (imageURL && imageURL.startsWith('http')) {
-              console.log('image url (' + imageURL + ') found for article with url: (' + url + ')');
-              res({url: url, imageURL: imageURL});
-            } else {
-              console.log('no image url found for article with url: (' + url + ')');
-              res();
-            }
-          } else {
-            rej();
-          }
-        });
-      });
+      var promise = getImageForArticle(article);
       catches.push(promise.catch(e => {
         console.log('Error finding img url for ');
         return e;
@@ -103,6 +113,45 @@ function getImages(articles) {
     }).catch((error) => {
       resolve(results);
     });
+  });
+}
+
+/**
+ * Inserts the new articles for the given stockDatum
+ * @param {stock} stockDatum - The existing stock datum
+ * @param {articles[]} newArticles - The article to be added
+ * @param {function} callback - the function to call on completion
+ */
+function insertNewArticles(stockDatum, newArticles, callback) {
+  getImages(newArticles).then((imgResults) => {
+    for (var x=0; x<imgResults.length; x++) {
+      var imgResult = imgResults[x]
+      for (var y=0; y<newArticles.length; y++) {
+        var newArtic = newArticles[y];
+        if (newArtic.url === imgResult.url) {
+          newArtic.imageURL = imgResult.imageURL;
+          break;
+        }
+      }
+    }
+    var existingArticles = stockDatum.history || [];
+    var updatedArticles = sortArticles(existingArticles.concat(newArticles));
+    var company = stockDatum.company;
+    if (updatedArticles.length > config.MAX_ARTICLES_PER_COMPANY) {
+      console.log('"' + company + '" has exceeded article max of ' + config.MAX_ARTICLES_PER_COMPANY + '...');
+      console.log('Removing ' + (updatedArticles.length - config.MAX_ARTICLES_PER_COMPANY) + ' oldest article(s) from "' + company + '" history...');
+      updatedArticles = updatedArticles.slice(0, config.MAX_ARTICLES_PER_COMPANY);
+    }
+    stockDatum.history = updatedArticles;
+    console.log('Inserting into company "' + company + '" articles: ' );
+    console.log(newArticles);
+    //TODO batch insert?
+    stock_db.insertOrUpdate(stockDatum).catch((error) => {
+      console.log(error);
+    });
+    callback();
+  }).catch(() => {
+    callback();
   });
 }
 
@@ -146,32 +195,7 @@ function updateStocksData(articleData, stockData) {
       });
 
       if (newArticles.length > 0) {
-        getImages(newArticles).then((imgResults) => {
-          for (var x=0; x<imgResults.length; x++) {
-            var imgResult = imgResults[x]
-            for (var y=0; y<newArticles.length; y++) {
-              var newArtic = newArticles[y];
-              if (newArtic.url === imgResult.url) {
-                newArtic.imageURL = imgResult.imageURL;
-                break;
-              }
-            }
-          }
-          var updatedArticles = sortArticles(existingArticles.concat(newArticles));
-          if (updatedArticles.length > config.MAX_ARTICLES_PER_COMPANY) {
-            console.log('"' + company + '" has exceeded article max of ' + config.MAX_ARTICLES_PER_COMPANY + '...');
-            console.log('Removing ' + (updatedArticles.length - config.MAX_ARTICLES_PER_COMPANY) + ' oldest article(s) from "' + company + '" history...');
-            updatedArticles = updatedArticles.slice(0, config.MAX_ARTICLES_PER_COMPANY);
-          }
-          stockDatum.history = updatedArticles;
-          console.log('Inserting into company "' + company + '" articles: ' );
-          console.log(newArticles);
-          //TODO batch insert?
-          stock_db.insertOrUpdate(stockDatum).catch((error) => {
-            console.log(error);
-          });
-          res();
-        }).catch(() => {
+        insertNewArticles(stockDatum, newArticles, function() {
           res();
         });
       } else {

@@ -78,7 +78,7 @@ function getImages(articles) {
           } else {
             rej();
           }
-        })
+        });
       });
       catches.push(promise.catch(e => {
         console.log('Error finding img url for ');
@@ -169,7 +169,7 @@ function updateStocksData(articleData, stockData) {
           //TODO batch insert?
           stock_db.insertOrUpdate(stockDatum).catch((error) => {
             console.log(error);
-          })
+          });
           res();
         }).catch(() => {
           res();

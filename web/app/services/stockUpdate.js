@@ -173,7 +173,7 @@ function updateStocksData(articleData, stockData) {
           res();
         }).catch(() => {
           res();
-        })
+        });
       } else {
         console.log('No new articles to insert into "' + company + '"');
         res();

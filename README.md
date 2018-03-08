@@ -1,4 +1,4 @@
-# Watson Stock Advisor [![Build Status](https://travis-ci.org/IBM/watson-stock-advisor.svg?branch=master)](https://travis-ci.org/IBM/watson-stock-advisor)
+# Watson Stock Advisor [![Build Status](https://travis-ci.org/IBM/watson-stock-advisor.svg?branch=jayakrishna-duvvuri-patch-1)](https://travis-ci.org/IBM/watson-stock-advisor)
 
 ## Provision NoSQL DB TODO add pics
     1. Navigate to console.bluemix.net

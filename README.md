@@ -66,3 +66,7 @@ $ bower install
 $ npm start
 ```
 The portal should now be accessible on port 8080 (or another port specified by PORT in .env)
+
+## Deploy to IBM Cloud
+
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor)

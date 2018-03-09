@@ -10,7 +10,7 @@ applications:
 - path: ./web
   name: watsonstockadvisor
   buildpack: sdk-for-nodejs
-  memory: 512M
+  memory: 256M
   instances: 1
   disk_quota: 256M
   random-route: true

@@ -71,5 +71,19 @@ module.exports = {
   configured               : configured,
   companies                : companies,
   MAX_ARTICLES_PER_COMPANY : process.env.MAX_ARTICLES_PER_COMPANY || 100,
-  MAX_COMPANIES            : process.env.MAX_COMPANIES
+  MAX_COMPANIES            : process.env.MAX_COMPANIES,
+  APP                      : {
+    port : process.env.PORT || 8080
+  },
+  CLOUDANT                 : {
+    account  : process.env.CLOUDANT_ACCESS,
+    key      : process.env.CLOUDANT_KEY,
+    password : process.env.CLOUDANT_PASSWORD,
+    db_name  : process.env.DB_NAME
+  },
+  DISCOVERY                : {
+    version      : process.env.DISCOVERY_VERSION,
+    version_date : process.env.DISCOVERY_VERSION_DATE,
+    env_id       : process.env.DISCOVERY_ENV_ID
+  }
 };

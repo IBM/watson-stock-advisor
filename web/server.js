@@ -18,8 +18,9 @@ var express        = require('express');
 var app            = express();
 var bodyParser     = require('body-parser');
 var methodOverride = require('method-override');
+const config = require('./config');
 
-var port = process.env.PORT || 8080; // set our port
+var port = config.APP.port // set our port
 
 const publicRoot = __dirname + '/public/';
 

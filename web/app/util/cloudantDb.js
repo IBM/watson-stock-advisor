@@ -67,7 +67,6 @@ class DB {
    * @returns {promise} - A promise representing the query to the DB
    */
   insertOrUpdate(doc) {
-    console.log('updating: ', doc);
     return new Promise((resolve, reject) => {
       db.insert(doc, function(err, body, header) {
         if (err) {

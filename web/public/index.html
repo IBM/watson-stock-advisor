@@ -112,16 +112,16 @@
           <hr class="mt-2">
           <div class="card-columns">
             <div ng-repeat="article in articles" class="card mb-3">
-              <a href="#">
-                  <img class="card-img-top img-fluid w-100" src="" alt="">
-                </a>
+              <a ng-if="article.url" href="{{article.url}}" target="_blank">
+                <img class="card-img-top img-fluid w-100" src="{{article.imageURL}}" alt="">
+              </a>
               <div class="card-body">
-                <h6 class="card-title mb-1"><a href="{{article.url}}">{{article.title}}</a></h6>
+                <span ng-if="article.title"><h6 class="card-title mb-1"><a href="{{article.url}}">{{article.title}}</a></h6></span>
                 <p class="card-text small">
-                  Source: {{article.source}}
-                  <br>Company: {{article.company}}
-                  <br>Sentiment: {{article.sentiment}}
-                  <br><a href="{{article.url}}">View Article</a>
+                  <span ng-if="article.source">Source: {{article.source}}</span>
+                  <span ng-if="article.company"><br>Company: {{article.company}}</span>
+                  <span ng-if="article.sentiment"><br>Sentiment: {{article.sentiment}}</span>
+                  <span ng-if="article.url"><br><a href="{{article.url}}">View Article</a></span>
                 </p>
               </div>
               <hr class="my-0">

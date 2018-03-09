@@ -55,7 +55,7 @@ Choose Watson Discover News
 Under the `Overview` tab, `Collection Info` section, click `Use this collection in API` and copy the `Collection ID` and the `Environment ID` into your .env file as `DISCOVERY_COLLECTION_ID` and `DISCOVERY_ENVIRONMENT_ID`.
 
 
-## 4. Provision NoSQL DB
+### 4. Provision NoSQL DB
     1. Navigate to console.bluemix.net
     2. Click 'Create Resource'
     3. Search for 'cloudant nosql'
@@ -64,7 +64,7 @@ Under the `Overview` tab, `Collection Info` section, click `Use this collection 
     6. Click 'Create' in the bottom right
 
 
-## 5. Web Portal
+### 5. Web Portal
 
 The web page is adapted from a [template](https://startbootstrap.com/template-overviews/sb-admin/ "Start Boostrap SB Admin") from [Start Bootstrap](https://startbootstrap.com/ "Start Bootstrap") by [Blackrock Digital](https://github.com/BlackrockDigital "Blackrock Digital").
 You can find the repository for the template [here](https://github.com/BlackrockDigital/startbootstrap-sb-admin "SB Admin Repo"), including its [License](https://github.com/BlackrockDigital/startbootstrap-sb-admin/blob/master/LICENSE "SB Admin License").
@@ -129,18 +129,18 @@ $ npm start
 ```
 The portal should now be accessible on port 8080 (or another port specified by PORT in .env)
 
-# Links
+## Links
 
 * [Watson Discovery](https://www.ibm.com/watson/services/discovery/)
 * [IBM Cloudant db](https://www.ibm.com/cloud/cloudant)
 
-# Learn more
+## Learn more
 
 * **Artificial Intelligence Code Patterns**: Enjoyed this Code Pattern? Check out our other [AI Code Patterns](https://developer.ibm.com/code/technologies/artificial-intelligence/).
 * **AI and Data Code Pattern Playlist**: Bookmark our [playlist](https://www.youtube.com/playlist?list=PLzUbsvIyrNfknNewObx5N7uGZ5FKH0Fde) with all of our Code Pattern videos
 * **With Watson**: Want to take your Watson app to the next level? Looking to utilize Watson Brand assets? [Join the With Watson program](https://www.ibm.com/watson/with-watson/) to leverage exclusive brand, marketing, and tech resources to amplify and accelerate your Watson embedded commercial solution.
 
-# License
+## License
 
 [Apache 2.0](LICENSE)
 

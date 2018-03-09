@@ -61,15 +61,32 @@ function getImageForArticle(article) {
   return new Promise((res, rej) => {
     var url = article.url;
     request(url, function(error, response, html) {
+
+      var fail = function() {
+        console.log('no image url found for article with url: (' + url + ')');
+        res();
+      }
+
       if (!error){
         var $ = cheerio.load(html);
-        var imageURL = $('body').find('img').attr('src');
-        if (imageURL && imageURL.startsWith('http')) {
+        var imgSrc = $.root().find('img').attr('src');
+        if (!imgSrc) {
+          imgSrc = $('body').find('img').attr('src');
+        }
+        if (imgSrc) {
+          var imageURL;
+          var httpURL = utils.extractHTTPURL(imgSrc);
+          if (httpURL) {
+            imageURL = httpURL;
+          } else {
+            //in this case, imgSrc *should* be a relative path
+            var domain = utils.extractDomain(url);
+            imageURL = domain + '/' + (imgSrc.startsWith('/') ? imgSrc.slice(1) : imgSrc);
+          }
           console.log('image url (' + imageURL + ') found for article with url: (' + url + ')');
           res({url: url, imageURL: imageURL});
         } else {
-          console.log('no image url found for article with url: (' + url + ')');
-          res();
+          fail();
         }
       } else {
         rej();

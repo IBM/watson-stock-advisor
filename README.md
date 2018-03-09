@@ -13,7 +13,7 @@
 
 ## Deploy to IBM Cloud
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor)
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor&branch=jayakrishna-duvvuri-patch-1)
 
 TODO: Update steps, if user uses this deploy button.
 

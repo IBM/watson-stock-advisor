@@ -75,7 +75,7 @@ You can find the repository for the template [here](https://github.com/Blackrock
 As you create the Blumix Services, you'll need to create service credentials and get the
 username and password:
 
-Move the watson-stock-advisor/web/env.sample file to /.env and populate the service
+Move the watson-stock-advisor/web/env.sample file to watson-stock-advisor/web/.env and populate the service
 credentials (and Cloudant URL) as you create the credentials:
 
 The credentials for IBM Cloud services (Discovery), can be found in the ``Services`` menu in IBM Cloud,

@@ -7,7 +7,7 @@ declared-services:
     label: cloudantNoSQLDB
     plan: Lite
 applications:
-- path: .
+- path: ./web
   name: watsonstockadvisor
   buildpack: sdk-for-nodejs
   memory: 256M

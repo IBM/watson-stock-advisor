@@ -21,19 +21,25 @@ const config = require('../../config.js');
 var cloudant;
 
 if (!config.VCAP) {
+  console.log('Initializing cloudant from env');
   cloudant = Cloudant({
     account  : config.CLOUDANT.account,
     key      : config.CLOUDANT.key,
     password : config.CLOUDANT.password
   });
 } else {
+  console.log('Initializing cloudant from VCAP');
+  console.log('credentials url: ' + config.CLOUDANT.credentialsURL);
   cloudant = Cloudant(config.CLOUDANT.credentialsURL);
 }
 
 // try to create DB
+console.log('trying to create DB with name: ' + config.CLOUDANT.db_name);
 cloudant.db.create(config.CLOUDANT.db_name, function(err, res) {
   if (err) {
     console.log('Could not create new db: ' + config.CLOUDANT.db_name + ', it might already exist.');
+  } else {
+    console.log('DB created');
   }
 });
 

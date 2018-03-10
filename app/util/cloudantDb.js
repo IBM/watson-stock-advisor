@@ -29,6 +29,14 @@ if (!config.VCAP) {
 } else {
   cloudant = Cloudant(config.CLOUDANT.credentialsURL);
 }
+
+// try to create DB
+cloudant.db.create(config.CLOUDANT.db_name, function(err, res) {
+  if (err) {
+    console.log('Could not create new db: ' + config.CLOUDANT.db_name + ', it might already exist.');
+  }
+});
+
 const db = cloudant.db.use(config.CLOUDANT.db_name);
 
 /**

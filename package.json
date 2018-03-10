@@ -28,6 +28,6 @@
   },
   "scripts": {
     "test": "jshint build_test.js",
-    "postinstall": "echo 'starting manual script' && pwd && pwd && npm install -g bower && bower install"
+    "postinstall": "echo 'Beginning postinstall...' && npm install -g bower && bower install"
   }
 }

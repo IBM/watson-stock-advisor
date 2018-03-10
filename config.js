@@ -59,14 +59,17 @@ companies = companies.sort(function(a, b) {
   return 0;
 });
 
-var configured = false;
+const VCAP = process.env.VCAP_SERVICES;
+var configured = true;
 
 if (fs.existsSync(env_path)) {
-  configured = true;
+  console.log('using env file');
+} else if (VCAP) {
+  console.log('using VCAP');
 } else {
+  configured = false;
   console.log('.env file not found');
 }
-
 
 function getDBCredentialsUrl(jsonData) {
   var vcapServices = JSON.parse(jsonData);
@@ -100,8 +103,6 @@ var theConfig = {
     env_id       : process.env.DISCOVERY_ENV_ID
   }
 };
-
-const VCAP = process.env.VCAP_SERVICES;
 
 if (VCAP) {
   theConfig.VCAP = VCAP;

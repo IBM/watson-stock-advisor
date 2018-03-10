@@ -16,14 +16,20 @@
 
 const Cloudant = require('cloudant');
 const utils = require('./utils.js');
-require('../../config.js');
+const config = require('../../config.js');
 
-const cloudant = Cloudant({
-  account  : process.env.CLOUDANT_ACCESS,
-  key      : process.env.CLOUDANT_KEY,
-  password : process.env.CLOUDANT_PASSWORD
-});
-const db = cloudant.db.use(process.env.DB_NAME);
+var cloudant;
+
+if (!config.VCAP) {
+  cloudant = Cloudant({
+    account  : config.CLOUDANT.account,
+    key      : config.CLOUDANT.key,
+    password : config.CLOUDANT.password
+  });
+} else {
+  cloudant = Cloudant(config.CLOUDANT.credentialsURL);
+}
+const db = cloudant.db.use(config.CLOUDANT.db_name);
 
 /**
  * Searches for docs with the given value for the given key

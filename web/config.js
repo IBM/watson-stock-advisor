@@ -67,9 +67,45 @@ if (fs.existsSync(env_path)) {
   console.log('.env file not found');
 }
 
-module.exports = {
+
+function getDBCredentialsUrl(jsonData) {
+  var vcapServices = JSON.parse(jsonData);
+  // Pattern match to find the first instance of a Cloudant service in
+  // VCAP_SERVICES. If you know your service key, you can access the
+  // service credentials directly by using the vcapServices object.
+  for (var vcapService in vcapServices) {
+      if (vcapService.match(/cloudant/i)) {
+          return vcapServices[vcapService][0].credentials.url;
+      }
+  }
+}
+
+var theConfig = {
   configured               : configured,
   companies                : companies,
   MAX_ARTICLES_PER_COMPANY : process.env.MAX_ARTICLES_PER_COMPANY || 100,
-  MAX_COMPANIES            : process.env.MAX_COMPANIES
+  MAX_COMPANIES            : process.env.MAX_COMPANIES,
+  APP                      : {
+    port : process.env.PORT || 8080
+  },
+  CLOUDANT                 : {
+    account  : process.env.CLOUDANT_ACCESS,
+    key      : process.env.CLOUDANT_KEY,
+    password : process.env.CLOUDANT_PASSWORD,
+    db_name  : process.env.DB_NAME
+  },
+  DISCOVERY                : {
+    version      : process.env.DISCOVERY_VERSION,
+    version_date : process.env.DISCOVERY_VERSION_DATE,
+    env_id       : process.env.DISCOVERY_ENV_ID
+  }
 };
+
+const VCAP = process.env.VCAP_SERVICES;
+
+if (VCAP) {
+  theConfig.VCAP = VCAP;
+  theConfig.CLOUDANT.credentialsURL = getDBCredentialsUrl(VCAP);
+}
+
+module.exports = theConfig;

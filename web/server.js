@@ -14,12 +14,13 @@
  * the License.
  */
 
-var express        = require('express');
-var app            = express();
-var bodyParser     = require('body-parser');
-var methodOverride = require('method-override');
+const express        = require('express');
+const app            = express();
+const bodyParser     = require('body-parser');
+const methodOverride = require('method-override');
+const config = require('./config');
 
-var port = process.env.PORT || 8080; // set our port
+const port = config.APP.port // set our port
 
 const publicRoot = __dirname + '/public/';
 

@@ -49,6 +49,50 @@ class Utils {
     return undefined;
   }
 
+  /**
+   * Finds and extracts the substring of str starting with http:// or https:// and continuing
+   * through the rest of the string
+   * @param {string} str
+   * @returns {string|undefined} the URL, or undefined
+   */
+  extractHTTPURL(str) {
+
+    if (!str) {
+      return undefined;
+    }
+
+    var httpIndex = str.indexOf('http://');
+    if (httpIndex == -1) {
+      httpIndex = str.indexOf('https://');
+    }
+    if (httpIndex > -1) {
+      return str.substring(httpIndex, str.length);
+    }
+    return undefined;
+  }
+
+  /**
+   * Finds and extracts the domain in the url, starting with http
+   * and continuing up until the / after http:// or https://
+   * @param {string} url
+   * @returns {string|undefined} the domain, or undefined
+   */
+  extractDomain(url) {
+
+    if (!url) {
+      return undefined;
+    }
+
+    var domain;
+    if (url.indexOf('http') > -1) {
+      var split = url.split('/');
+      if (split.length > 2) {
+        domain = split[0] + '//' + split[2];
+      }
+    }
+    return domain;
+  }
+
 }
 
 module.exports = new Utils();

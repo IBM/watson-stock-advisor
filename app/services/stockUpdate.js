@@ -19,6 +19,8 @@ const utils  = require('../util/utils');
 
 const stock_db  = config.configured && require('../util/cloudantDb');
 const discovery = config.configured && require('./discovery');
+const request = require('request');
+const cheerio = require('cheerio');
 
 /**
  * Sorts and returns the articles from most to least recent by date
@@ -50,6 +52,127 @@ function articleContains(article, articles) {
 }
 
 /**
+ * Finds the image for the given article
+ * @param {article} article
+ * @returns {promise} - The result will be of the form {url: url, imageURL: imageURL},
+ * or undefined if no image found
+ */
+function getImageForArticle(article) {
+  return new Promise((res, rej) => {
+    var url = article.url;
+    request(url, function(error, response, html) {
+
+      var fail = function() {
+        console.log('no image url found for article with url: (' + url + ')');
+        res();
+      }
+
+      if (!error){
+        var $ = cheerio.load(html);
+        var imgSrc = $.root().find('img').attr('src');
+        if (!imgSrc) {
+          imgSrc = $('body').find('img').attr('src');
+        }
+        if (imgSrc) {
+          var imageURL;
+          var httpURL = utils.extractHTTPURL(imgSrc);
+          if (httpURL) {
+            imageURL = httpURL;
+          } else {
+            //in this case, imgSrc *should* be a relative path
+            var domain = utils.extractDomain(url);
+            imageURL = domain + '/' + (imgSrc.startsWith('/') ? imgSrc.slice(1) : imgSrc);
+          }
+          console.log('image url (' + imageURL + ') found for article with url: (' + url + ')');
+          res({url: url, imageURL: imageURL});
+        } else {
+          fail();
+        }
+      } else {
+        rej();
+      }
+    });
+  });
+}
+
+/**
+ * Try to find and add image urls to each article
+ * @param {article[]} articles
+ */
+function getImages(articles) {
+
+  return new Promise((resolve, reject) => {
+    var catches = [];
+
+    for (var i=0; i<articles.length; i++) {
+      var article = articles[i];
+      var promise = getImageForArticle(article);
+      catches.push(promise.catch(e => {
+        console.log('Error finding img url for ');
+        return e;
+      }));
+    }
+
+    //we wait here until all attempts are finished.
+    //we may not be able to retrieve image urls for all articles...
+    //and that's ok. since we are Promise.all-ing caught promises,
+    //we allow any outstanding promises to continue even if one of them fails.
+    //the catch block here should never fire, but we place it for good measure
+    Promise.all(catches).then((tempResults) => {
+      var results = [];
+      for (var x=0; x<tempResults.length; x++) {
+        var tempRes = tempResults[x];
+        if (tempRes && tempRes.url) {
+          results.push(tempRes);
+        }
+      }
+      resolve(results);
+    }).catch((error) => {
+      resolve(results);
+    });
+  });
+}
+
+/**
+ * Inserts the new articles for the given stockDatum
+ * @param {stock} stockDatum - The existing stock datum
+ * @param {articles[]} newArticles - The article to be added
+ * @param {function} callback - the function to call on completion
+ */
+function insertNewArticles(stockDatum, newArticles, callback) {
+  getImages(newArticles).then((imgResults) => {
+    for (var x=0; x<imgResults.length; x++) {
+      var imgResult = imgResults[x]
+      for (var y=0; y<newArticles.length; y++) {
+        var newArtic = newArticles[y];
+        if (newArtic.url === imgResult.url) {
+          newArtic.imageURL = imgResult.imageURL;
+          break;
+        }
+      }
+    }
+    var existingArticles = stockDatum.history || [];
+    var updatedArticles = sortArticles(existingArticles.concat(newArticles));
+    var company = stockDatum.company;
+    if (updatedArticles.length > config.MAX_ARTICLES_PER_COMPANY) {
+      console.log('"' + company + '" has exceeded article max of ' + config.MAX_ARTICLES_PER_COMPANY + '...');
+      console.log('Removing ' + (updatedArticles.length - config.MAX_ARTICLES_PER_COMPANY) + ' oldest article(s) from "' + company + '" history...');
+      updatedArticles = updatedArticles.slice(0, config.MAX_ARTICLES_PER_COMPANY);
+    }
+    stockDatum.history = updatedArticles;
+    console.log('Inserting into company "' + company + '" articles: ' );
+    console.log(newArticles);
+    //TODO batch insert?
+    stock_db.insertOrUpdate(stockDatum).catch((error) => {
+      console.log(error);
+    });
+    callback();
+  }).catch(() => {
+    callback();
+  });
+}
+
+/**
  * Updates the database with the article data. New (unique) articles
  * are inserted into the database. Duplicates are removed. The articles
  * are sorted from most to least recent for each before updating DB.
@@ -60,48 +183,58 @@ function articleContains(article, articles) {
 function updateStocksData(articleData, stockData) {
   
   var results = stockData;
+  var catches = [];
 
   for (var i=0; i<articleData.length; i++) {
-    var articleDatum = articleData[i];
-    var company = articleDatum.company;
-    console.log('Beginning article insertion for "' + company + '"');
-    var stockDatum = utils.findStockDatum(stockData, company);
-    if (!stockDatum) {
-      stockDatum = {
-        company : company,
-        ticker  : findTickerForCompanyWithName(company) || 'No Ticker Found',
-        history : []
-      };
-      results.push(stockDatum);
-    }
-    var existingArticles = stockDatum.history || [];
     
-    //filter existing articles
-    var newArticles = articleDatum.articles.filter(function(article) {
-      var articleExists = articleContains(article, existingArticles);
-      if (articleExists) {
-        console.log('Not adding duplicate article: ' + article.url);
+    var promise = new Promise((res, rej) => {
+      var articleDatum = articleData[i];
+      var company = articleDatum.company;
+      console.log('Beginning article insertion for "' + company + '"');
+      var stockDatum = utils.findStockDatum(stockData, company);
+      if (!stockDatum) {
+        stockDatum = {
+          company : company,
+          ticker  : findTickerForCompanyWithName(company) || 'No Ticker Found',
+          history : []
+        };
+        results.push(stockDatum);
       }
-      return !articleExists;
+      var existingArticles = stockDatum.history || [];
+      
+      //filter existing articles
+      var newArticles = articleDatum.articles.filter(function(article) {
+        var articleExists = articleContains(article, existingArticles);
+        if (articleExists) {
+          console.log('Not adding duplicate article: ' + article.url);
+        }
+        return !articleExists;
+      });
+
+      if (newArticles.length > 0) {
+        insertNewArticles(stockDatum, newArticles, function() {
+          res();
+        });
+      } else {
+        console.log('No new articles to insert into "' + company + '"');
+        res();
+      }
     });
-        
-    //TODO batch insert?
-    if (newArticles.length > 0) {
-      var updatedArticles = sortArticles(existingArticles.concat(newArticles));
-      if (updatedArticles.length > config.MAX_ARTICLES_PER_COMPANY) {
-        console.log('"' + company + '" has exceeded article max of ' + config.MAX_ARTICLES_PER_COMPANY + '...');
-        console.log('Removing ' + (updatedArticles.length - config.MAX_ARTICLES_PER_COMPANY) + ' oldest article(s) from "' + company + '" history...');
-        updatedArticles = updatedArticles.slice(0, config.MAX_ARTICLES_PER_COMPANY);
-      }
-      stockDatum.history = updatedArticles;
-      console.log('Inserting into company "' + company + '" articles: ' );
-      console.log(newArticles);
-      stock_db.insertOrUpdate(stockDatum);
-    } else {
-      console.log('No new articles to insert into "' + company + '"');
-    }
+
+    catches.push(promise.catch(e => {
+      console.log('Error inserting stock data for ' + company);
+      return e;
+    }));
   }
-  return results;
+
+  return new Promise((resolve, reject) => {
+    Promise.all(catches).then(() => {
+      resolve(results);
+    }).catch((error) => {
+      console.log(error);
+      resolve(results);
+    })
+  });
 }
 
 /**
@@ -251,8 +384,12 @@ class StockUpdate {
         if (companies && companies.length > 0) {
           getArticleDataForCompanies(companies, function(articleData, articlesErr) {
             if (!articlesErr) {
-              var results = updateStocksData(articleData, docs);
-              resolve(results);
+              updateStocksData(articleData, docs).then((results) => {
+                resolve(results);
+              }).catch((results) => {
+                //updateStocksData never rejects, so resolving here is a failsafe
+                resolve(results);
+              });
             } else {
               console.log(articlesErr);
               reject();

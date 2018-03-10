@@ -98,9 +98,9 @@ var theConfig = {
     db_name  : process.env.DB_NAME || 'stock-data'
   },
   DISCOVERY                : {
-    version      : process.env.DISCOVERY_VERSION,
-    version_date : process.env.DISCOVERY_VERSION_DATE,
-    env_id       : process.env.DISCOVERY_ENV_ID
+    version      : process.env.DISCOVERY_VERSION || 'v1',
+    version_date : process.env.DISCOVERY_VERSION_DATE || '2017-11-07',
+    env_id       : process.env.DISCOVERY_ENV_ID || 'system'
   }
 };
 

@@ -1,0 +1,20 @@
+---
+declared-services:
+  wsa-discovery:
+    label: discovery
+    plan: lite
+  wsa-cloudant:
+    label: cloudantNoSQLDB
+    plan: Lite
+applications:
+- path: .
+  name: watsonstockadvisor
+  buildpack: sdk-for-nodejs
+  memory: 256M
+  instances: 1
+  disk_quota: 256M
+  random-route: false
+  timeout: 180
+  services:
+  - wsa-discovery
+  - wsa-cloudant

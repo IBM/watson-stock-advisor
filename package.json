@@ -25,6 +25,11 @@
     "watson-developer-cloud": "^3.0.4"
   },
   "devDependencies": {
-    "eslint": "^4.18.1"
+    "eslint": "^4.18.1",
+    "jshint": "^2.6.0"
+  },
+  "scripts": {
+    "test": "jshint build_test.js",
+    "postinstall": "echo 'Beginning postinstall...' && npm install -g bower && bower install"
   }
 }

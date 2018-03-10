@@ -16,14 +16,34 @@
 
 const Cloudant = require('cloudant');
 const utils = require('./utils.js');
-require('../../config.js');
+const config = require('../../config.js');
 
-const cloudant = Cloudant({
-  account  : process.env.CLOUDANT_ACCESS,
-  key      : process.env.CLOUDANT_KEY,
-  password : process.env.CLOUDANT_PASSWORD
+var cloudant;
+
+if (!config.VCAP) {
+  console.log('Initializing cloudant from env');
+  cloudant = Cloudant({
+    account  : config.CLOUDANT.account,
+    key      : config.CLOUDANT.key,
+    password : config.CLOUDANT.password
+  });
+} else {
+  console.log('Initializing cloudant from VCAP');
+  console.log('credentials url: ' + config.CLOUDANT.credentialsURL);
+  cloudant = Cloudant(config.CLOUDANT.credentialsURL);
+}
+
+// try to create DB
+console.log('trying to create DB with name: ' + config.CLOUDANT.db_name);
+cloudant.db.create(config.CLOUDANT.db_name, function(err, res) {
+  if (err) {
+    console.log('Could not create new db: ' + config.CLOUDANT.db_name + ', it might already exist.');
+  } else {
+    console.log('DB created');
+  }
 });
-const db = cloudant.db.use(process.env.DB_NAME);
+
+const db = cloudant.db.use(config.CLOUDANT.db_name);
 
 /**
  * Searches for docs with the given value for the given key

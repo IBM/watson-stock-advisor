@@ -1,3 +1,4 @@
-
 .idea/
 .env
+public/libs
+node_modules

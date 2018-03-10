@@ -8,6 +8,6 @@
   },
   "scripts": {
     "test": "jshint web/build_test.js",
-    "postinstall": "cd ./web && npm install && npm install -g bower && bower install"
+    "postinstall": "echo 'starting manual script' && pwd && cd ./web && pwd && npm install && npm install -g bower && bower install && pwd && npm start"
   }
 }

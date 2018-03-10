@@ -2,10 +2,10 @@
 declared-services:
   wsa-discovery:
     label: discovery
-    plan: lite
+    plan: Lite
   wsa-cloudant:
     label: cloudantNoSQLDB
-    plan: lite
+    plan: Lite
 applications:
 - path: ./web
   name: watsonstockadvisor

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/IBM/watson-stock-advisor.svg?branch=jayakrishna-duvvuri-patch-1)](https://travis-ci.org/IBM/watson-stock-advisor)
+[![Build Status](https://travis-ci.org/IBM/watson-stock-advisor.svg)](https://travis-ci.org/IBM/watson-stock-advisor)
 
 # Watson Stock Advisor
 
@@ -13,7 +13,7 @@
 
 ## Deploy to IBM Cloud
 
-[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor&branch=jayakrishna-duvvuri-patch-1)
+[![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor)
 
 TODO: Update steps, if user uses this deploy button.
 

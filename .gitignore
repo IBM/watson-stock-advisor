@@ -1,4 +1,4 @@
 .idea/
 .env
-web/public/libs
+public/libs
 node_modules

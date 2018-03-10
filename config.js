@@ -92,7 +92,7 @@ var theConfig = {
     account  : process.env.CLOUDANT_ACCESS,
     key      : process.env.CLOUDANT_KEY,
     password : process.env.CLOUDANT_PASSWORD,
-    db_name  : process.env.DB_NAME
+    db_name  : process.env.DB_NAME || 'stock-data'
   },
   DISCOVERY                : {
     version      : process.env.DISCOVERY_VERSION,

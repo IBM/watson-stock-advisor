@@ -18,11 +18,17 @@ const Cloudant = require('cloudant');
 const utils = require('./utils.js');
 const config = require('../../config.js');
 
-const cloudant = Cloudant({
-  account  : config.CLOUDANT.account,
-  key      : config.CLOUDANT.key,
-  password : config.CLOUDANT.password
-});
+var cloudant;
+
+if (!config.VCAP) {
+  cloudant = Cloudant({
+    account  : config.CLOUDANT.account,
+    key      : config.CLOUDANT.key,
+    password : config.CLOUDANT.password
+  });
+} else {
+  cloudant = Cloudant(config.CLOUDANT.credentialsURL);
+}
 const db = cloudant.db.use(config.CLOUDANT.db_name);
 
 /**

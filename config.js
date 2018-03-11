@@ -101,6 +101,9 @@ var theConfig = {
     version      : process.env.DISCOVERY_VERSION || 'v1',
     version_date : process.env.DISCOVERY_VERSION_DATE || '2017-11-07',
     env_id       : process.env.DISCOVERY_ENV_ID || 'system'
+  },
+  ALPHAVANTAGE             : {
+    api_key : process.env.ALPHAVANTAGE_API_KEY || 'demo'
   }
 };
 

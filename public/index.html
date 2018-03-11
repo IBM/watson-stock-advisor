@@ -46,7 +46,7 @@
               <button id="addStockButton" ng-click="addStock()" type="button" class="btn btn-success">Add Stock</button>
             </div>
             <div class="card-body">
-              <div class="table-responsive">
+              <div class="table-responsive" style="height: 390px;">
                 <table class="table table-bordered table-hover" width="100%" cellspacing="0">
                   <thead>
                     <tr>
@@ -56,8 +56,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-repeat="stock in stocks">
-                      <td ng-click=selectCompany(stock)>{{stock.company}}
+                    <tr ng-click=selectCompany($event,stock) class="clickable-row getrow" ng-repeat="stock in stocks">
+                      <td>{{stock.company}}
                         <span class="pull-right">
                           <button ng-click="$event.stopPropagation(); confirmDelete(stock.company)" class="btn btn-danger">
                             <strong>Delete</strong>
@@ -85,7 +85,7 @@
         <div class="col-lg-4">
           <div ng-show="stocks.length > 0" class="card mb-1">
             <div class="card-header">
-              <i class="fa fa-pie-chart"></i> Sentiment Breakdown</div>
+              <i class="fa fa-pie-chart"></i> Sentiment Breakdown for {{currentCompany}}</div>
             <div class="card-body">
               <canvas id="sentimentPieChart" width="100%" height="100"></canvas>
             </div>
@@ -96,7 +96,7 @@
       <!-- Area Chart -->
       <div ng-show="stocks.length > 0" class="card mb-3">
         <div class="card-header">
-          <i class="fa fa-area-chart"></i> Trend Over Time</div>
+          <i class="fa fa-area-chart"></i> Trend Over Time for {{currentCompany}}</div>
         <div class="card-body">
           <canvas id="trendChart" width="100%" height="30"></canvas>
         </div>
@@ -107,7 +107,7 @@
       <div ng-show="stocks.length > 0" class="row">
         <div class="col-lg-8">
           <div class="mb-0">
-            <i class="fa fa-newspaper-o"></i> Recent News
+            <i class="fa fa-newspaper-o"></i> Recent News for {{currentCompany}}
           </div>
           <hr class="mt-2">
           <div class="card-columns">

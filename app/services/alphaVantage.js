@@ -50,7 +50,6 @@ class AlphaVantage {
       alphaVantageAPI.getDailyData(companyTicker)
         .then((dailyData) => {
           var stockPriceMap = parsedailyData(dailyData);
-          console.log(stockPriceMap);
           resolve(stockPriceMap);
         }).catch((err) => {
           console.error(err);

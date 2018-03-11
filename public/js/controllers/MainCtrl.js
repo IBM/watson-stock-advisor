@@ -165,6 +165,11 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
       $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
       $scope.myLineChart.data.labels = newLineChartData.labels;
+      $scope.myLineChart.data.datasets[0].pointRadius = getPointRadius(newLineChartData.data);
+      $scope.myLineChart.data.datasets[0].pointBackgroundColor = getPointColor(newLineChartData.data);
+      $scope.myLineChart.data.datasets[0].pointBorderColor = getPointColor(newLineChartData.data);
+      $scope.myLineChart.data.datasets[0].pointHoverRadius = getPointRadius(newLineChartData.data);
+      $scope.myLineChart.data.datasets[0].pointHoverBackgroundColor = getPointColor(newLineChartData.data);
       $scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
       $scope.myLineChart.update();
 
@@ -433,11 +438,13 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     var radii = [];
     for(var i=0; i<data.length; i++){ 
       radii.push(Math.abs(data[i]*6));}
+    console.log(data);  
     return radii;
   }
 
   function getPointColor(data){
     var color = [];
+    console.log("here");
     for(var i=0; i<data.length; i++){ 
       if(data[i]>0){
         color_i = '#28a745';

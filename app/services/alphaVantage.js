@@ -19,6 +19,11 @@ const config = require('../../config');
 const AlphaVantageAPI = require('alpha-vantage-cli').AlphaVantageAPI;
 const alphaVantageAPI = new AlphaVantageAPI(config.ALPHAVANTAGE.api_key, 'compact', true);
 
+/**
+ * Creates a map between date and price from the response from AlphaVantage
+ * @param {alphaVantageData} dailyData
+ * @returns {map} priceMap
+ */
 function parsedailyData(dailyData) {
   var stockPriceMap = {};
 
@@ -34,6 +39,11 @@ function parsedailyData(dailyData) {
 
 class AlphaVantage {
 
+  /**
+   * Returns a price map
+   * @param {string} companyTicker
+   * @returns promise - the result is a price map by date, or an error
+   */
   getPriceHistoryForTicker(companyTicker) {
      
     return new Promise((resolve, reject) => {

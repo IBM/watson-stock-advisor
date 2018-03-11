@@ -429,8 +429,31 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   }
 
+  function getPointRadius(data){
+    var radii = [];
+    for(var i=0; i<data.length; i++){ 
+      radii.push(Math.abs(data[i]*6));}
+    return radii;
+  }
+
+  function getPointColor(data){
+    var color = [];
+    for(var i=0; i<data.length; i++){ 
+      if(data[i]>0){
+        color_i = '#28a745';
+      }else if (data[i]<0) {
+        color_i = '#dc3545';
+      }else{
+        color_i = '#ffc107';
+      }
+      color.push(color_i); 
+    }
+    return color;
+  }
+
   function makeNewChart(labels,data, company){
     var ctx = document.getElementById('trendChart');
+    console.log(data);
     $scope.myLineChart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -440,11 +463,11 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           lineTension: 0.0,
           backgroundColor: 'rgba(2,117,216,0)',
           borderColor: 'rgba(2,117,216,1)',
-          pointRadius: 5,
-          pointBackgroundColor: 'rgba(2,117,216,1)',
-          pointBorderColor: 'rgba(255,255,255,0.8)',
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: 'rgba(2,117,216,1)',
+          pointRadius: getPointRadius(data),
+          pointBackgroundColor: getPointColor(data),
+          pointBorderColor: getPointColor(data),
+          pointHoverRadius: getPointRadius(data),
+          pointHoverBackgroundColor: getPointColor(data),
           pointHitRadius: 5,
           pointBorderWidth: 2,
           data: data,

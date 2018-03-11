@@ -58,3 +58,5 @@ class AlphaVantage {
     });
   }
 }
+
+module.exports = new AlphaVantage();

@@ -20,6 +20,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   $scope.stocks = [];
   $scope.showBanner = false;
+  $scope.currentCompany = "your Portfolio";
+  $scope.superStockHistory = [];
 
   var loader = $('#loader');
   loader.hide();
@@ -33,6 +35,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       return;
     }
 
+    $scope.currentCompany = selectedCompany;
     var addStockButton = $('#addStockButton');
     addStockButton.hide();
     loader.show();
@@ -55,6 +58,22 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           var stocks = $scope.stocks;
           stocks.push(result);
           sortStocks(stocks);
+
+          $scope.currentCompany = result.company;
+          var newLineChartData = getLineChartData(result.history);
+          var newPieChartData = getPieChartData(result.history);
+
+          $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
+          $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
+          $scope.myLineChart.data.labels = newLineChartData.labels;
+          //$scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
+          $scope.myLineChart.update();
+
+          $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
+          $scope.myPieChart.data.labels = newPieChartData.labels;
+          $scope.myPieChart.update();
+
+          updateArticles([result]);
         });
       };
 
@@ -93,20 +112,68 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
     }
     companyNamePendingDeletion = undefined;
-  };
 
-  $scope.selectCompany = function(stock) {
-    var newLineChartData = getLineChartData(stock);
+    $scope.currentCompany = "your Portfolio";
+    var newLineChartData = getLineChartData($scope.superStockHistory);
+    var newPieChartData = getPieChartData($scope.superStockHistory);
+
     $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
+    $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
     $scope.myLineChart.data.labels = newLineChartData.labels;
+    $scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
     $scope.myLineChart.update();
 
-    var newPieChartData = getPieChartData(stock);
     $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
     $scope.myPieChart.data.labels = newPieChartData.labels;
     $scope.myPieChart.update();
 
-    updateArticles([stock]);
+    updateArticles($scope.stocks);
+  };
+
+  $scope.selectCompany = function($event, stock) {
+    tablinks = document.getElementsByClassName("getrow");
+    if($event.currentTarget.classList.contains("bg-info")){
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" bg-info", "");
+      }
+      $scope.currentCompany = "your Portfolio";
+      var newLineChartData = getLineChartData($scope.superStockHistory);
+      var newPieChartData = getPieChartData($scope.superStockHistory);
+
+      $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
+      $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
+      $scope.myLineChart.data.labels = newLineChartData.labels;
+      $scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
+      $scope.myLineChart.update();
+
+      $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
+      $scope.myPieChart.data.labels = newPieChartData.labels;
+      $scope.myPieChart.update();
+
+      updateArticles($scope.stocks);
+
+    }
+    else{
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" bg-info", "");
+      }
+      $event.currentTarget.className += " bg-info";
+      $scope.currentCompany = stock.company;
+      var newLineChartData = getLineChartData(stock.history);
+      var newPieChartData = getPieChartData(stock.history);
+
+      $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
+      $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
+      $scope.myLineChart.data.labels = newLineChartData.labels;
+      $scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
+      $scope.myLineChart.update();
+
+      $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
+      $scope.myPieChart.data.labels = newPieChartData.labels;
+      $scope.myPieChart.update();
+
+      updateArticles([stock]);
+    }
   };
 
   StockService.getStocks().then((stocks) => {
@@ -195,11 +262,14 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       sortStocks(stocks);
       $scope.stocks = stocks;
       if (haveStocks) {
-        updatePieChart(stocks[0]);
+        for (var i = 0; i < stocks.length; i++) {
+          $scope.superStockHistory.push.apply($scope.superStockHistory, stocks[i].history);
+        }
+        updatePieChart($scope.superStockHistory);
       }
       //space out page updates to prevent lag
       if (haveStocks) {
-        $timeout(updateLineChart(stocks[0]), 2000);
+        $timeout(updateLineChart($scope.superStockHistory), 2000);
       }
       $timeout(updateArticles(stocks), 3000);
     });
@@ -224,20 +294,19 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   /**
    * Updates the pie chart
-   * @param {stock[]} stocks
+   * @param {stock[].history} stocks
    */
-  function updatePieChart(stock) {
-    var pieChartData = getPieChartData(stock);
+  function updatePieChart(history) {
+    var pieChartData = getPieChartData(history);
     makeNewPieChart(pieChartData.labels, pieChartData.data);
   }
 
-  function getPieChartData(stock){
+  function getPieChartData(history){
     var keys = ['Positive', 'Neutral', 'Negative'];
 
     var dataMap = {};
     for (var x=0; x<keys.length; x++) { dataMap[keys[x].toLowerCase()] = 0; }
 
-    var history = stock.history;
     for (var i=0; i<history.length; i++) {dataMap[history[i].sentiment.toLowerCase()] += 1;}
 
     var data = [];
@@ -314,15 +383,14 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   /**
    * Updates the line chart
-   * @param {stock[]} stocks
+   * @param {stock[].history} stocks
    */
-  function updateLineChart(stock) {
-    var lineChartData = getLineChartData(stock);
-    makeNewChart(lineChartData.labels, lineChartData.data);
+    function updateLineChart(history) {
+    var lineChartData = getLineChartData(history);
+    makeNewChart(lineChartData.labels, lineChartData.data, $scope.currentCompany);
   }
 
-  function getLineChartData(stock) {
-    var history = stock.history;
+  function getLineChartData(history) {
     var sentimentMap = {};//has over all sentiment of the day for a particular stock
     var articleCountmap = {};//has article count of the day for a particular stock
 
@@ -361,14 +429,14 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   }
 
-  function makeNewChart(labels,data){
+  function makeNewChart(labels,data, company){
     var ctx = document.getElementById('trendChart');
     $scope.myLineChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: labels,
         datasets: [{
-          label: 'Sentiment value per day',
+          label: company,
           lineTension: 0.0,
           backgroundColor: 'rgba(2,117,216,0)',
           borderColor: 'rgba(2,117,216,1)',
@@ -392,7 +460,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
               display: false
             },
             ticks: {
-              maxTicksLimit: labels.length
+              maxTicksLimit: 40
             }
           }],
           yAxes: [{
@@ -407,7 +475,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           }],
         },
         legend: {
-          display: false
+          display: true
         }
       }
     });

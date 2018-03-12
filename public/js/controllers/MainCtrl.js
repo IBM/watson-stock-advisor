@@ -26,7 +26,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   var loader = $('#loader');
   loader.hide();
 
-  function setHeight(height) {
+  function setMaxTableHeight(height) {
     $('#dataTable').css('max-height', height + 'px');
   }
 
@@ -38,7 +38,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         if (mutation.type == 'attributes' && mutation.attributeName == "height") {
           var newHeight = mutation.target.height
           if (newHeight > 0) {
-            setHeight(newHeight - 14);
+            setMaxTableHeight(newHeight - 14);
           }
         }
       }

@@ -209,13 +209,12 @@ function getLatestStockPrices(stockDatum) {
 
 /**
  * Finds the stock price for the given date, or the latest prior to that date, if available
- * @param {string} articleDate
+ * @param {string} date
  * @param {[]} priceList - sorted price list e.g. [{date:'2018-01-25', price: 35.9}, {date:'2018-01-27', price: 36.21}]
  * @returns pricepair - e.g. {date:'2018-01-25', price: 35.9}
  */
-function getPairForDate(articleDate, priceList) {
+function getPairForDate(date, priceList) {
 
-  var date = utils.convertArticleDateToAVDate(articleDate);
   if (!date || !priceList) {
     return undefined;
   }
@@ -298,8 +297,10 @@ function updateStocksData(articleData, stockData) {
           var neededDates = existingArticles.concat(newArticles).filter(function(art) {
             return art && typeof art.date != 'undefined';
           }).map(function(artic) {
-            return artic.date;
+            return utils.convertArticleDateToAVDate(artic.date);
           });
+          //filter duplicates
+          neededDates = Array.from(new Set(neededDates));
           var filteredPriceHistory = {};
           var priceMap = stockDatum.price_history;
           var sortedPrices = utils.convertPriceMapToList(priceMap);

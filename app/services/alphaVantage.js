@@ -28,10 +28,10 @@ function parsedailyData(dailyData) {
   var stockPriceMap = {};
 
   for (var id in dailyData) {
-    var date = dailyData[id]["Timestamp"];
+    var date = dailyData[id]['Timestamp'];
     var dateString = JSON.stringify(date);
     dateString = dateString.slice(1,11);
-    var price = dailyData[id]["Close"];
+    var price = dailyData[id]['Close'];
     stockPriceMap[dateString] = price; // date:price
   }
   return stockPriceMap;

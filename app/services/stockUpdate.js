@@ -66,7 +66,7 @@ function getImageForArticle(article) {
       var fail = function() {
         console.log('no image url found for article with url: (' + url + ')');
         res();
-      }
+      };
 
       if (!error){
         var $ = cheerio.load(html);
@@ -143,7 +143,7 @@ function getImages(articles) {
 function insertNewArticles(stockDatum, newArticles, callback) {
   getImages(newArticles).then((imgResults) => {
     for (var x=0; x<imgResults.length; x++) {
-      var imgResult = imgResults[x]
+      var imgResult = imgResults[x];
       for (var y=0; y<newArticles.length; y++) {
         var newArtic = newArticles[y];
         if (newArtic.url === imgResult.url) {
@@ -233,7 +233,7 @@ function getPairForDate(date, priceList) {
       var previousInd = i - 1;
       if (previousInd >= 0) {
         var previous = priceList[previousInd];
-        console.log('No price exists for ' + date + ' , using previous of ' + previous.date)
+        console.log('No price exists for ' + date + ' , using previous of ' + previous.date);
         price = previous.price;
       }
       return {date: date, price: price};
@@ -322,7 +322,7 @@ function updateStocksData(articleData, stockData) {
           insertNewArticles(stockDatum, newArticles, function() {
             res();
           });
-        })
+        });
       } else {
         console.log('No new articles to insert into "' + company + '"');
         res();
@@ -341,7 +341,7 @@ function updateStocksData(articleData, stockData) {
     }).catch((error) => {
       console.log(error);
       resolve(results);
-    })
+    });
   });
 }
 

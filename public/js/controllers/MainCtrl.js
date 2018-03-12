@@ -26,6 +26,34 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   var loader = $('#loader');
   loader.hide();
 
+  function setHeight(height) {
+    $('#dataTable').css('max-height', height + 'px');
+  }
+
+  //match the height of the table when the height of the pie chart changes
+  function monitorPieChartHeight() {
+
+    var observer = new MutationObserver(function(mutationsList) {
+      for (var mutation of mutationsList) {
+        if (mutation.type == 'attributes' && mutation.attributeName == "height") {
+          var newHeight = mutation.target.height
+          if (newHeight > 0) {
+            setHeight(newHeight - 14);
+          }
+        }
+      }
+    });
+
+    observer.observe(document.getElementById('sentimentPieChart'),
+      {
+        attributes: true,
+        childList: false
+      }
+    );
+  }
+
+  monitorPieChartHeight();
+
   $scope.addStock = function() {
 
     var selectedCompany = $('#selectpicker').find('option:selected').text();

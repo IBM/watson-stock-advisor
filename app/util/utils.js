@@ -50,6 +50,49 @@ class Utils {
   }
 
   /**
+   * Parses the AV version of the date from the article date format
+   * @param {string} articleDate
+   */
+  convertArticleDateToAVDate(articleDate) {
+    return articleDate ? articleDate.slice(0, 10) : undefined;
+  }
+
+  /**
+   * Converts avDate with format (YYYY-MM-DD) to a Date object
+   * @param {string} dateStr
+   * @returns {Date}
+   */
+  avDateStringToDate(dateStr) {
+    const [year, month, day] = dateStr.split("-");
+    return new Date(year, month - 1, day);
+  }
+
+  /**
+   * Converts a price map to a sorted list of date -> price pairs, by dates
+   * @param {{}} priceMap
+   * @returns {[]}
+   */
+  convertPriceMapToList(priceMap) {
+
+    var result = [];
+  
+    if (!priceMap) {
+      return result;
+    }
+  
+    for (var date in priceMap) {
+      if (priceMap.hasOwnProperty(date)) {
+        result.push({date: date, price: priceMap[date]});
+      }
+    }
+  
+    const self = this;
+    return result.sort(function(a, b) {
+      return self.avDateStringToDate(a.date) - self.avDateStringToDate(b.date);
+    });
+  }
+
+  /**
    * Finds and extracts the substring of str starting with http:// or https:// and continuing
    * through the rest of the string
    * @param {string} str

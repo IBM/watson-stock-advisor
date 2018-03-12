@@ -33,7 +33,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   //match the height of the table when the height of the pie chart changes
   function monitorPieChartHeight() {
 
-    // Create an observer instance linked to the callback function
     var observer = new MutationObserver(function(mutationsList) {
       for (var mutation of mutationsList) {
         if (mutation.type == 'attributes' && mutation.attributeName == "height") {
@@ -45,7 +44,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
     });
 
-    // Start observing the target node for configured mutations
     observer.observe(document.getElementById('sentimentPieChart'),
       {
         attributes: true,

@@ -2,6 +2,17 @@
 
 # Watson Stock Advisor
 
+![architecture](docs/architecture.png)
+
+## Flow
+1. The user interacts with the backend server via the app UI. Here they are able to add and remove stocks they are interested in.
+2. User input is processed and routed to the backend server, which in turn uses Watson Discovery and a Cloudant NoSQL database. 
+3. The backend server stores stock information in a Cloudant NoSQL database for easy retrieval.
+4. The backend server uses the Watson Discovery to find information about a specific company.
+5. The Watson Discovery Service queries the Watson News Collection for articles related to the company.
+6. The AlphaVantage APIs are queried to find market price for a given company.
+7. News, sentiment, and stock price are all returned and rendered in the web app to the user.
+
 ## Included Components
 
 * [Watson Discovery](https://www.ibm.com/watson/developercloud/discovery.html): A cognitive search and content analytics engine for applications to identify patterns, trends, and actionable insights.
@@ -32,7 +43,9 @@ TODO: Update steps, if user uses this deploy button.
 
 Clone the `watson-stock-advisor` locally. In a terminal, run:
 
-  `$ git clone https://github.com/ibm/watson-stock-advisor`
+```
+$ git clone https://github.com/ibm/watson-stock-advisor
+```
 
 
 ### 2. Create IBM Cloud services
@@ -49,19 +62,19 @@ Launch the **Watson Discovery** tool. The first time you do this, you will see
 "Before working with private data, we will need to set up your storage". Click 'Continue' and
 wait for the storage to be set up.
 
-
-Choose Watson Discover News
+Choose `Watson Discover News`
 
 Under the `Overview` tab, `Collection Info` section, click `Use this collection in API` and copy the `Collection ID` and the `Environment ID` into your .env file as `DISCOVERY_COLLECTION_ID` and `DISCOVERY_ENVIRONMENT_ID`.
 
 
 ### 4. Provision NoSQL DB
-    1. Navigate to console.bluemix.net
-    2. Click 'Create Resource'
-    3. Search for 'cloudant nosql'
-    4. Select the only search result under 'Data & Analytics' called 'Cloudant NoSQL DB'
-    5. Specify the settings you want
-    6. Click 'Create' in the bottom right
+
+1. Navigate to console.bluemix.net
+2. Click 'Create Resource'
+3. Search for 'cloudant nosql'
+4. Select the only search result under 'Data & Analytics' called 'Cloudant NoSQL DB'
+5. Specify the settings you want
+6. Click 'Create' in the bottom right
 
 
 ### 5. Web Portal
@@ -89,6 +102,7 @@ Navigate to the web directory and Copy the [`env.sample`](env.sample) to `.env`.
 ```
 $ cp env.sample .env
 ```
+
 Edit the `.env` file with the necessary settings.
 
 #### `env.sample:`

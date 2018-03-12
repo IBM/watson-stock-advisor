@@ -4,12 +4,16 @@ Below is a general overview of the most important directories and files in the p
 
 ```
 ├── app
+│   ├── data
+│   │   ├── NASDAQ_mapping.txt     # List of Nasdaq companies
+│   │   └── NYSE_mapping.txt       # List of NYSE companies
 │   ├── jobs
 │   │   └── update.js              # A scheduled job that runs the stock update
 │   ├── models
 │   │   └── error.js               # Convenience class for specifying errors
 │   ├── routes.js                  # Specifies the valid http paths for the app
 │   ├── services
+│   │   ├── alphaVantage.js        # Service to abstract interacting with AlphaVantage stock APIs
 │   │   ├── discovery.js           # Service to abstract interacting with Watson Discvoery
 │   │   ├── stockService.js        # Service to abstract interaction with DB
 │   │   └── stockUpdate.js         # Update task for discovering and storing new articles
@@ -19,7 +23,8 @@ Below is a general overview of the most important directories and files in the p
 ├── bower.json                     # Defines dependencies for the client side of the web portal
 ├── config.js                      # Performs setup for node application, loading environment vars
 ├── env.sample                     # Sample environment variable files that needs to be copied to .env file
-├── package.json                   # Defines node dependencies
+├── manifest.yml                   # Specifies cloud services to auto-provision when deploying to IBM Cloud
+├── package.json                   # Defines node dependencies and performs bower install
 ├── public                         # Root dir accessible to web clients
 │   ├── css
 │   │   └── style.css              # Defines the styles of the web portal

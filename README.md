@@ -138,7 +138,6 @@ Navigate to /watson-stock-advisor/web directory, and run the following,
 
 ```
 $ npm install
-$ bower install
 $ npm start
 ```
 The portal should now be accessible on port 8080 (or another port specified by PORT in .env)

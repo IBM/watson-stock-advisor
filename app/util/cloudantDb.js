@@ -20,28 +20,32 @@ const config = require('../../config.js');
 
 var cloudant;
 
-if (!config.VCAP) {
+if (config.usingEnv) {
   console.log('Initializing cloudant from env');
   cloudant = Cloudant({
     account  : config.CLOUDANT.account,
     key      : config.CLOUDANT.key,
     password : config.CLOUDANT.password
   });
-} else {
+} else if (config.usingVCAP) {
   console.log('Initializing cloudant from VCAP');
   console.log('credentials url: ' + config.CLOUDANT.credentialsURL);
   cloudant = Cloudant(config.CLOUDANT.credentialsURL);
+} else {
+  console.log('Not initializing cloudant from env or VCAP...');
 }
 
 // try to create DB
+if (cloudant) {
 console.log('trying to create DB with name: ' + config.CLOUDANT.db_name);
-cloudant.db.create(config.CLOUDANT.db_name, function(err, res) {
-  if (err) {
-    console.log('Could not create new db: ' + config.CLOUDANT.db_name + ', it might already exist.');
-  } else {
-    console.log('DB created');
-  }
-});
+  cloudant.db.create(config.CLOUDANT.db_name, function(err, res) {
+    if (err) {
+      console.log('Could not create new db: ' + config.CLOUDANT.db_name + ', it might already exist.');
+    } else {
+      console.log('DB created');
+    }
+  });
+}
 
 const db = cloudant.db.use(config.CLOUDANT.db_name);
 

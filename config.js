@@ -61,10 +61,14 @@ companies = companies.sort(function(a, b) {
 
 const VCAP = process.env.VCAP_SERVICES;
 var configured = true;
+var usingEnv = false;
+var usingVCAP = false;
 
 if (fs.existsSync(env_path)) {
+  usingEnv = true;
   console.log('using env file');
 } else if (VCAP) {
+  usingVCAP = true;
   console.log('using VCAP');
 } else {
   configured = false;
@@ -85,6 +89,8 @@ function getDBCredentialsUrl(jsonData) {
 
 var theConfig = {
   configured               : configured,
+  usingEnv                 : usingEnv,
+  usingVCAP                : usingVCAP,
   companies                : companies,
   MAX_ARTICLES_PER_COMPANY : process.env.MAX_ARTICLES_PER_COMPANY || 100,
   MAX_COMPANIES            : process.env.MAX_COMPANIES,

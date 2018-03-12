@@ -222,11 +222,15 @@ function getPairForDate(articleDate, priceList) {
   }
 
   var pair = undefined;
-  for (var i=0; i<priceList.length; i++) {
+  var realDate = utils.avDateStringToDate(date);
+  var numPairs = priceList.length;
+  for (var i=0; i<numPairs; i++) {
     var thisPair = priceList[i];
     if (thisPair.date == date) {
       return thisPair;
-    } else if (utils.avDateStringToDate(thisPair.date) > utils.avDateStringToDate(date)) {
+    }
+    var thisDate = utils.avDateStringToDate(thisPair.date);
+    if (thisDate > realDate) {
       var price = thisPair.price;
       var previousInd = i - 1;
       if (previousInd >= 0) {
@@ -236,6 +240,12 @@ function getPairForDate(articleDate, priceList) {
       }
       return {date: date, price: price};
     }
+  }
+
+  //default to the most recent date if none available and
+  //it is earlier than this date
+  if (numPairs > 0 && realDate > utils.avDateStringToDate(priceList[numPairs - 1].date)) {
+    return thisPair;
   }
 
   return undefined;

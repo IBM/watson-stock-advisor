@@ -93,7 +93,7 @@ var theConfig = {
   usingVCAP                : usingVCAP,
   companies                : companies,
   MAX_ARTICLES_PER_COMPANY : process.env.MAX_ARTICLES_PER_COMPANY || 100,
-  MAX_COMPANIES            : process.env.MAX_COMPANIES,
+  MAX_COMPANIES            : process.env.MAX_COMPANIES || 20,
   APP                      : {
     port : process.env.PORT || 8080
   },

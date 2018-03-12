@@ -128,13 +128,15 @@ DB_NAME="XXXXXXXXXX"
 MAX_COMPANIES=20
 MAX_ARTICLES_PER_COMPANY=100
 
+# AlphaVantage
+ALPHAVANTAGE_API_KEY="demo"
 ```
 
 ### 7. Run the application
 
 #### If you decided to run the app locally...
 
-Navigate to /watson-stock-advisor/web directory, and run the following,
+In the root directory, run:
 
 ```
 $ npm install

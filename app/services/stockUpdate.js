@@ -202,9 +202,8 @@ function getLatestStockPrices(stockDatum) {
       stockDatum.price_history = newHistory;
       resolve(stockDatum);
     }).catch((error) => {
-      console.log(error);
-      reject();
-    })
+      reject(error);
+    });
   });
 }
 

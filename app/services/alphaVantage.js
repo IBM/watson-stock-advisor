@@ -52,7 +52,6 @@ class AlphaVantage {
           var stockPriceMap = parsedailyData(dailyData);
           resolve(stockPriceMap);
         }).catch((err) => {
-          console.error(err);
           reject(err);
         });
     });

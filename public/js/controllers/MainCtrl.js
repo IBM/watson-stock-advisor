@@ -35,10 +35,14 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
     var observer = new MutationObserver(function(mutationsList) {
       for (var mutation of mutationsList) {
-        if (mutation.type == 'attributes' && mutation.attributeName == "height") {
-          var newHeight = mutation.target.height
-          if (newHeight > 0) {
-            setMaxTableHeight(newHeight - 14);
+        if (mutation.type == 'attributes' && mutation.attributeName == "style" || mutation.attributeName == "height") {
+          var newHeight = $('#sentimentPieChart').css('height');
+          if (newHeight && newHeight.length > 2) {
+            //remove 'px'
+            newHeight = newHeight.slice(0, -2);
+            if (newHeight > 0) {
+              setMaxTableHeight(newHeight - 14);
+            }
           }
         }
       }

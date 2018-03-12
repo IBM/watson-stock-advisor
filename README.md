@@ -129,7 +129,7 @@ MAX_COMPANIES=20
 MAX_ARTICLES_PER_COMPANY=100
 
 # AlphaVantage
-ALPHAVANTAGE_API_KEY='demo'
+ALPHAVANTAGE_API_KEY="demo"
 ```
 
 ### 7. Run the application

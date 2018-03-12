@@ -21,7 +21,8 @@ function prepareDocForClient(doc) {
   return {
     company : doc.company,
     ticker  : doc.ticker,
-    history : doc.history || []
+    history : doc.history || [],
+    price_history : doc.price_history || {}
   };
 }
 

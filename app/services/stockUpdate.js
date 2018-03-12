@@ -19,6 +19,7 @@ const utils  = require('../util/utils');
 
 const stock_db  = config.configured && require('../util/cloudantDb');
 const discovery = config.configured && require('./discovery');
+const alphaV = config.configured && require('./alphaVantage');
 const request = require('request');
 const cheerio = require('cheerio');
 
@@ -65,7 +66,7 @@ function getImageForArticle(article) {
       var fail = function() {
         console.log('no image url found for article with url: (' + url + ')');
         res();
-      }
+      };
 
       if (!error){
         var $ = cheerio.load(html);
@@ -142,7 +143,7 @@ function getImages(articles) {
 function insertNewArticles(stockDatum, newArticles, callback) {
   getImages(newArticles).then((imgResults) => {
     for (var x=0; x<imgResults.length; x++) {
-      var imgResult = imgResults[x]
+      var imgResult = imgResults[x];
       for (var y=0; y<newArticles.length; y++) {
         var newArtic = newArticles[y];
         if (newArtic.url === imgResult.url) {
@@ -170,6 +171,82 @@ function insertNewArticles(stockDatum, newArticles, callback) {
   }).catch(() => {
     callback();
   });
+}
+
+/**
+ * Retrieves the latest price history for the stock and
+ * combines it with the existing history
+ * @param {stock} stockDatum
+ * @returns promise - The result is the updated stock, if successful
+ */
+function getLatestStockPrices(stockDatum) {
+
+  return new Promise((resolve, reject) => {
+    if (!stockDatum || !stockDatum.ticker) {
+      reject();
+      return;
+    }
+
+    var ticker = stockDatum.ticker;
+    console.log('Beginning stock price update for ' + ticker);
+
+    alphaV.getPriceHistoryForTicker(ticker).then((updatedHistory) => {
+      
+      //combine the existing price history with the newly retrieved history
+      var newHistory = stockDatum.price_history || {};
+      for (var date in updatedHistory) {
+        if (updatedHistory.hasOwnProperty(date)) {
+          newHistory[date] = updatedHistory[date];
+        }
+      }
+      stockDatum.price_history = newHistory;
+      resolve(stockDatum);
+    }).catch((error) => {
+      reject(error);
+    });
+  });
+}
+
+/**
+ * Finds the stock price for the given date, or the latest prior to that date, if available
+ * @param {string} date
+ * @param {[]} priceList - sorted price list e.g. [{date:'2018-01-25', price: 35.9}, {date:'2018-01-27', price: 36.21}]
+ * @returns pricepair - e.g. {date:'2018-01-25', price: 35.9}
+ */
+function getPairForDate(date, priceList) {
+
+  if (!date || !priceList) {
+    return undefined;
+  }
+
+  var pair = undefined;
+  var realDate = utils.avDateStringToDate(date);
+  var numPairs = priceList.length;
+  for (var i=0; i<numPairs; i++) {
+    var thisPair = priceList[i];
+    if (thisPair.date == date) {
+      return thisPair;
+    }
+    var thisDate = utils.avDateStringToDate(thisPair.date);
+    if (thisDate > realDate) {
+      var price = thisPair.price;
+      var previousInd = i - 1;
+      if (previousInd >= 0) {
+        var previous = priceList[previousInd];
+        console.log('No price exists for ' + date + ' , using previous of ' + previous.date);
+        price = previous.price;
+      }
+      return {date: date, price: price};
+    }
+  }
+
+  //default to the most recent date if none available and
+  //it is earlier than this date
+  if (numPairs > 0 && realDate > utils.avDateStringToDate(priceList[numPairs - 1].date)) {
+    return thisPair;
+  }
+
+  return undefined;
 }
 
 /**
@@ -212,8 +289,39 @@ function updateStocksData(articleData, stockData) {
       });
 
       if (newArticles.length > 0) {
-        insertNewArticles(stockDatum, newArticles, function() {
-          res();
+        getLatestStockPrices(stockDatum).then((updatedStock) => {
+          console.log('stock price retrieval successful for ' + stockDatum.ticker);
+
+          //filter for stock prices on dates for which we have articles
+          //and generate, if possible, missing prices
+          var neededDates = existingArticles.concat(newArticles).filter(function(art) {
+            return art && typeof art.date != 'undefined';
+          }).map(function(artic) {
+            return utils.convertArticleDateToAVDate(artic.date);
+          });
+          //filter duplicates
+          neededDates = Array.from(new Set(neededDates));
+          var filteredPriceHistory = {};
+          var priceMap = stockDatum.price_history;
+          var sortedPrices = utils.convertPriceMapToList(priceMap);
+          for (var q=0; q<neededDates.length; q++) {
+            var date = neededDates[q];
+            var pair = getPairForDate(date, sortedPrices);
+            if (pair) {
+              filteredPriceHistory[pair.date] = pair.price;
+            }
+          }
+
+          stockDatum.price_history = filteredPriceHistory;
+          insertNewArticles(updatedStock, newArticles, function() {
+            res();
+          });
+        }).catch((error) => {
+          console.log('stock price retrieval failed:');
+          console.log(error);
+          insertNewArticles(stockDatum, newArticles, function() {
+            res();
+          });
         });
       } else {
         console.log('No new articles to insert into "' + company + '"');
@@ -233,7 +341,7 @@ function updateStocksData(articleData, stockData) {
     }).catch((error) => {
       console.log(error);
       resolve(results);
-    })
+    });
   });
 }
 

@@ -13,6 +13,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "alpha-vantage-cli": "^1.0.8",
     "app-root-path": "^2.0.1",
     "body-parser": "~1.8.2",
     "cheerio": "^1.0.0-rc.2",

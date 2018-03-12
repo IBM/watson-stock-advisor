@@ -77,9 +77,9 @@ function getDBCredentialsUrl(jsonData) {
   // VCAP_SERVICES. If you know your service key, you can access the
   // service credentials directly by using the vcapServices object.
   for (var vcapService in vcapServices) {
-      if (vcapService.match(/cloudant/i)) {
-          return vcapServices[vcapService][0].credentials.url;
-      }
+    if (vcapService.match(/cloudant/i)) {
+      return vcapServices[vcapService][0].credentials.url;
+    }
   }
 }
 
@@ -101,6 +101,9 @@ var theConfig = {
     version      : process.env.DISCOVERY_VERSION || 'v1',
     version_date : process.env.DISCOVERY_VERSION_DATE || '2017-11-07',
     env_id       : process.env.DISCOVERY_ENV_ID || 'system'
+  },
+  ALPHAVANTAGE             : {
+    api_key : process.env.ALPHAVANTAGE_API_KEY || 'demo'
   }
 };
 

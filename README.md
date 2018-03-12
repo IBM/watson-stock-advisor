@@ -8,8 +8,10 @@
 1. The user interacts with the backend server via the app UI. Here they are able to add and remove stocks they are interested in.
 2. User input is processed and routed to the backend server, which in turn uses Watson Discovery and a Cloudant NoSQL database. 
 3. The backend server stores stock information in a Cloudant NoSQL database for easy retrieval.
-4. The backend server uses the Watson Discovery  to find information about a specific company.
+4. The backend server uses the Watson Discovery to find information about a specific company.
 5. The Watson Discovery Service queries the Watson News Collection for articles related to the company.
+6. The AlphaVantage APIs are queried to find market price for a given company.
+7. News, sentiment, and stock price are all returned and rendered in the web app to the user.
 
 ## Included Components
 

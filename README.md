@@ -136,7 +136,7 @@ ALPHAVANTAGE_API_KEY="demo"
 
 #### If you decided to run the app locally...
 
-Navigate to /watson-stock-advisor/web directory, and run the following,
+In the root directory, run:
 
 ```
 $ npm install

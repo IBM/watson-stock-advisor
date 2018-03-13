@@ -445,7 +445,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    * Updates the line chart
    * @param {stock[].history} stocks
    */
-    function updateLineChart(history, price_history) {
+  function updateLineChart(history, price_history) {
     var lineChartData = getLineChartData(history, price_history);
     makeNewChart(lineChartData.labels, lineChartData.data, lineChartData.price, $scope.currentCompany);
   }

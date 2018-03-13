@@ -192,7 +192,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       $scope.myLineChart.data.datasets[0].pointHoverRadius = getPointRadius(newLineChartData.data);
       $scope.myLineChart.data.datasets[0].pointHoverBackgroundColor = getPointColor(newLineChartData.data);
       $scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
-      $scope.myLineChart.options.scales.yAxes["0"].ticks.max = 50;
+      $scope.myLineChart.options.scales.yAxes["0"].ticks.max = Math.ceil(Math.max.apply(null, newLineChartData.price)/100)*100;
       // $scope.myLineChart.options.scales.yAxes["0"].ticks.max = 700;
       console.log(newLineChartData.price);
       // console.log(Math.max.apply(null, newLineChartData.price));

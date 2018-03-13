@@ -670,7 +670,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           yAxes: [{
             ticks: {
               min: 0,
-              max: 5000,
+              max: Math.ceil(Math.max.apply(null, price)/100)*100,
               maxTicksLimit: 10
             },
             gridLines: {

@@ -242,8 +242,12 @@ function getPairForDate(date, priceList) {
 
   //default to the most recent date if none available and
   //it is earlier than this date
-  if (numPairs > 0 && realDate > utils.avDateStringToDate(priceList[numPairs - 1].date)) {
-    return thisPair;
+  if (numPairs > 0) {
+    var lastPair = priceList[numPairs - 1];
+    if (realDate > utils.avDateStringToDate(lastPair.date)) {
+      console.log('No price exists for ' + date + ' , using last of ' + lastPair.date);
+      return {date: date, price: lastPair.price};
+    }
   }
 
   return undefined;
@@ -309,6 +313,8 @@ function updateStocksData(articleData, stockData) {
             var pair = getPairForDate(date, sortedPrices);
             if (pair) {
               filteredPriceHistory[pair.date] = pair.price;
+            } else {
+              console.log('Could not find/infer price for date: ' + date);
             }
           }
 

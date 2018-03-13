@@ -521,6 +521,80 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   }
 
+  /**
+   * Converts avDate with format (YYYY-MM-DD) to a Date object
+   * @param {string} dateStr
+   * @returns {Date}
+   */
+  function avDateStringToDate(dateStr) {
+    var split = dateStr.split('-');
+    var year = split[0];
+    var month = split[1];
+    var dat = split[2];
+    return new Date(year, month - 1, day);
+  }
+
+  /**
+   * Converts a price map to a sorted list of date -> price pairs, by dates
+   * @param {{}} priceMap
+   * @returns {[]}
+   */
+  function convertPriceMapToList(priceMap) {
+
+    var result = [];
+  
+    if (!priceMap) {
+      return result;
+    }
+  
+    for (var date in priceMap) {
+      if (priceMap.hasOwnProperty(date)) {
+        result.push({date: date, price: priceMap[date]});
+      }
+    }
+  
+    return result.sort(function(a, b) {
+      return avDateStringToDate(a.date) - avDateStringToDate(b.date);
+    });
+  }
+
+  function getMatchingDatePair(date, priceList) {
+
+    if (!date || !priceList) {
+      return undefined;
+    }
+
+    var pair = undefined;
+    var realDate = avDateStringToDate(date);
+    var numPairs = priceList.length;
+    for (var i=0; i<numPairs; i++) {
+      var thisPair = priceList[i];
+      if (thisPair.date == date) {
+        return thisPair;
+      }
+      var thisDate = avDateStringToDate(thisPair.date);
+      if (thisDate > realDate) {
+        var price = thisPair.price;
+        var previousInd = i - 1;
+        if (previousInd >= 0) {
+          return priceList[previousInd];
+        }
+        return thisPair;
+      }
+    }
+
+    //default to the most recent date if none available and
+    //it is earlier than this date
+    if (numPairs > 0) {
+      var lastPair = priceList[numPairs - 1];
+      if (realDate > avDateStringToDate(lastPair.date)) {
+        return lastPair;
+      }
+    }
+
+    return undefined;
+  }
+
   function getPointRadius(data){
     var radii = [];
     var constAdd = 2;

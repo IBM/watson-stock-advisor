@@ -94,9 +94,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
           $scope.currentCompany = result.company;
           var newLineChartData = getLineChartData(result.history, result.price_history);
+          console.log(result.price_history);
           var newPieChartData = getPieChartData(result.history);
 
-          $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
+          $scope.myLineChart.data.datasets[0].data = newLineChartData.price;
           $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
           $scope.myLineChart.data.labels = newLineChartData.labels;
           $scope.myLineChart.data.datasets[0].pointRadius = getPointRadius(newLineChartData.data);
@@ -151,11 +152,11 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
     companyNamePendingDeletion = undefined;
 
-    $scope.currentCompany = "your Portfolio";
+    $scope.currentCompany = "Your Portfolio";
     var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
     var newPieChartData = getPieChartData($scope.superStockHistory);
 
-    $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
+    $scope.myLineChart.data.datasets[0].data = newLineChartData.price;
     $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
     $scope.myLineChart.data.labels = newLineChartData.labels;
     $scope.myLineChart.data.datasets[0].pointRadius = getPointRadius(newLineChartData.data);
@@ -179,10 +180,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" bg-info", "");
       }
-      $scope.currentCompany = "your Portfolio";
+      $scope.currentCompany = "Your Portfolio";
       var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
       var newPieChartData = getPieChartData($scope.superStockHistory);
-      $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
+      $scope.myLineChart.data.datasets[0].data = newLineChartData.price;
       $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
       $scope.myLineChart.data.labels = newLineChartData.labels;
       $scope.myLineChart.data.datasets[0].pointRadius = getPointRadius(newLineChartData.data);
@@ -191,6 +192,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       $scope.myLineChart.data.datasets[0].pointHoverRadius = getPointRadius(newLineChartData.data);
       $scope.myLineChart.data.datasets[0].pointHoverBackgroundColor = getPointColor(newLineChartData.data);
       $scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
+      $scope.myLineChart.options.scales.yAxes["0"].ticks.max = 50;
+      // $scope.myLineChart.options.scales.yAxes["0"].ticks.max = 700;
+      console.log(newLineChartData.price);
+      // console.log(Math.max.apply(null, newLineChartData.price));
       $scope.myLineChart.update();
 
       $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
@@ -209,7 +214,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       var newLineChartData = getLineChartData(stock.history, stock.price_history);
       var newPieChartData = getPieChartData(stock.history);
 
-      $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
+      $scope.myLineChart.data.datasets[0].data = newLineChartData.price;
       $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
       $scope.myLineChart.data.labels = newLineChartData.labels;
       $scope.myLineChart.data.datasets[0].pointRadius = getPointRadius(newLineChartData.data);
@@ -218,8 +223,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       $scope.myLineChart.data.datasets[0].pointHoverRadius = getPointRadius(newLineChartData.data);
       $scope.myLineChart.data.datasets[0].pointHoverBackgroundColor = getPointColor(newLineChartData.data);
       $scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
+      $scope.myLineChart.options.scales.yAxes["0"].ticks.max = Math.ceil(Math.max.apply(null, newLineChartData.price)/100)*100;
       $scope.myLineChart.update();
-
+      console.log(newLineChartData.price);
+      
       $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
       $scope.myPieChart.data.labels = newPieChartData.labels;
       $scope.myPieChart.update();
@@ -440,14 +447,13 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    */
     function updateLineChart(history, price_history) {
     var lineChartData = getLineChartData(history, price_history);
-    makeNewChart(lineChartData.labels, lineChartData.data, $scope.currentCompany);
+    makeNewChart(lineChartData.labels, lineChartData.data, lineChartData.price, $scope.currentCompany);
   }
 
   function getLineChartData(history, price_history) {
-    var sentimentMap = {};//has over all sentiment of the day for a particular stock
+    var sentimentMap = {};//has overall sentiment of the day for a particular stock
     var articleCountmap = {};//has article count of the day for a particular stock
-    var stockPriceMap = {};
-    console.log(price_history);
+    // console.log(price_history);
     for (var i=0; i<history.length; i++) {
       var sentiment = history[i].sentiment.toLowerCase();
       var sentimentInt = 0;
@@ -470,15 +476,28 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
 
     //distinct dates found in history and sort them
-    var labels1 = Object.keys(sentimentMap);
+    var labels1 = Object.keys(price_history);
     var labels = labels1.sort(function(a, b) {
       return new Date(a) - new Date(b);
     });
 
+    // var labels = [];
+    var price = [];
+    for (var key in price_history){
+      // labels.push(key);
+      console.log(price_history[key]);
+      price.push(price_history[key]);
+      // console.log('for loop');
+      console.log(price_history[key]);
+    }
+    console.log(":(");
+    console.log(price_history);
+
     var data = [];
     for (var y=0; y<labels.length; y++) { data.push((sentimentMap[labels[y]]/articleCountmap[labels[y]])); }
     
-    var lineChartData = { data: data , labels: labels};
+    var lineChartData = { data: data , labels: labels, price: price};
+    // console.log(price);
     return lineChartData;
 
   }
@@ -507,7 +526,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     return color;
   }
 
-  function makeNewChart(labels,data, company){
+  function makeNewChart(labels,data,price,company){
     var ctx = document.getElementById('trendChart');
     $scope.myLineChart = new Chart(ctx, {
       type: 'line',
@@ -525,7 +544,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           pointHoverBackgroundColor: getPointColor(data),
           pointHitRadius: 5,
           pointBorderWidth: 2,
-          data: data,
+          data: price
         }],
       },
       options: {
@@ -538,7 +557,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
               display: false
             },
             ticks: {
-              maxTicksLimit: 40
+              maxTicksLimit: 100
             },
             scaleLabel: {
               display: true,
@@ -547,8 +566,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           }],
           yAxes: [{
             ticks: {
-              min: -2,
-              max: +2,
+              min: 0,
+              max: 50,
               maxTicksLimit: 10
             },
             gridLines: {

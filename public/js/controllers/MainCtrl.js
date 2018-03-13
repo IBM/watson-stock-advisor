@@ -20,8 +20,9 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   $scope.stocks = [];
   $scope.showBanner = false;
-  $scope.currentCompany = "your Portfolio";
+  $scope.currentCompany = "Your Portfolio";
   $scope.superStockHistory = [];
+  $scope.superStockPriceHistory = [];
 
   var loader = $('#loader');
   loader.hide();
@@ -92,7 +93,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           sortStocks(stocks);
 
           $scope.currentCompany = result.company;
-          var newLineChartData = getLineChartData(result.history);
+          var newLineChartData = getLineChartData(result.history, result.price_history);
           var newPieChartData = getPieChartData(result.history);
 
           $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
@@ -151,7 +152,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     companyNamePendingDeletion = undefined;
 
     $scope.currentCompany = "your Portfolio";
-    var newLineChartData = getLineChartData($scope.superStockHistory);
+    var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
     var newPieChartData = getPieChartData($scope.superStockHistory);
 
     $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
@@ -179,7 +180,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         tablinks[i].className = tablinks[i].className.replace(" bg-info", "");
       }
       $scope.currentCompany = "your Portfolio";
-      var newLineChartData = getLineChartData($scope.superStockHistory);
+      var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
       var newPieChartData = getPieChartData($scope.superStockHistory);
       $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
       $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
@@ -205,7 +206,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
       $event.currentTarget.className += " bg-info";
       $scope.currentCompany = stock.company;
-      var newLineChartData = getLineChartData(stock.history);
+      var newLineChartData = getLineChartData(stock.history, stock.price_history);
       var newPieChartData = getPieChartData(stock.history);
 
       $scope.myLineChart.data.datasets[0].data = newLineChartData.data;
@@ -315,12 +316,13 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       if (haveStocks) {
         for (var i = 0; i < stocks.length; i++) {
           $scope.superStockHistory.push.apply($scope.superStockHistory, stocks[i].history);
+          $scope.superStockPriceHistory.push($scope.superStockPriceHistory, stocks[i].price_history);
         }
         updatePieChart($scope.superStockHistory);
       }
       //space out page updates to prevent lag
       if (haveStocks) {
-        $timeout(updateLineChart($scope.superStockHistory), 2000);
+        $timeout(updateLineChart($scope.superStockHistory, $scope.superStockPriceHistory), 2000);
       }
       $timeout(updateArticles(stocks), 3000);
     });
@@ -436,15 +438,16 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    * Updates the line chart
    * @param {stock[].history} stocks
    */
-    function updateLineChart(history) {
-    var lineChartData = getLineChartData(history);
+    function updateLineChart(history, price_history) {
+    var lineChartData = getLineChartData(history, price_history);
     makeNewChart(lineChartData.labels, lineChartData.data, $scope.currentCompany);
   }
 
-  function getLineChartData(history) {
+  function getLineChartData(history, price_history) {
     var sentimentMap = {};//has over all sentiment of the day for a particular stock
     var articleCountmap = {};//has article count of the day for a particular stock
-
+    var stockPriceMap = {};
+    console.log(price_history);
     for (var i=0; i<history.length; i++) {
       var sentiment = history[i].sentiment.toLowerCase();
       var sentimentInt = 0;
@@ -534,6 +537,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
             },
             ticks: {
               maxTicksLimit: 40
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Time'
             }
           }],
           yAxes: [{
@@ -544,6 +551,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
             },
             gridLines: {
               color: 'rgba(0, 0, 0, .125)',
+            },
+            scaleLabel: {
+              display: true,
+              labelString: 'Stock price'
             }
           }],
         },

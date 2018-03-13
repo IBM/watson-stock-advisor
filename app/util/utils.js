@@ -68,31 +68,6 @@ class Utils {
   }
 
   /**
-   * Converts a price map to a sorted list of date -> price pairs, by dates
-   * @param {{}} priceMap
-   * @returns {[]}
-   */
-  convertPriceMapToList(priceMap) {
-
-    var result = [];
-  
-    if (!priceMap) {
-      return result;
-    }
-  
-    for (var date in priceMap) {
-      if (priceMap.hasOwnProperty(date)) {
-        result.push({date: date, price: priceMap[date]});
-      }
-    }
-  
-    const self = this;
-    return result.sort(function(a, b) {
-      return self.avDateStringToDate(a.date) - self.avDateStringToDate(b.date);
-    });
-  }
-
-  /**
    * Finds and extracts the substring of str starting with http:// or https:// and continuing
    * through the rest of the string
    * @param {string} str

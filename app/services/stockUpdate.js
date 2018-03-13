@@ -208,48 +208,6 @@ function getLatestStockPrices(stockDatum) {
 }
 
 /**
- * Finds the stock price for the given date, or the latest prior to that date, if available
- * @param {string} date
- * @param {[]} priceList - sorted price list e.g. [{date:'2018-01-25', price: 35.9}, {date:'2018-01-27', price: 36.21}]
- * @returns pricepair - e.g. {date:'2018-01-25', price: 35.9}
- */
-function getPairForDate(date, priceList) {
-
-  if (!date || !priceList) {
-    return undefined;
-  }
-
-  var pair = undefined;
-  var realDate = utils.avDateStringToDate(date);
-  var numPairs = priceList.length;
-  for (var i=0; i<numPairs; i++) {
-    var thisPair = priceList[i];
-    if (thisPair.date == date) {
-      return thisPair;
-    }
-    var thisDate = utils.avDateStringToDate(thisPair.date);
-    if (thisDate > realDate) {
-      var price = thisPair.price;
-      var previousInd = i - 1;
-      if (previousInd >= 0) {
-        var previous = priceList[previousInd];
-        console.log('No price exists for ' + date + ' , using previous of ' + previous.date);
-        price = previous.price;
-      }
-      return {date: date, price: price};
-    }
-  }
-
-  //default to the most recent date if none available and
-  //it is earlier than this date
-  if (numPairs > 0 && realDate > utils.avDateStringToDate(priceList[numPairs - 1].date)) {
-    return thisPair;
-  }
-
-  return undefined;
-}
-
-/**
  * Updates the database with the article data. New (unique) articles
  * are inserted into the database. Duplicates are removed. The articles
  * are sorted from most to least recent for each before updating DB.
@@ -291,28 +249,6 @@ function updateStocksData(articleData, stockData) {
       if (newArticles.length > 0) {
         getLatestStockPrices(stockDatum).then((updatedStock) => {
           console.log('stock price retrieval successful for ' + stockDatum.ticker);
-
-          //filter for stock prices on dates for which we have articles
-          //and generate, if possible, missing prices
-          var neededDates = existingArticles.concat(newArticles).filter(function(art) {
-            return art && typeof art.date != 'undefined';
-          }).map(function(artic) {
-            return utils.convertArticleDateToAVDate(artic.date);
-          });
-          //filter duplicates
-          neededDates = Array.from(new Set(neededDates));
-          var filteredPriceHistory = {};
-          var priceMap = stockDatum.price_history;
-          var sortedPrices = utils.convertPriceMapToList(priceMap);
-          for (var q=0; q<neededDates.length; q++) {
-            var date = neededDates[q];
-            var pair = getPairForDate(date, sortedPrices);
-            if (pair) {
-              filteredPriceHistory[pair.date] = pair.price;
-            }
-          }
-
-          stockDatum.price_history = filteredPriceHistory;
           insertNewArticles(updatedStock, newArticles, function() {
             res();
           });

@@ -485,8 +485,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   function getPointRadius(data){
     var radii = [];
+    var constAdd = 2;
+    var constMul = 6;
     for(var i=0; i<data.length; i++){ 
-      radii.push(Math.abs(data[i]*6));}  
+      radii.push(Math.abs(data[i]*constMul)+constAdd);}  
     return radii;
   }
 

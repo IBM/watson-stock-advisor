@@ -470,6 +470,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       price_history = tempPriceHistory;
     }
 
+    var sortedList = convertPriceMapToList(price_history);
+
     var sentimentMap = {};//has overall sentiment of the day for a particular stock
     var articleCountmap = {};//has article count of the day for a particular stock
     // console.log(price_history);
@@ -483,39 +485,47 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         sentimentInt = -1;
       }
       
-      var index = history[i].date.substr(0,10);
-      if(index in sentimentMap){
-        sentimentMap[index] += sentimentInt;
-        articleCountmap[index] += 1;
+      var date = history[i].date.substr(0,10);
+      if (!price_history[date]) {
+        var pair = getMatchingDatePair(date, sortedList);
+        if (pair) {
+          date = pair.date;
+        }
       }
-      else{
-        sentimentMap[index] = sentimentInt;
-        articleCountmap[index] = 1;
+      if (date) {
+        var index = date;
+        if(index in sentimentMap){
+          sentimentMap[index] += sentimentInt;
+          articleCountmap[index] += 1;
+        } else{
+          sentimentMap[index] = sentimentInt;
+          articleCountmap[index] = 1;
+        }
       }
     }
 
     //distinct dates found in history and sort them
-    var labels1 = Object.keys(price_history);
+    var labels1 = Object.keys(sentimentMap);
     var labels = labels1.sort(function(a, b) {
       return new Date(a) - new Date(b);
     });
 
     // var labels = [];
-    var price = [];
-    for (var key in price_history){
-      // labels.push(key);
-      console.log(price_history[key]);
-      price.push(price_history[key]);
-      // console.log('for loop');
-      console.log(price_history[key]);
+    var prices = [];
+    for (var labelInd=0; labelInd<labels.length; labelInd++){
+      var label = labels[labelInd];
+      var price = price_history[label];
+      prices.push(price);
     }
     console.log(":(");
     console.log(price_history);
 
     var data = [];
-    for (var y=0; y<labels.length; y++) { data.push((sentimentMap[labels[y]]/articleCountmap[labels[y]])); }
-    
-    var lineChartData = { data: data , labels: labels, price: price};
+    for (var y=0; y<labels.length; y++) {
+      data.push((sentimentMap[labels[y]]/articleCountmap[labels[y]]));
+    }
+
+    var lineChartData = { data: data , labels: labels, price: prices};
     // console.log(price);
     return lineChartData;
 
@@ -660,7 +670,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           yAxes: [{
             ticks: {
               min: 0,
-              max: 50,
+              max: 5000,
               maxTicksLimit: 10
             },
             gridLines: {

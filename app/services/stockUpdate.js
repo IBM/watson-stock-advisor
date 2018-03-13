@@ -207,7 +207,7 @@ function getLatestStockPrices(stockDatum) {
   });
 }
 
-/**
+/*
  * Updates the database with the article data. New (unique) articles
  * are inserted into the database. Duplicates are removed. The articles
  * are sorted from most to least recent for each before updating DB.

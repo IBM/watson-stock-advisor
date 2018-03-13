@@ -530,7 +530,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     var split = dateStr.split('-');
     var year = split[0];
     var month = split[1];
-    var dat = split[2];
+    var day = split[2];
     return new Date(year, month - 1, day);
   }
 

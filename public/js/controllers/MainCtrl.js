@@ -323,7 +323,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       if (haveStocks) {
         for (var i = 0; i < stocks.length; i++) {
           $scope.superStockHistory.push.apply($scope.superStockHistory, stocks[i].history);
-          $scope.superStockPriceHistory.push($scope.superStockPriceHistory, stocks[i].price_history);
+          $scope.superStockPriceHistory.push(stocks[i].price_history);
         }
         updatePieChart($scope.superStockHistory);
       }
@@ -451,6 +451,25 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   }
 
   function getLineChartData(history, price_history) {
+
+    if (Array.isArray(price_history)) {
+      var tempPriceHistory = {};
+      for (var x=0; x<price_history.length; x++) {
+        var singlePriceMap = price_history[x];
+        for (var date in singlePriceMap) {
+          if (singlePriceMap.hasOwnProperty(date)) {
+            var totalPrice = tempPriceHistory[date];
+            if (!totalPrice) {
+              totalPrice = 0;
+            }
+            totalPrice += singlePriceMap[date];
+            tempPriceHistory[date] = totalPrice;
+          }
+        }
+      }
+      price_history = tempPriceHistory;
+    }
+
     var sentimentMap = {};//has overall sentiment of the day for a particular stock
     var articleCountmap = {};//has article count of the day for a particular stock
     // console.log(price_history);

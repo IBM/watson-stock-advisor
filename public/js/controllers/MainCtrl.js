@@ -91,35 +91,20 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           var stocks = $scope.stocks;
           stocks.push(result);
           sortStocks(stocks);
+          updateSuperStockData();
 
           $scope.currentCompany = result.company;
-          if($scope.myLineChart){
-          var newLineChartData = getLineChartData(result.history, result.price_history);
-          //console.log(result.price_history);
-          var newPieChartData = getPieChartData(result.history);
+          if ($scope.myLineChart){
+            var newLineChartData = getLineChartData(result.history, result.price_history);
+            var newPieChartData = getPieChartData(result.history);
+            updateVisualizations(newLineChartData, newPieChartData);
 
-          $scope.myLineChart.data.datasets[0].data = newLineChartData.price;
-          $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
-          $scope.myLineChart.data.labels = newLineChartData.labels;
-          $scope.myLineChart.data.datasets[0].pointRadius = getPointRadius(newLineChartData.data);
-          $scope.myLineChart.data.datasets[0].pointBackgroundColor = getPointColor(newLineChartData.data);
-          $scope.myLineChart.data.datasets[0].pointBorderColor = getPointColor(newLineChartData.data);
-          $scope.myLineChart.data.datasets[0].pointHoverRadius = getPointRadius(newLineChartData.data);
-          $scope.myLineChart.data.datasets[0].pointHoverBackgroundColor = getPointColor(newLineChartData.data);
-          //$scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
-          $scope.myLineChart.update();
-
-          $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
-          $scope.myPieChart.data.labels = newPieChartData.labels;
-          $scope.myPieChart.update();
-
-          updateArticles([result]);
-        }
-        else{
-          updatePieChart(result.history);
-          $timeout(updateLineChart(result.history, result.price_history), 2000);
-          $timeout(updateArticles([result]), 3000);
-        }
+            updateArticles([result]);
+          } else {
+            updatePieChart(result.history);
+            $timeout(updateLineChart(result.history, result.price_history), 2000);
+            $timeout(updateArticles([result]), 3000);
+          }
         });
       };
 
@@ -161,6 +146,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
     $scope.currentCompany = "Your Portfolio";
     
+    updateSuperStockData();
     var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
     var newPieChartData = getPieChartData($scope.superStockHistory);
     updateVisualizations(newLineChartData, newPieChartData);
@@ -275,10 +261,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       sortStocks(stocks);
       $scope.stocks = stocks;
       if (haveStocks) {
-        for (var i = 0; i < stocks.length; i++) {
-          $scope.superStockHistory.push.apply($scope.superStockHistory, stocks[i].history);
-          $scope.superStockPriceHistory.push(stocks[i].price_history);
-        }
+        updateSuperStockData();
         updatePieChart($scope.superStockHistory);
         //space out page updates to prevent lag
         $timeout(updateLineChart($scope.superStockHistory, $scope.superStockPriceHistory), 2000);
@@ -302,6 +285,22 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
     picker.append(newItems);
     picker.selectpicker('refresh');
+  }
+
+  function updateSuperStockData() {
+
+    $scope.superStockHistory = [];
+    $scope.superStockPriceHistory = [];
+
+    var stocks = $scope.stocks;
+    if (!stocks) {
+      return;
+    }
+
+    for (var i=0; i<stocks.length; i++) {
+      $scope.superStockHistory.push.apply($scope.superStockHistory, stocks[i].history);
+      $scope.superStockPriceHistory.push(stocks[i].price_history);
+    }
   }
 
   function updateVisualizations(newLineChartData, newPieChartData) {

@@ -95,7 +95,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           $scope.currentCompany = result.company;
           if($scope.myLineChart){
           var newLineChartData = getLineChartData(result.history, result.price_history);
-          console.log(result.price_history);
+          //console.log(result.price_history);
           var newPieChartData = getPieChartData(result.history);
 
           $scope.myLineChart.data.datasets[0].data = newLineChartData.price;
@@ -117,7 +117,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         }
         else{
           updatePieChart(result.history);
-          $timeout(updateLineChart(result.history), 2000);
+          $timeout(updateLineChart(result.history, result.price_history), 2000);
           $timeout(updateArticles([result]), 3000);
         }
         });
@@ -201,7 +201,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       $scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
       $scope.myLineChart.options.scales.yAxes["0"].ticks.max = Math.ceil(Math.max.apply(null, newLineChartData.price)/100)*100;
       // $scope.myLineChart.options.scales.yAxes["0"].ticks.max = 700;
-      console.log(newLineChartData.price);
+      //console.log(newLineChartData.price);
       // console.log(Math.max.apply(null, newLineChartData.price));
       $scope.myLineChart.update();
 
@@ -232,7 +232,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       $scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
       $scope.myLineChart.options.scales.yAxes["0"].ticks.max = Math.ceil(Math.max.apply(null, newLineChartData.price)/100)*100;
       $scope.myLineChart.update();
-      console.log(newLineChartData.price);
+      //console.log(newLineChartData.price);
       
       $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
       $scope.myPieChart.data.labels = newPieChartData.labels;
@@ -518,8 +518,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       var price = price_history[label];
       prices.push(price);
     }
-    console.log(":(");
-    console.log(price_history);
+    //console.log(":(");
+    //console.log(price_history);
 
     var data = [];
     for (var y=0; y<labels.length; y++) {

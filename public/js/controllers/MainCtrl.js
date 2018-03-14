@@ -91,6 +91,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           var stocks = $scope.stocks;
           stocks.push(result);
           sortStocks(stocks);
+          updateSuperStockData();
 
           $scope.currentCompany = result.company;
           if ($scope.myLineChart){
@@ -145,6 +146,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
     $scope.currentCompany = "Your Portfolio";
     
+    updateSuperStockData();
     var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
     var newPieChartData = getPieChartData($scope.superStockHistory);
     updateVisualizations(newLineChartData, newPieChartData);
@@ -259,10 +261,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       sortStocks(stocks);
       $scope.stocks = stocks;
       if (haveStocks) {
-        for (var i = 0; i < stocks.length; i++) {
-          $scope.superStockHistory.push.apply($scope.superStockHistory, stocks[i].history);
-          $scope.superStockPriceHistory.push(stocks[i].price_history);
-        }
+        updateSuperStockData();
         updatePieChart($scope.superStockHistory);
         //space out page updates to prevent lag
         $timeout(updateLineChart($scope.superStockHistory, $scope.superStockPriceHistory), 2000);
@@ -286,6 +285,22 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
     picker.append(newItems);
     picker.selectpicker('refresh');
+  }
+
+  function updateSuperStockData() {
+
+    $scope.superStockHistory = [];
+    $scope.superStockPriceHistory = [];
+
+    var stocks = $scope.stocks;
+    if (!stocks) {
+      return;
+    }
+
+    for (var i=0; i<stocks.length; i++) {
+      $scope.superStockHistory.push.apply($scope.superStockHistory, stocks[i].history);
+      $scope.superStockPriceHistory.push(stocks[i].price_history);
+    }
   }
 
   function updateVisualizations(newLineChartData, newPieChartData) {

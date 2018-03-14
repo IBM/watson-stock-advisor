@@ -280,9 +280,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           $scope.superStockPriceHistory.push(stocks[i].price_history);
         }
         updatePieChart($scope.superStockHistory);
-      }
-      //space out page updates to prevent lag
-      if (haveStocks) {
+        //space out page updates to prevent lag
         $timeout(updateLineChart($scope.superStockHistory, $scope.superStockPriceHistory), 2000);
       }
       $timeout(updateArticles(stocks), 3000);

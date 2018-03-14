@@ -57,6 +57,22 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     );
   }
 
+  $scope.isStockPriceEmpty = function(){
+    if($scope.currentCompany == "Your Portfolio"){
+      if($scope.superStockPriceHistory.length>0)
+        return false;
+      else
+        return true;
+    }
+    for (var i = 0; i < $scope.stocks.length; i++) {
+      if($scope.stocks[i].company == $scope.currentCompany){
+        if(Object.keys($scope.stocks[i].price_history).length>0)
+          return false;
+      }
+    }
+    return true;
+  }
+
   monitorPieChartHeight();
 
   $scope.addStock = function() {

@@ -18,3 +18,5 @@ applications:
   services:
   - wsa-discovery
   - wsa-cloudant
+env:
+  ALPHAVANTAGE_API_KEY: placeholder

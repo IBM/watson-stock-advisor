@@ -109,7 +109,7 @@ var theConfig = {
     env_id       : process.env.DISCOVERY_ENV_ID || 'system'
   },
   ALPHAVANTAGE             : {
-    api_key : process.env.ALPHAVANTAGE_API_KEY || 'demo'
+    api_key : process.env.ALPHAVANTAGE_API_KEY
   }
 };
 

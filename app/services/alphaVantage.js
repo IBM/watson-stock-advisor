@@ -17,7 +17,19 @@
 const config = require('../../config');
 
 const AlphaVantageAPI = require('alpha-vantage-cli').AlphaVantageAPI;
-const alphaVantageAPI = new AlphaVantageAPI(config.ALPHAVANTAGE.api_key, 'compact', true);
+const API_KEY = config.ALPHAVANTAGE.api_key;
+const PLACEHOLDER = 'placeholder';
+var alphaVantageAPI;
+if (API_KEY) {
+  if (API_KEY == PLACEHOLDER) {
+    console.log('ALPHAVANTAGE_API_KEY needs to be set correctly. It is currently set to ' + PLACEHOLDER);
+  } else {
+    console.log('initializing AlphaVantage with API key: ' + API_KEY);
+    alphaVantageAPI = new AlphaVantageAPI(API_KEY, 'compact', true);
+  }
+} else {
+  console.log('ALPHAVANTAGE_API_KEY needs to be set correctly. It is currently not defined.');
+}
 
 /**
  * Creates a map between date and price from the response from AlphaVantage

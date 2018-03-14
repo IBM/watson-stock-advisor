@@ -93,6 +93,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           sortStocks(stocks);
 
           $scope.currentCompany = result.company;
+          if($scope.myLineChart){
           var newLineChartData = getLineChartData(result.history, result.price_history);
           console.log(result.price_history);
           var newPieChartData = getPieChartData(result.history);
@@ -113,6 +114,12 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           $scope.myPieChart.update();
 
           updateArticles([result]);
+        }
+        else{
+          updatePieChart(result.history);
+          $timeout(updateLineChart(result.history), 2000);
+          $timeout(updateArticles([result]), 3000);
+        }
         });
       };
 

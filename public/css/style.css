@@ -129,3 +129,8 @@ footer.sticky-footer {
   line-height: 55px;
   color: white;
 }
+
+.price-not-available{
+  margin: 50px;
+  text-align: center;
+}

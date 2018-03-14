@@ -93,33 +93,17 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           sortStocks(stocks);
 
           $scope.currentCompany = result.company;
-          if($scope.myLineChart){
-          var newLineChartData = getLineChartData(result.history, result.price_history);
-          //console.log(result.price_history);
-          var newPieChartData = getPieChartData(result.history);
+          if ($scope.myLineChart){
+            var newLineChartData = getLineChartData(result.history, result.price_history);
+            var newPieChartData = getPieChartData(result.history);
+            updateVisualizations(newLineChartData, newPieChartData);
 
-          $scope.myLineChart.data.datasets[0].data = newLineChartData.price;
-          $scope.myLineChart.data.datasets[0].label = $scope.currentCompany;
-          $scope.myLineChart.data.labels = newLineChartData.labels;
-          $scope.myLineChart.data.datasets[0].pointRadius = getPointRadius(newLineChartData.data);
-          $scope.myLineChart.data.datasets[0].pointBackgroundColor = getPointColor(newLineChartData.data);
-          $scope.myLineChart.data.datasets[0].pointBorderColor = getPointColor(newLineChartData.data);
-          $scope.myLineChart.data.datasets[0].pointHoverRadius = getPointRadius(newLineChartData.data);
-          $scope.myLineChart.data.datasets[0].pointHoverBackgroundColor = getPointColor(newLineChartData.data);
-          //$scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
-          $scope.myLineChart.update();
-
-          $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
-          $scope.myPieChart.data.labels = newPieChartData.labels;
-          $scope.myPieChart.update();
-
-          updateArticles([result]);
-        }
-        else{
-          updatePieChart(result.history);
-          $timeout(updateLineChart(result.history, result.price_history), 2000);
-          $timeout(updateArticles([result]), 3000);
-        }
+            updateArticles([result]);
+          } else {
+            updatePieChart(result.history);
+            $timeout(updateLineChart(result.history, result.price_history), 2000);
+            $timeout(updateArticles([result]), 3000);
+          }
         });
       };
 

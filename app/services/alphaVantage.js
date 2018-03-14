@@ -17,18 +17,22 @@
 const config = require('../../config');
 
 const AlphaVantageAPI = require('alpha-vantage-cli').AlphaVantageAPI;
-const API_KEY = config.ALPHAVANTAGE.api_key;
 const PLACEHOLDER = 'placeholder';
 var alphaVantageAPI;
-if (API_KEY) {
-  if (API_KEY == PLACEHOLDER) {
-    console.log('ALPHAVANTAGE_API_KEY needs to be set correctly. It is currently set to ' + PLACEHOLDER);
+
+function initializeAPI() {
+
+  var API_KEY = process.env.ALPHAVANTAGE_API_KEY;
+  if (API_KEY) {
+    if (API_KEY == PLACEHOLDER) {
+      console.log('ALPHAVANTAGE_API_KEY needs to be set correctly. It is currently set to ' + PLACEHOLDER);
+    } else {
+      console.log('initializing AlphaVantage with API key: ' + API_KEY);
+      alphaVantageAPI = new AlphaVantageAPI(API_KEY, 'compact', true);
+    }
   } else {
-    console.log('initializing AlphaVantage with API key: ' + API_KEY);
-    alphaVantageAPI = new AlphaVantageAPI(API_KEY, 'compact', true);
+    console.log('ALPHAVANTAGE_API_KEY needs to be set correctly. It is currently not defined.');
   }
-} else {
-  console.log('ALPHAVANTAGE_API_KEY needs to be set correctly. It is currently not defined.');
 }
 
 /**
@@ -59,6 +63,16 @@ class AlphaVantage {
   getPriceHistoryForTicker(companyTicker) {
      
     return new Promise((resolve, reject) => {
+
+      if (!alphaVantageAPI) {
+        initializeAPI();
+        
+        if (!alphaVantageAPI) {
+          reject('AlphaVantage API Not initialized');
+          return;
+        }
+      }
+
       alphaVantageAPI.getDailyData(companyTicker)
         .then((dailyData) => {
           var stockPriceMap = parsedailyData(dailyData);
@@ -70,4 +84,5 @@ class AlphaVantage {
   }
 }
 
+initializeAPI();
 module.exports = new AlphaVantage();

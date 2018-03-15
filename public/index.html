@@ -56,7 +56,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr ng-click=selectCompany($event,stock) class="clickable-row getrow" ng-repeat="stock in stocks">
+                    <tr id="{{stock.company}}" ng-class="highlightRow($index)" ng-click=selectCompany($event,stock) class="clickable-row getrow" ng-repeat="stock in stocks">
                       <td>{{stock.company}}
                         <span class="pull-right">
                           <button ng-click="$event.stopPropagation(); confirmDelete(stock.company)" class="btn btn-danger">

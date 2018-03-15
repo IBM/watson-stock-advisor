@@ -26,8 +26,20 @@
 
 [![Deploy to Bluemix](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor)
 
-TODO: Update steps, if user uses this deploy button.
+You can Deploy the application simply by clicking the Deploy to IBM Cloud button above to automatically create a toolchain to provision and run the application.
 
+If you do not have an IBM Cloud account yet, you will need to create one.
+
+### Update the environment
+
+After deploying the application above, create an account on [AlphaVantage](https://www.alphavantage.co/) and complete the following steps:
+
+1. Navigate to https://console.bluemix.net/dashboard/apps/
+2. Located and click on your newly created application (not the 'Route' link)
+3. Select 'Runtime' in the left menu
+4. Select the 'Environment Variables' tab in the middle of the page
+5. Scroll down to the User defined variables section
+6. Paste your API key from [AlphaVantage](https://www.alphavantage.co/)
 
 ## Run locally
 

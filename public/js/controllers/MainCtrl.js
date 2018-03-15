@@ -73,6 +73,14 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     return true;
   }
 
+    $scope.highlightRow = function(index){
+        if($scope.stocks[index].company == $scope.currentCompany){
+          return "bg-info";
+        }
+        else
+          return;
+  }
+
   monitorPieChartHeight();
 
   $scope.addStock = function() {
@@ -114,7 +122,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
             var newLineChartData = getLineChartData(result.history, result.price_history);
             var newPieChartData = getPieChartData(result.history);
             updateVisualizations(newLineChartData, newPieChartData);
-
             updateArticles([result]);
           } else {
             updatePieChart(result.history);
@@ -180,9 +187,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
       var newPieChartData = getPieChartData($scope.superStockHistory);
       updateVisualizations(newLineChartData, newPieChartData);
-
       updateArticles($scope.stocks);
-
     } else {
       for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" bg-info", "");
@@ -192,7 +197,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       var newLineChartData = getLineChartData(stock.history, stock.price_history);
       var newPieChartData = getPieChartData(stock.history);
       updateVisualizations(newLineChartData, newPieChartData);
-
       updateArticles([stock]);
     }
   };

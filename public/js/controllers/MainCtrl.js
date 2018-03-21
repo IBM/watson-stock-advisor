@@ -467,7 +467,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
     var sentimentMap = {};//has overall sentiment of the day for a particular stock
     var articleCountmap = {};//has article count of the day for a particular stock
-    // console.log(price_history);
     for (var i=0; i<history.length; i++) {
       var sentiment = history[i].sentiment.toLowerCase();
       var sentimentInt = 0;

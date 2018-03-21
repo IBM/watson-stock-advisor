@@ -20,7 +20,7 @@ const bodyParser     = require('body-parser');
 const methodOverride = require('method-override');
 const config = require('./config');
 
-const port = config.APP.port // set our port
+const port = config.APP.port; // set our port
 
 const publicRoot = __dirname + '/public/';
 

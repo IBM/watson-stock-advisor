@@ -102,7 +102,7 @@ function getImageForArticle(article) {
  */
 function getImages(articles) {
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     var catches = [];
 
     for (var i=0; i<articles.length; i++) {
@@ -223,7 +223,7 @@ function updateStocksData(articleData, stockData) {
 
   for (var i=0; i<articleData.length; i++) {
     
-    var promise = new Promise((res, rej) => {
+    var promise = new Promise((res) => {
       var articleDatum = articleData[i];
       var company = articleDatum.company;
       console.log('Beginning article insertion for "' + company + '"');
@@ -272,7 +272,7 @@ function updateStocksData(articleData, stockData) {
     }));
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     Promise.all(catches).then(() => {
       resolve(results);
     }).catch((error) => {

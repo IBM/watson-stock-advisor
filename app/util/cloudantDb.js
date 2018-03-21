@@ -41,7 +41,8 @@ if (cloudant) {
     if (err) {
       console.log('Could not create new db: ' + config.CLOUDANT.db_name + ', it might already exist.');
     } else {
-      console.log('DB created');
+      console.log('DB created:');
+      console.log(res);
     }
   });
 }

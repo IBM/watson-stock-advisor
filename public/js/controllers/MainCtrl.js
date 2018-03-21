@@ -184,29 +184,30 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   };
 
   $scope.selectCompany = function($event, stock) {
+
+    var isSelected = $event.currentTarget.classList.contains(BG_INFO_CLASSNAME);
     var tablinks = document.getElementsByClassName('getrow');
-    if ($event.currentTarget.classList.contains(BG_INFO_CLASSNAME)) {
-      for (var i = 0; i < tablinks.length; i++) {
-        var tabLink = tablinks[i];
-        tabLink.className = tabLink.className.replace(' ' + BG_INFO_CLASSNAME, '');
-      }
+    for (var i=0; i<tablinks.length; i++) {
+      var row = tablinks[i];
+      row.className = row.className.replace(' ' + BG_INFO_CLASSNAME, '');
+    }
+    var newLineChartData;
+    var newPieChartData;
+    var stocks;
+    if (isSelected) {
       $scope.currentCompany = YOUR_PORTFOLIO;
-      var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
-      var newPieChartData = getPieChartData($scope.superStockHistory);
-      updateVisualizations(newLineChartData, newPieChartData);
-      updateArticles($scope.stocks);
+      newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
+      newPieChartData = getPieChartData($scope.superStockHistory);
+      stocks = $scope.stocks;
     } else {
-      for (var x = 0; x < tablinks.length; x++) {
-        var tabLink = tablinks[x];
-        tabLink.className = tabLink.className.replace(' ' + BG_INFO_CLASSNAME, '');
-      }
       $event.currentTarget.className += ' ' + BG_INFO_CLASSNAME;
       $scope.currentCompany = stock.company;
-      var newLineChartData = getLineChartData(stock.history, stock.price_history);
-      var newPieChartData = getPieChartData(stock.history);
-      updateVisualizations(newLineChartData, newPieChartData);
-      updateArticles([stock]);
+      newLineChartData = getLineChartData(stock.history, stock.price_history);
+      newPieChartData = getPieChartData(stock.history);
+      stocks = [stock];
     }
+    updateVisualizations(newLineChartData, newPieChartData);
+    updateArticles(stocks);
   };
 
   StockService.getStocks().then((stocks) => {
@@ -470,14 +471,14 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       var tempPriceHistory = {};
       for (var x=0; x<price_history.length; x++) {
         var singlePriceMap = price_history[x];
-        for (var date in singlePriceMap) {
-          if (singlePriceMap.hasOwnProperty(date)) {
-            var totalPrice = tempPriceHistory[date];
+        for (var aDate in singlePriceMap) {
+          if (singlePriceMap.hasOwnProperty(aDate)) {
+            var totalPrice = tempPriceHistory[aDate];
             if (!totalPrice) {
               totalPrice = 0;
             }
-            totalPrice += singlePriceMap[date];
-            tempPriceHistory[date] = totalPrice;
+            totalPrice += singlePriceMap[aDate];
+            tempPriceHistory[aDate] = totalPrice;
           }
         }
       }
@@ -623,6 +624,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   function getPointColor(data){
     var color = [];
     for (var i=0; i<data.length; i++) {
+      var color_i;
       if (data[i] > 0) {
         color_i = '#28a745';
       } else if (data[i] < 0) {

@@ -29,7 +29,6 @@ angular.module('MainModule').factory('StockService', ['$http', function($http) {
       promise.then((result) => {
         resolve(result.data);
       }).catch((error) => {
-        console.log(error);
         reject(error);
       });
     });

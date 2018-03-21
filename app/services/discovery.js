@@ -21,7 +21,6 @@ const discovery = new Discovery({
   version_date : config.DISCOVERY.version_date
 });
 
-const utils = require('../util/utils');
 const NUM_DOCS_TO_QUERY = 5;
 
 /**

@@ -26,7 +26,6 @@ require('../../config');
 const CronJob = require('cron').CronJob;
 const updateTask = require('../services/stockUpdate');
 const task = new updateTask();
-const stockService = require('../services/stockService');
 
 /*
  * Runs every day at 01:00:00 AM.

@@ -14,21 +14,31 @@
  * the License.
  */
 
+const YOUR_PORTFOLIO = 'Your Portfolio';
+const LOADER_ID = 'loader';
+const DATA_TABLE_ID = 'dataTable';
+const SENTIMENT_PIE_CHART_ID = 'sentimentPieChart';
+const ADD_STOCK_BUTTON_ID = 'addStockButton';
+const BG_INFO_CLASSNAME = 'bg-info';
+const SELECT_PICKER_ID = 'selectpicker';
+const TREND_CHART_ID = 'trendChart';
+
 angular.module('MainModule', []).controller('MainController',['$scope', 'StockService', '$timeout', function($scope, StockService, $timeout) {
 
   var companyNamePendingDeletion = undefined;
 
   $scope.stocks = [];
   $scope.showBanner = false;
-  $scope.currentCompany = "Your Portfolio";
+  $scope.currentCompany = YOUR_PORTFOLIO;
   $scope.superStockHistory = [];
   $scope.superStockPriceHistory = [];
+  $scope.YOUR_PORTFOLIO = YOUR_PORTFOLIO;
 
-  var loader = $('#loader');
+  var loader = $('#' + LOADER_ID);
   loader.hide();
 
   function setMaxTableHeight(height) {
-    $('#dataTable').css('max-height', height + 'px');
+    $('#' + DATA_TABLE_ID).css('max-height', height + 'px');
   }
 
   //match the height of the table when the height of the pie chart changes
@@ -36,8 +46,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
     var observer = new MutationObserver(function(mutationsList) {
       for (var mutation of mutationsList) {
-        if (mutation.type == 'attributes' && mutation.attributeName == "style" || mutation.attributeName == "height") {
-          var newHeight = $('#sentimentPieChart').css('height');
+        if (mutation.type == 'attributes' && mutation.attributeName == 'style' || mutation.attributeName == 'height') {
+          var newHeight = $('#' + SENTIMENT_PIE_CHART_ID).css('height');
           if (newHeight && newHeight.length > 2) {
             //remove 'px'
             newHeight = newHeight.slice(0, -2);
@@ -49,43 +59,39 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
     });
 
-    observer.observe(document.getElementById('sentimentPieChart'),
+    observer.observe(document.getElementById(SENTIMENT_PIE_CHART_ID),
       {
         attributes: true,
         childList: false
       }
     );
   }
+  monitorPieChartHeight();
 
   $scope.isStockPriceEmpty = function(){
-    if($scope.currentCompany == "Your Portfolio"){
-      if($scope.superStockPriceHistory.length>0)
-        return false;
-      else
-        return true;
+    if ($scope.currentCompany == YOUR_PORTFOLIO) {
+      return $scope.superStockPriceHistory.length <= 0;
     }
     for (var i = 0; i < $scope.stocks.length; i++) {
-      if($scope.stocks[i].company == $scope.currentCompany){
-        if(Object.keys($scope.stocks[i].price_history).length>0)
+      var stock = $scope.stocks[i];
+      if (stock.company == $scope.currentCompany) {
+        if (Object.keys(stock.price_history).length > 0) {
           return false;
+        }
       }
     }
     return true;
-  }
+  };
 
-    $scope.highlightRow = function(index){
-        if($scope.stocks[index].company == $scope.currentCompany){
-          return "bg-info";
-        }
-        else
-          return;
-  }
-
-  monitorPieChartHeight();
+  $scope.highlightRow = function(index){
+    if ($scope.stocks[index].company == $scope.currentCompany) {
+      return BG_INFO_CLASSNAME;
+    }
+  };
 
   $scope.addStock = function() {
 
-    var selectedCompany = $('#selectpicker').find('option:selected').text();
+    var selectedCompany = $('#' + SELECT_PICKER_ID).find('option:selected').text();
 
     if (stockExists(selectedCompany)) {
       alert('You are already watching this company.');
@@ -93,7 +99,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
 
     $scope.currentCompany = selectedCompany;
-    var addStockButton = $('#addStockButton');
+    var addStockButton = $('#' + ADD_STOCK_BUTTON_ID);
     addStockButton.hide();
     loader.show();
     if (selectedCompany && selectedCompany.trim() !== '') {
@@ -118,7 +124,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           updateSuperStockData();
 
           $scope.currentCompany = result.company;
-          if ($scope.myLineChart){
+          if ($scope.myLineChart) {
             var newLineChartData = getLineChartData(result.history, result.price_history);
             var newPieChartData = getPieChartData(result.history);
             updateVisualizations(newLineChartData, newPieChartData);
@@ -167,7 +173,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     }
     companyNamePendingDeletion = undefined;
 
-    $scope.currentCompany = "Your Portfolio";
+    $scope.currentCompany = YOUR_PORTFOLIO;
     
     updateSuperStockData();
     var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
@@ -178,21 +184,23 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   };
 
   $scope.selectCompany = function($event, stock) {
-    tablinks = document.getElementsByClassName("getrow");
-    if($event.currentTarget.classList.contains("bg-info")){
-      for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" bg-info", "");
+    var tablinks = document.getElementsByClassName('getrow');
+    if ($event.currentTarget.classList.contains(BG_INFO_CLASSNAME)) {
+      for (var i = 0; i < tablinks.length; i++) {
+        var tabLink = tablinks[i];
+        tabLink.className = tabLink.className.replace(' ' + BG_INFO_CLASSNAME, '');
       }
-      $scope.currentCompany = "Your Portfolio";
+      $scope.currentCompany = YOUR_PORTFOLIO;
       var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
       var newPieChartData = getPieChartData($scope.superStockHistory);
       updateVisualizations(newLineChartData, newPieChartData);
       updateArticles($scope.stocks);
     } else {
-      for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" bg-info", "");
+      for (var x = 0; x < tablinks.length; x++) {
+        var tabLink = tablinks[x];
+        tabLink.className = tabLink.className.replace(' ' + BG_INFO_CLASSNAME, '');
       }
-      $event.currentTarget.className += " bg-info";
+      $event.currentTarget.className += ' ' + BG_INFO_CLASSNAME;
       $scope.currentCompany = stock.company;
       var newLineChartData = getLineChartData(stock.history, stock.price_history);
       var newPieChartData = getPieChartData(stock.history);
@@ -210,7 +218,19 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   });
 
   function capitalizeFirstLetterOnly(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+
+    if (!string) {
+      return string;
+    }
+
+    var result = string;
+    if (string.length > 0) {
+      result = string.charAt(0).toUpperCase();
+    }
+    if (string.length > 1) {
+      result += string.slice(1).toLowerCase();
+    }
+    return result;
   }
 
   function sortStocks(stocks) {
@@ -230,7 +250,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     var temp = null;
   
     for (i = array.length - 1; i > 0; i -= 1) {
-      j = Math.floor(Math.random() * (i + 1))
+      j = Math.floor(Math.random() * (i + 1));
       temp = array[i];
       array[i] = array[j];
       array[j] = temp;
@@ -296,7 +316,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    */
   function handleCompanies(companies) {
     
-    var picker = $('#selectpicker');
+    var picker = $('#' + SELECT_PICKER_ID);
     var newItems = '';
 
     for (var i=0; i<companies.length; i++) {
@@ -334,8 +354,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       $scope.myLineChart.data.datasets[0].pointBorderColor = getPointColor(newLineChartData.data);
       $scope.myLineChart.data.datasets[0].pointHoverRadius = getPointRadius(newLineChartData.data);
       $scope.myLineChart.data.datasets[0].pointHoverBackgroundColor = getPointColor(newLineChartData.data);
-      $scope.myLineChart.options.scales.xAxes["0"].ticks.maxTicksLimit = newLineChartData.labels.length;
-      $scope.myLineChart.options.scales.yAxes["0"].ticks.max = Math.ceil(Math.max.apply(null, newLineChartData.price)/100)*100;
+      $scope.myLineChart.options.scales.xAxes['0'].ticks.maxTicksLimit = newLineChartData.labels.length;
+      $scope.myLineChart.options.scales.yAxes['0'].ticks.max = Math.ceil(Math.max.apply(null, newLineChartData.price)/100)*100;
       $scope.myLineChart.update();
     }
 
@@ -371,7 +391,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   }
 
   function makeNewPieChart(labels,data){
-    var ctx = document.getElementById('sentimentPieChart');
+    var ctx = document.getElementById(SENTIMENT_PIE_CHART_ID);
     $scope.myPieChart = new Chart(ctx, {
       type: 'pie',
       data: {
@@ -468,7 +488,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
     var sentimentMap = {};//has overall sentiment of the day for a particular stock
     var articleCountmap = {};//has article count of the day for a particular stock
-    // console.log(price_history);
     for (var i=0; i<history.length; i++) {
       var sentiment = history[i].sentiment.toLowerCase();
       var sentimentInt = 0;
@@ -479,7 +498,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         sentimentInt = -1;
       }
       
-      var date = history[i].date.substr(0,10);
+      var date = history[i].date.substr(0, 10);
       if (!price_history[date]) {
         var pair = getMatchingDatePair(date, sortedList);
         if (pair) {
@@ -488,10 +507,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
       if (date) {
         var index = date;
-        if(index in sentimentMap){
+        if (index in sentimentMap){
           sentimentMap[index] += sentimentInt;
           articleCountmap[index] += 1;
-        } else{
+        } else {
           sentimentMap[index] = sentimentInt;
           articleCountmap[index] = 1;
         }
@@ -504,25 +523,19 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       return new Date(a) - new Date(b);
     });
 
-    // var labels = [];
     var prices = [];
-    for (var labelInd=0; labelInd<labels.length; labelInd++){
+    for (var labelInd=0; labelInd<labels.length; labelInd++) {
       var label = labels[labelInd];
       var price = price_history[label];
       prices.push(price);
     }
-    //console.log(":(");
-    //console.log(price_history);
 
     var data = [];
     for (var y=0; y<labels.length; y++) {
       data.push((sentimentMap[labels[y]]/articleCountmap[labels[y]]));
     }
 
-    var lineChartData = { data: data , labels: labels, price: prices};
-    // console.log(price);
-    return lineChartData;
-
+    return { data: data, labels: labels, price: prices};
   }
 
   /**
@@ -568,7 +581,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       return undefined;
     }
 
-    var pair = undefined;
     var realDate = avDateStringToDate(date);
     var numPairs = priceList.length;
     for (var i=0; i<numPairs; i++) {
@@ -578,7 +590,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
       var thisDate = avDateStringToDate(thisPair.date);
       if (thisDate > realDate) {
-        var price = thisPair.price;
         var previousInd = i - 1;
         if (previousInd >= 0) {
           return priceList[previousInd];
@@ -603,19 +614,20 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     var radii = [];
     var constAdd = 2;
     var constMul = 6;
-    for(var i=0; i<data.length; i++){ 
-      radii.push(Math.abs(data[i]*constMul)+constAdd);}  
+    for (var i=0; i<data.length; i++) {
+      radii.push(Math.abs(data[i] * constMul) + constAdd);
+    }
     return radii;
   }
 
   function getPointColor(data){
     var color = [];
-    for(var i=0; i<data.length; i++){ 
-      if(data[i]>0){
+    for (var i=0; i<data.length; i++) {
+      if (data[i] > 0) {
         color_i = '#28a745';
-      }else if (data[i]<0) {
+      } else if (data[i] < 0) {
         color_i = '#dc3545';
-      }else{
+      } else {
         color_i = '#ffc107';
       }
       color.push(color_i); 
@@ -624,7 +636,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   }
 
   function makeNewChart(labels,data,price,company){
-    var ctx = document.getElementById('trendChart');
+    var ctx = document.getElementById(TREND_CHART_ID);
     $scope.myLineChart = new Chart(ctx, {
       type: 'line',
       data: {

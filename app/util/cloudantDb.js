@@ -15,7 +15,6 @@
  */
 
 const Cloudant = require('cloudant');
-const utils = require('./utils.js');
 const config = require('../../config.js');
 
 var cloudant;
@@ -37,7 +36,7 @@ if (config.usingEnv) {
 
 // try to create DB
 if (cloudant) {
-console.log('trying to create DB with name: ' + config.CLOUDANT.db_name);
+  console.log('trying to create DB with name: ' + config.CLOUDANT.db_name);
   cloudant.db.create(config.CLOUDANT.db_name, function(err, res) {
     if (err) {
       console.log('Could not create new db: ' + config.CLOUDANT.db_name + ', it might already exist.');

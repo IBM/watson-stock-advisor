@@ -119,8 +119,8 @@ function getImages(articles) {
     //and that's ok. since we are Promise.all-ing caught promises,
     //we allow any outstanding promises to continue even if one of them fails.
     //the catch block here should never fire, but we place it for good measure
+    var results = [];
     Promise.all(catches).then((tempResults) => {
-      var results = [];
       for (var x=0; x<tempResults.length; x++) {
         var tempRes = tempResults[x];
         if (tempRes && tempRes.url) {
@@ -129,6 +129,7 @@ function getImages(articles) {
       }
       resolve(results);
     }).catch((error) => {
+      console.log(error);
       resolve(results);
     });
   });
@@ -266,7 +267,7 @@ function updateStocksData(articleData, stockData) {
     });
 
     catches.push(promise.catch(e => {
-      console.log('Error inserting stock data for ' + company);
+      console.log('Error inserting stock data for ' + articleData[i].company);
       return e;
     }));
   }
@@ -336,13 +337,13 @@ function getArticleDataForCompany(company, callback) {
     var results = data.results;
     var articles = filterDuplicates(parseResults(results));
     console.log('Received ' + articles.length + ' unique articles for "' + company + '" from Discovery');
-    var data = {
+    var theArticleData = {
       company : company,
       articles : articles
     };
-    callback(data);
+    callback(theArticleData);
   }).catch(function (error) {
-    callback([], error);
+    callback({}, error);
   });
   
   return promise;
@@ -377,6 +378,7 @@ function getArticleDataForCompanies(companies, callback) {
       callback(articleData);
     }
   }).catch(function(error) {
+    console.log(error);
     if (utils.isFunc(callback)) {
       callback(articleData, errors.join());
     }

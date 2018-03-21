@@ -14,8 +14,6 @@
  * the License.
  */
 
-const config = require('../../config');
-
 const AlphaVantageAPI = require('alpha-vantage-cli').AlphaVantageAPI;
 const PLACEHOLDER = 'placeholder';
 var alphaVantageAPI;

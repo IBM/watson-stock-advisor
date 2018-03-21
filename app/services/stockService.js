@@ -82,7 +82,7 @@ class StockService {
       this.getStockByCompanyName(companyName).then((stocks) => {
         var companyDoc = stocks.docs[0];
         if (companyDoc) {
-          db.delete(companyDoc).then((data) => {
+          db.delete(companyDoc).then(() => {
             resolve();
           }).catch((error) => {
             console.log(error);

@@ -2,7 +2,12 @@
   "env": {
     "browser": true,
     "es6": true,
-    "node": true
+    "node": true,
+    "jquery": true
+  },
+  "globals": {
+    "angular": false,
+    "Chart": false
   },
   "extends": "eslint:recommended",
   "parserOptions": {

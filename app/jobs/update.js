@@ -30,7 +30,7 @@ const task = new updateTask();
 /*
  * Runs every day at 01:00:00 AM.
  */
-const job = new CronJob('00 00 01 * * 0-6', function() {
+new CronJob('00 00 01 * * 0-6', function() {
 
   console.log('Beginning stock update task');
   task.run();

@@ -30,6 +30,7 @@
     "jshint": "^2.6.0"
   },
   "scripts": {
+    "lint": "./node_modules/.bin/eslint . ./**/*.js",
     "test": "jshint build_test.js",
     "postinstall": "echo 'Beginning postinstall...' && npm install -g bower && bower install"
   }

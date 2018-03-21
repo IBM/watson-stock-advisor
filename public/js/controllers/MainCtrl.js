@@ -177,9 +177,9 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   };
 
   $scope.selectCompany = function($event, stock) {
-    tablinks = document.getElementsByClassName('getrow');
+    var tablinks = document.getElementsByClassName('getrow');
     if ($event.currentTarget.classList.contains('bg-info')) {
-      for (i = 0; i < tablinks.length; i++) {
+      for (var i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(' bg-info', '');
       }
       $scope.currentCompany = 'Your Portfolio';
@@ -188,8 +188,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       updateVisualizations(newLineChartData, newPieChartData);
       updateArticles($scope.stocks);
     } else {
-      for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(' bg-info', '');
+      for (var x = 0; x < tablinks.length; x++) {
+        tablinks[x].className = tablinks[x].className.replace(' bg-info', '');
       }
       $event.currentTarget.className += ' bg-info';
       $scope.currentCompany = stock.company;
@@ -478,7 +478,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         sentimentInt = -1;
       }
       
-      var date = history[i].date.substr(0,10);
+      var date = history[i].date.substr(0, 10);
       if (!price_history[date]) {
         var pair = getMatchingDatePair(date, sortedList);
         if (pair) {
@@ -561,7 +561,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       return undefined;
     }
 
-    var pair = undefined;
     var realDate = avDateStringToDate(date);
     var numPairs = priceList.length;
     for (var i=0; i<numPairs; i++) {
@@ -571,7 +570,6 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
       var thisDate = avDateStringToDate(thisPair.date);
       if (thisDate > realDate) {
-        var price = thisPair.price;
         var previousInd = i - 1;
         if (previousInd >= 0) {
           return priceList[previousInd];

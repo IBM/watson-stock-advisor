@@ -5,6 +5,10 @@
     "node": true,
     "jquery": true
   },
+  "globals": {
+    "angular": false,
+    "Chart": false
+  },
   "extends": "eslint:recommended",
   "parserOptions": {
     "sourceType": "module"

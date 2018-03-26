@@ -98,8 +98,8 @@ var theConfig = {
     port : process.env.PORT || 8080
   },
   CLOUDANT                 : {
-    account  : process.env.CLOUDANT_ACCESS,
-    key      : process.env.CLOUDANT_KEY,
+    account  : process.env.CLOUDANT_HOST,
+    key      : process.env.CLOUDANT_USERNAME,
     password : process.env.CLOUDANT_PASSWORD,
     db_name  : process.env.DB_NAME || 'stock-data'
   },

@@ -528,7 +528,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     for (var labelInd=0; labelInd<labels.length; labelInd++) {
       var label = labels[labelInd];
       var price = price_history[label];
-      prices.push(price);
+      prices.push(price.toFixed(2));
     }
 
     var data = [];

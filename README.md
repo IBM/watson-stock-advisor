@@ -51,7 +51,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 
 ## Deploy to IBM Cloud
 
-Button To be added
+[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor)
 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 

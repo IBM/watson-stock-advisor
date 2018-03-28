@@ -38,6 +38,8 @@ When the reader has completed this Code Pattern, they will understand how to:
 
 # Watch the Video
 
+[![][(https://i.ytimg.com/vi/uigisF50F8s/hqdefault.jpg)](https://youtu.be/uigisF50F8s)
+
 # Prerequisites
 
 ### Create an Alpha Vantage account and get API key
@@ -221,6 +223,7 @@ The portal should now be accessible on port 8080 (or another port specified by P
 
 * [Watson Discovery](https://www.ibm.com/watson/services/discovery/)
 * [IBM Cloudant db](https://www.ibm.com/cloud/cloudant)
+* [Youtube Video](https://i.ytimg.com/vi/uigisF50F8s/hqdefault.jpg)
 
 ## Learn more
 

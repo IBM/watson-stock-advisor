@@ -223,7 +223,7 @@ The portal should now be accessible on port 8080 (or another port specified by P
 
 * [Watson Discovery](https://www.ibm.com/watson/services/discovery/)
 * [IBM Cloudant db](https://www.ibm.com/cloud/cloudant)
-* [Youtube Video](https://i.ytimg.com/vi/uigisF50F8s/hqdefault.jpg)
+* [Youtube Video](https://www.youtube.com/watch?v=uigisF50F8s)
 
 ## Learn more
 

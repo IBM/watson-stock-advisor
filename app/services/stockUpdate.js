@@ -139,9 +139,10 @@ function getImages(articles) {
  * Inserts the new articles for the given stockDatum
  * @param {stock} stockDatum - The existing stock datum
  * @param {articles[]} newArticles - The article to be added
+ * @param {} updatedPriceHistory - The latest retrieved stock prices
  * @param {function} callback - the function to call on completion
  */
-function insertNewArticles(stockDatum, newArticles, callback) {
+function insertNewData(stockDatum, newArticles, updatedPriceHistory, callback) {
   getImages(newArticles).then((imgResults) => {
     for (var x=0; x<imgResults.length; x++) {
       var imgResult = imgResults[x];
@@ -153,21 +154,40 @@ function insertNewArticles(stockDatum, newArticles, callback) {
         }
       }
     }
-    var existingArticles = stockDatum.history || [];
-    var updatedArticles = sortArticles(existingArticles.concat(newArticles));
     var company = stockDatum.company;
-    if (updatedArticles.length > config.MAX_ARTICLES_PER_COMPANY) {
-      console.log('"' + company + '" has exceeded article max of ' + config.MAX_ARTICLES_PER_COMPANY + '...');
-      console.log('Removing ' + (updatedArticles.length - config.MAX_ARTICLES_PER_COMPANY) + ' oldest article(s) from "' + company + '" history...');
-      updatedArticles = updatedArticles.slice(0, config.MAX_ARTICLES_PER_COMPANY);
+    if (newArticles.length > 0) {
+      var existingArticles = stockDatum.history || [];
+      var updatedArticles = sortArticles(existingArticles.concat(newArticles));
+      if (updatedArticles.length > config.MAX_ARTICLES_PER_COMPANY) {
+        console.log('"' + company + '" has exceeded article max of ' + config.MAX_ARTICLES_PER_COMPANY + '...');
+        console.log('Removing ' + (updatedArticles.length - config.MAX_ARTICLES_PER_COMPANY) + ' oldest article(s) from "' + company + '" history...');
+        updatedArticles = updatedArticles.slice(0, config.MAX_ARTICLES_PER_COMPANY);
+      }
+      stockDatum.history = updatedArticles;
+      console.log('Inserting into company "' + company + '" articles: ' );
+      console.log(newArticles);
+    } else {
+      console.log('No new articles to insert into "' + company + '"');
     }
-    stockDatum.history = updatedArticles;
-    console.log('Inserting into company "' + company + '" articles: ' );
-    console.log(newArticles);
+    //combine the existing price history with the newly retrieved history
+    var newHistory = stockDatum.price_history || {};
+    var pricesUpdated = false;
+    for (var date in updatedPriceHistory) {
+      if (updatedPriceHistory.hasOwnProperty(date)) {
+        if (!newHistory[date]) {
+          pricesUpdated = true;
+          newHistory[date] = updatedPriceHistory[date];
+        }
+      }
+    }
+    stockDatum.price_history = newHistory;
+
     //TODO batch insert?
-    stock_db.insertOrUpdate(stockDatum).catch((error) => {
-      console.log(error);
-    });
+    if (pricesUpdated || newArticles.length > 0) {
+      stock_db.insertOrUpdate(stockDatum).catch((error) => {
+        console.log(error);
+      });
+    }
     callback();
   }).catch(() => {
     callback();
@@ -178,7 +198,7 @@ function insertNewArticles(stockDatum, newArticles, callback) {
  * Retrieves the latest price history for the stock and
  * combines it with the existing history
  * @param {stock} stockDatum
- * @returns promise - The result is the updated stock, if successful
+ * @returns priceMap - The result is the new price history, if successful
  */
 function getLatestStockPrices(stockDatum) {
 
@@ -192,16 +212,7 @@ function getLatestStockPrices(stockDatum) {
     console.log('Beginning stock price update for ' + ticker);
 
     alphaV.getPriceHistoryForTicker(ticker).then((updatedHistory) => {
-      
-      //combine the existing price history with the newly retrieved history
-      var newHistory = stockDatum.price_history || {};
-      for (var date in updatedHistory) {
-        if (updatedHistory.hasOwnProperty(date)) {
-          newHistory[date] = updatedHistory[date];
-        }
-      }
-      stockDatum.price_history = newHistory;
-      resolve(stockDatum);
+      resolve(updatedHistory);
     }).catch((error) => {
       reject(error);
     });
@@ -247,23 +258,18 @@ function updateStocksData(articleData, stockData) {
         return !articleExists;
       });
 
-      if (newArticles.length > 0) {
-        getLatestStockPrices(stockDatum).then((updatedStock) => {
-          console.log('stock price retrieval successful for ' + stockDatum.ticker);
-          insertNewArticles(updatedStock, newArticles, function() {
-            res();
-          });
-        }).catch((error) => {
-          console.log('stock price retrieval failed:');
-          console.log(error);
-          insertNewArticles(stockDatum, newArticles, function() {
-            res();
-          });
+      getLatestStockPrices(stockDatum).then((newPriceHistory) => {
+        console.log('stock price retrieval successful for ' + stockDatum.ticker);
+        insertNewData(stockDatum, newArticles, newPriceHistory, function() {
+          res();
         });
-      } else {
-        console.log('No new articles to insert into "' + company + '"');
-        res();
-      }
+      }).catch((error) => {
+        console.log('stock price retrieval failed:');
+        console.log(error);
+        insertNewData(stockDatum, newArticles, {}, function() {
+          res();
+        });
+      });
     });
 
     catches.push(promise.catch(e => {

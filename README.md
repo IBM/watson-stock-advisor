@@ -58,7 +58,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 
 <!--optional step-->
-2. In Toolchains, click on Delivery Pipeline to watch while the app is deployed. Once deployed, the app can be viewed by clicking 'View app'.
+2. In Toolchains, click on ``Delivery Pipeline`` to watch while the app is deployed. Once deployed, the app can be viewed by clicking ``View app``.
 
 <p align="center">
   <img width="80%" height="80%" src="doc/source/images/toolchain-pipeline.png">
@@ -69,7 +69,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
     * wsa-discovery
     * wsa-cloudant
 
-You can Deploy the application simply by clicking the Deploy to IBM Cloud button above to automatically create a toolchain to provision and run the application.
+You can Deploy the application simply by clicking the ``Deploy to IBM Cloud`` button above to automatically create a toolchain to provision and run the application.
 
 If you do not have an IBM Cloud account yet, you will need to create one.
 
@@ -111,7 +111,7 @@ Create the following services:
 ### 3. Configure Watson Discovery and get credentials
 
 * Launch the **Watson Discovery** tool. The first time you do this, you will see
-"Before working with private data, we will need to set up your storage". Click 'Continue' and wait for the storage to be set up.
+"Before working with private data, we will need to set up your storage". Click ``Continue`` and wait for the storage to be set up.
 
 * Choose `Watson Discover News` from the `Manage Data` tab.
 
@@ -132,11 +132,11 @@ Create the following services:
 ### 4. Provision Cloudant NoSQL DB and Get Credentials
 
 * Navigate to console.bluemix.net
-* Click 'Create Resource'
-* Search for 'cloudant nosql'
-*  Select the only search result under 'Data & Analytics' called 'Cloudant NoSQL DB'
+* Click ``Create Resource``
+* Search for ``cloudant nosql``
+* Select the only search result under ``Data & Analytics`` called ``Cloudant NoSQL DB``
 * Specify the settings you want
-* Click 'Create' in the bottom right
+* Click ``Create`` in the bottom right
 
 * From the top-level Cloudant page, click `Service Credentials`. If there is no credential under `View Credentials` click `New Credential` and then `View Credentials`.
 
@@ -152,10 +152,10 @@ You can find the repository for the template [here](https://github.com/Blackrock
 
 ### 6. Add IBM Cloud Services Credentials to .env file
 
-As you create the Blumix Services, you'll need to create service credentials and get the
+As you create the Bluemix Services, you'll need to create service credentials and get the
 username and password:
 
-Move the watson-stock-advisor/web/env.sample file to watson-stock-advisor/web/.env and populate the service
+Move the ``watson-stock-advisor/web/env.sample`` file to ``watson-stock-advisor/web/.env`` and populate the service
 credentials (and Cloudant URL) as you create the credentials:
 
 The credentials for IBM Cloud services (Discovery), can be found in the ``Services`` menu in IBM Cloud,
@@ -210,7 +210,7 @@ $ npm install
 $ npm start
 ```
 
-The portal should now be accessible on port 8080 (or another port specified by PORT in .env)
+The portal should now be accessible on port ``8080`` (or another port specified by PORT in .env)
 
 # Sample Output
 

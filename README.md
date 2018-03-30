@@ -118,7 +118,7 @@ Create the following services:
 * Under  `Collection Info` section, click `Use this collection in API` and copy the `Environment ID` into your .env file as `DISCOVERY_ENV_ID`. This should be `system` for the `Watson Discover News` collection.
 
 <p align="center">
-  <img width="80%" height="80%" src="doc/source/images/usecollectionapi.png">
+  <img width="80%" height="80%" src="doc/source/images/useCollectionAPI.png">
 </p>
 
 * From the top-level Discovery page, click `Service Credentials`. If there is no credential under `View Credentials` click `New Credential` and then `View Credentials`.

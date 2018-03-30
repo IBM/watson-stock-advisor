@@ -346,6 +346,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
   function updateVisualizations(newLineChartData, newPieChartData) {
 
+    //update Pie Chart
     if (newPieChartData) {
       $timeout(function() {
         $scope.myPieChart.data.datasets[0].data = newPieChartData.data;
@@ -354,6 +355,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }, 100);
     }
 
+    //update Line Chart
     if (newLineChartData) {
       $timeout(function() {
         $scope.myLineChart.data.datasets[0].data = newLineChartData.price;

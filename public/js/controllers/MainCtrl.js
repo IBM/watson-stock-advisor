@@ -405,7 +405,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
         labels: labels,
         datasets: [{
           data: data,
-          backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+          backgroundColor: ['#28a745', '#D3D3D3', '#dc3545'],
         }],
       },
     });

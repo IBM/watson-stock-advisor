@@ -71,7 +71,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   monitorPieChartHeight();
 
   function updateEditButtonText() {
-    $scope.editButtonText = $scope.isEditing ? "Done" : "Edit";
+    $scope.editButtonText = $scope.isEditing ? 'Done' : 'Edit';
   }
 
   updateEditButtonText();
@@ -79,15 +79,15 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   $scope.toggleEdit = function() {
     $scope.isEditing = !$scope.isEditing;
     updateEditButtonText();
-  }
+  };
 
   $scope.editClass = function() {
-    return $scope.isEditing ? "btn-info" : "btn-danger";
-  }
+    return $scope.isEditing ? 'btn-info' : 'btn-danger';
+  };
 
   $scope.prepareForDisplay = function(categories) {
     return categories.join(', ');
-  }
+  };
 
   $scope.isStockPriceEmpty = function(){
     if ($scope.currentCompany == YOUR_PORTFOLIO) {

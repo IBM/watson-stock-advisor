@@ -310,7 +310,7 @@ function parseArticle(result) {
     }
 
     return categories;
-  }
+  };
   
   return {
     url: result.url,
@@ -406,11 +406,11 @@ function getArticleDataForCompanies(companies, callback) {
         callback(articleData, errors.join());
       }
     }
-  }
+  };
   
   Promise.all(promises).then(function() {
     done();
-  }).catch(function(error) {
+  }).catch(function() {
     done();
   });
 }

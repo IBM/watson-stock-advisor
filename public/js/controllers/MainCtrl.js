@@ -85,6 +85,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     return $scope.isEditing ? "btn-info" : "btn-danger";
   }
 
+  $scope.prepareForDisplay = function(categories) {
+    return categories.join(', ');
+  }
+
   $scope.isStockPriceEmpty = function(){
     if ($scope.currentCompany == YOUR_PORTFOLIO) {
       return $scope.superStockPriceHistory.length <= 0;

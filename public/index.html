@@ -131,7 +131,9 @@
               </div>
               <hr class="my-0">
               <hr class="my-0">
-              <div class="card-footer small text-muted">Posted {{article.formattedDate}}</div>
+              <div class="card-footer small text-muted">Posted {{article.formattedDate}}
+                <span ng-if="article.categories && article.categories.length > 0"><br><b><i>{{prepareForDisplay(article.categories)}}</i></b></span>
+              </div>
             </div>
           </div>
         </div>

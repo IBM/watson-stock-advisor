@@ -294,9 +294,28 @@ function updateStocksData(articleData, stockData) {
  * @returns {object} - a simplified JSON object with relevant data
  */
 function parseArticle(result) {
+  
+  var parseCategories = function(cats) {
+
+    var categories = [];
+    if (!cats || cats.length == 0) {
+      return categories;
+    }    
+    
+    for (var i=0; i<cats.length; i++) {
+      var rawLabel = cats[i].label;
+      var lastSlashIndex = rawLabel.lastIndexOf('/');
+      var category = lastSlashIndex == -1 ? rawLabel : rawLabel.substring(lastSlashIndex + 1);
+      categories.push(category);
+    }
+
+    return categories;
+  }
+  
   return {
     url: result.url,
     sentiment: result.enriched_text.sentiment.document.label,
+    categories: parseCategories(result.enriched_text.categories),
     date: result.crawl_date,
     title: result.title,
     source: result.forum_title

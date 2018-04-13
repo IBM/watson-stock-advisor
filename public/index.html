@@ -51,27 +51,24 @@
                   <thead>
                     <tr>
                       <th>Company</th>
-                      <th>Ticker</th>
                       <th>Last Sentiment</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr id="{{stock.company}}" ng-class="highlightRow($index)" ng-click=selectCompany($event,stock) class="clickable-row getrow" ng-repeat="stock in stocks">
-                      <td>{{stock.company}}
+                      <td>{{stock.company}}&nbsp;&nbsp;<i><small>{{stock.ticker}}</small></i>
                         <span class="pull-right">
                           <button ng-click="$event.stopPropagation(); confirmDelete(stock.company)" class="btn btn-danger">
                             <strong>Delete</strong>
                           </button>
                         </span>
                       </td>
-                      <td>{{stock.ticker}}</td>
                       <td>{{stock.recentSentiment}}</td>
                     </tr>
                   </tbody>
                   <tfoot>
                     <tr>
                       <th>Company</th>
-                      <th>Ticker</th>
                       <th>Last Sentiment</th>
                     </tr>
                   </tfoot>

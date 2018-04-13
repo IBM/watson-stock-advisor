@@ -378,16 +378,21 @@ function getArticleDataForCompanies(companies, callback) {
     });
     promises.push(promise);
   }
+
+  var done = function() {
+    if (utils.isFunc(callback)) {
+      if (errors.length == 0) {
+        callback(articleData);
+      } else {
+        callback(articleData, errors.join());
+      }
+    }
+  }
   
   Promise.all(promises).then(function() {
-    if (utils.isFunc(callback)) {
-      callback(articleData);
-    }
+    done();
   }).catch(function(error) {
-    console.log(error);
-    if (utils.isFunc(callback)) {
-      callback(articleData, errors.join());
-    }
+    done();
   });
 }
 

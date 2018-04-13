@@ -9,7 +9,7 @@ You can find the repository for the template [here](https://github.com/Blackrock
 When the reader has completed this Code Pattern, they will understand how to:
 
 * Create and use Watson Discovery and Cloudant NoSQL Database
-* Gather news from Discovery Watson News service
+* Gather news from the Watson Discovery News service
 * Obtain stock price information from Alpha Vantage
 * Deploy a Nodejs application to input stock choices and display information
 
@@ -23,7 +23,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 2. User input is processed and routed to the backend server.
 3. The backend server stores stock information in a Cloudant NoSQL database for easy retrieval.
 4. The backend server uses Watson Discovery to find information about a specific company.
-5. The Watson Discovery Service queries the Watson News Collection for articles related to the company.
+5. The Watson Discovery Service queries the Watson News collection for articles related to the company.
 6. The Alpha Vantage APIs are queried to find market price for a given company.
 7. News, sentiment, and stock price are all returned and rendered in the web app to the user.
 
@@ -113,9 +113,9 @@ Create the following services:
 * Launch the **Watson Discovery** tool. The first time you do this, you will see
 "Before working with private data, we will need to set up your storage". Click ``Continue`` and wait for the storage to be set up.
 
-* Choose `Watson Discover News` from the `Manage Data` tab.
+* Choose `Watson Discovery News` from the `Manage Data` tab.
 
-* Under  `Collection Info` section, click `Use this collection in API` and copy the `Environment ID` into your .env file as `DISCOVERY_ENV_ID`. This should be `system` for the `Watson Discover News` collection.
+* Under  `Collection Info` section, click `Use this collection in API` and copy the `Environment ID` into your .env file as `DISCOVERY_ENV_ID`. This should be `system` for the `Watson Discovery News` collection.
 
 <p align="center">
   <img width="80%" height="80%" src="doc/source/images/useCollectionAPI.png">
@@ -234,5 +234,3 @@ The portal should now be accessible on port ``8080`` (or another port specified 
 ## License
 
 [Apache 2.0](LICENSE)
-
-

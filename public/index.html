@@ -50,14 +50,19 @@
                 <table ng-if="stocks.length > 0" class="table table-bordered table-hover" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Company</th>
+                      <th>Company
+                        <span class="pull-right">
+                        <button ng-click="$event.stopPropagation(); toggleEdit()" class="btn" ng-class="editClass()">
+                          <strong>{{editButtonText}}</strong>
+                        </button>
+                      </span></th>
                       <th>Last Sentiment</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr id="{{stock.company}}" ng-class="highlightRow($index)" ng-click=selectCompany($event,stock) class="clickable-row getrow" ng-repeat="stock in stocks">
                       <td>{{stock.company}}&nbsp;&nbsp;<i><small>{{stock.ticker}}</small></i>
-                        <span class="pull-right">
+                        <span ng-if="isEditing" class="pull-right">
                           <button ng-click="$event.stopPropagation(); confirmDelete(stock.company)" class="btn btn-danger">
                             <strong>Delete</strong>
                           </button>

@@ -34,6 +34,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
   $scope.superStockPriceHistory = [];
   $scope.YOUR_PORTFOLIO = YOUR_PORTFOLIO;
 
+  $scope.isEditing = false;
+
   var loader = $('#' + LOADER_ID);
   loader.hide();
 
@@ -67,6 +69,21 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     );
   }
   monitorPieChartHeight();
+
+  function updateEditButtonText() {
+    $scope.editButtonText = $scope.isEditing ? "Done" : "Edit";
+  }
+
+  updateEditButtonText();
+
+  $scope.toggleEdit = function() {
+    $scope.isEditing = !$scope.isEditing;
+    updateEditButtonText();
+  }
+
+  $scope.editClass = function() {
+    return $scope.isEditing ? "btn-info" : "btn-danger";
+  }
 
   $scope.isStockPriceEmpty = function(){
     if ($scope.currentCompany == YOUR_PORTFOLIO) {

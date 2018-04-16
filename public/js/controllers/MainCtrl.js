@@ -143,6 +143,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           stocks.push(result);
           sortStocks(stocks);
           updateSuperStockData();
+          updateAggregateStats();
 
           $scope.currentCompany = result.company;
           if ($scope.myLineChart) {
@@ -197,6 +198,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     $scope.currentCompany = YOUR_PORTFOLIO;
     
     updateSuperStockData();
+    updateAggregateStats();
     var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
     var newPieChartData = getPieChartData($scope.superStockHistory);
     updateVisualizations(newLineChartData, newPieChartData);
@@ -227,6 +229,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       newPieChartData = getPieChartData(stock.history);
       stocks = [stock];
     }
+    updateAggregateStats();
     updateVisualizations(newLineChartData, newPieChartData);
     updateArticles(stocks);
   };
@@ -253,6 +256,58 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       result += string.slice(1).toLowerCase();
     }
     return result;
+  }
+
+  function updateAggregateStats() {
+
+    var stocks = $scope.stocks;
+    if (!stocks || stocks.length == 0) {
+      return;
+    }
+
+    var selectedCompany = $scope.currentCompany;
+    if (selectedCompany && selectedCompany != YOUR_PORTFOLIO) {
+      stocks = stocks.filter(function(stock) {
+        return stock.company == selectedCompany;
+      });
+    }
+
+    var date;
+    var anyStock = stocks[0];
+    var anyPriceData = anyStock.price_history;
+    for (var aDate in anyPriceData) {
+      if (anyPriceData.hasOwnProperty(aDate)) {
+        if (!date || (avDateStringToDate(aDate) > avDateStringToDate(date))) {
+          date = aDate;
+        }
+      }
+    }
+    
+    if (!date) {
+      return;
+    }
+
+    var high = 0;
+    var low = 0;
+    var open = 0;
+    var close = 0;
+    for (var i=0; i<stocks.length; i++) {
+      var stock = stocks[i];
+      var priceData = stock.price_history;
+      var data = priceData[date];
+      if (data) {
+        high += data.High;
+        low += data.Low;
+        open += data.Open;
+        close += data.Close;
+      }
+    }
+
+    $scope.high  = '$' + high.toFixed(2);
+    $scope.low   = '$' + low.toFixed(2);
+    $scope.open  = '$' + open.toFixed(2);
+    $scope.close = '$' + close.toFixed(2);
+    $scope.aggrStatsDate = date;
   }
 
   function sortStocks(stocks) {
@@ -350,6 +405,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       sortStocks(stocks);
       $scope.stocks = stocks;
       if (haveStocks) {
+        updateAggregateStats();
         updateSuperStockData();
         updatePieChart($scope.superStockHistory);
         //space out page updates to prevent lag

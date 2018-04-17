@@ -34,31 +34,31 @@ function initializeAPI() {
 }
 
 /**
- * Creates a map between date and price from the response from AlphaVantage
+ * Creates a map between date and data from the response from AlphaVantage
  * @param {alphaVantageData} dailyData
- * @returns {map} priceMap
+ * @returns {map} dataMap
  */
-function parsedailyData(dailyData) {
-  var stockPriceMap = {};
-
+function parseDailyData(dailyData) {
+  var stockDataMap = {};
   for (var id in dailyData) {
-    var date = dailyData[id]['Timestamp'];
+    var dayData = dailyData[id];
+    var date = dayData['Timestamp'];
     var dateString = JSON.stringify(date);
     dateString = dateString.slice(1,11);
-    var price = dailyData[id]['Close'];
-    stockPriceMap[dateString] = price; // date:price
+    delete dayData['Timestamp'];
+    stockDataMap[dateString] = dayData;
   }
-  return stockPriceMap;
+  return stockDataMap;
 }
 
 class AlphaVantage {
 
   /**
-   * Returns a price map
+   * Returns a data map
    * @param {string} companyTicker
-   * @returns promise - the result is a price map by date, or an error
+   * @returns promise - the result is a data map by date, or an error
    */
-  getPriceHistoryForTicker(companyTicker) {
+  getDataHistoryForTicker(companyTicker) {
      
     return new Promise((resolve, reject) => {
 
@@ -73,8 +73,8 @@ class AlphaVantage {
 
       alphaVantageAPI.getDailyData(companyTicker)
         .then((dailyData) => {
-          var stockPriceMap = parsedailyData(dailyData);
-          resolve(stockPriceMap);
+          var stockDataMap = parseDailyData(dailyData);
+          resolve(stockDataMap);
         }).catch((err) => {
           reject(err);
         });

@@ -211,7 +211,7 @@ function getLatestStockPrices(stockDatum) {
     var ticker = stockDatum.ticker;
     console.log('Beginning stock price update for ' + ticker);
 
-    alphaV.getPriceHistoryForTicker(ticker).then((updatedHistory) => {
+    alphaV.getDataHistoryForTicker(ticker).then((updatedHistory) => {
       resolve(updatedHistory);
     }).catch((error) => {
       reject(error);

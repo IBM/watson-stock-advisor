@@ -96,7 +96,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     for (var i = 0; i < $scope.stocks.length; i++) {
       var stock = $scope.stocks[i];
       if (stock.company == $scope.currentCompany) {
-        if (Object.keys(stock.price_history).length > 0) {
+        if (Object.keys(stock.closing_price_history).length > 0) {
           return false;
         }
       }
@@ -137,22 +137,23 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
       var success = function(result) {
         showButton();
-        addSentiment(result);
+        prepareStockForClient(result);
         $scope.$apply(() => {
           var stocks = $scope.stocks;
           stocks.push(result);
           sortStocks(stocks);
           updateSuperStockData();
+          updateAggregateStats();
 
           $scope.currentCompany = result.company;
           if ($scope.myLineChart) {
-            var newLineChartData = getLineChartData(result.history, result.price_history);
+            var newLineChartData = getLineChartData(result.history, result.closing_price_history);
             var newPieChartData = getPieChartData(result.history);
             updateVisualizations(newLineChartData, newPieChartData);
             updateArticles([result]);
           } else {
             updatePieChart(result.history);
-            $timeout(updateLineChart(result.history, result.price_history), 2000);
+            $timeout(updateLineChart(result.history, result.closing_price_history), 2000);
             $timeout(updateArticles([result]), 3000);
           }
         });
@@ -197,6 +198,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     $scope.currentCompany = YOUR_PORTFOLIO;
     
     updateSuperStockData();
+    updateAggregateStats();
     var newLineChartData = getLineChartData($scope.superStockHistory, $scope.superStockPriceHistory);
     var newPieChartData = getPieChartData($scope.superStockHistory);
     updateVisualizations(newLineChartData, newPieChartData);
@@ -223,10 +225,11 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     } else {
       $event.currentTarget.className += ' ' + BG_INFO_CLASSNAME;
       $scope.currentCompany = stock.company;
-      newLineChartData = getLineChartData(stock.history, stock.price_history);
+      newLineChartData = getLineChartData(stock.history, stock.closing_price_history);
       newPieChartData = getPieChartData(stock.history);
       stocks = [stock];
     }
+    updateAggregateStats();
     updateVisualizations(newLineChartData, newPieChartData);
     updateArticles(stocks);
   };
@@ -253,6 +256,58 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       result += string.slice(1).toLowerCase();
     }
     return result;
+  }
+
+  function updateAggregateStats() {
+
+    var stocks = $scope.stocks;
+    if (!stocks || stocks.length == 0) {
+      return;
+    }
+
+    var selectedCompany = $scope.currentCompany;
+    if (selectedCompany && selectedCompany != YOUR_PORTFOLIO) {
+      stocks = stocks.filter(function(stock) {
+        return stock.company == selectedCompany;
+      });
+    }
+
+    var date;
+    var anyStock = stocks[0];
+    var anyPriceData = anyStock.price_history;
+    for (var aDate in anyPriceData) {
+      if (anyPriceData.hasOwnProperty(aDate)) {
+        if (!date || (avDateStringToDate(aDate) > avDateStringToDate(date))) {
+          date = aDate;
+        }
+      }
+    }
+    
+    if (!date) {
+      return;
+    }
+
+    var high = 0;
+    var low = 0;
+    var open = 0;
+    var close = 0;
+    for (var i=0; i<stocks.length; i++) {
+      var stock = stocks[i];
+      var priceData = stock.price_history;
+      var data = priceData[date];
+      if (data) {
+        high += data.High;
+        low += data.Low;
+        open += data.Open;
+        close += data.Close;
+      }
+    }
+
+    $scope.high  = '$' + high.toFixed(2);
+    $scope.low   = '$' + low.toFixed(2);
+    $scope.open  = '$' + open.toFixed(2);
+    $scope.close = '$' + close.toFixed(2);
+    $scope.aggrStatsDate = date;
   }
 
   function sortStocks(stocks) {
@@ -292,11 +347,38 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     return false;
   }
 
+  function prepareStockForClient(stock) {
+    addSentiment(stock);
+    splitPriceData(stock);
+  }
+
   function addSentiment(stock) {
     stock.recentSentiment = 'None';
     if (stock.history && stock.history.length > 0) {
       stock.recentSentiment = capitalizeFirstLetterOnly(stock.history[0].sentiment);
     }
+  }
+
+  function splitPriceData(stock) {
+
+    if (!stock) {
+      return;
+    }
+
+    var closing_price_history = {};
+    var opening_price_history = {};
+    var price_history = stock.price_history;
+    if (price_history) {
+      for (var date in price_history) {
+        if (price_history.hasOwnProperty(date)) {
+          var data = price_history[date];
+          opening_price_history[date] = data['Open'];
+          closing_price_history[date] = data['Close'];
+        }
+      }
+    }
+    stock.opening_price_history = opening_price_history;
+    stock.closing_price_history = closing_price_history;
   }
 
   /**
@@ -308,7 +390,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       var mostRecent = undefined;
       for (var i=0 ; i<stocks.length; i++) {
         var stock = stocks[i];
-        addSentiment(stock);
+        prepareStockForClient(stock);
         for (var x=0; x<stock.history.length; x++) {
           var article = stock.history[x];
           var date = new Date(article.date);
@@ -323,6 +405,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       sortStocks(stocks);
       $scope.stocks = stocks;
       if (haveStocks) {
+        updateAggregateStats();
         updateSuperStockData();
         updatePieChart($scope.superStockHistory);
         //space out page updates to prevent lag
@@ -361,7 +444,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
 
     for (var i=0; i<stocks.length; i++) {
       $scope.superStockHistory.push.apply($scope.superStockHistory, stocks[i].history);
-      $scope.superStockPriceHistory.push(stocks[i].price_history);
+      $scope.superStockPriceHistory.push(stocks[i].closing_price_history);
     }
   }
 
@@ -487,17 +570,17 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
    * Updates the line chart
    * @param {stock[].history} stocks
    */
-  function updateLineChart(history, price_history) {
-    var lineChartData = getLineChartData(history, price_history);
+  function updateLineChart(history, closing_price_history) {
+    var lineChartData = getLineChartData(history, closing_price_history);
     makeNewChart(lineChartData.labels, lineChartData.data, lineChartData.price, $scope.currentCompany);
   }
 
-  function getLineChartData(history, price_history) {
+  function getLineChartData(history, closing_price_history) {
 
-    if (Array.isArray(price_history)) {
+    if (Array.isArray(closing_price_history)) {
       var tempPriceHistory = {};
-      for (var x=0; x<price_history.length; x++) {
-        var singlePriceMap = price_history[x];
+      for (var x=0; x<closing_price_history.length; x++) {
+        var singlePriceMap = closing_price_history[x];
         for (var aDate in singlePriceMap) {
           if (singlePriceMap.hasOwnProperty(aDate)) {
             var totalPrice = tempPriceHistory[aDate];
@@ -509,10 +592,10 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
           }
         }
       }
-      price_history = tempPriceHistory;
+      closing_price_history = tempPriceHistory;
     }
 
-    var sortedList = convertPriceMapToList(price_history);
+    var sortedList = convertPriceMapToList(closing_price_history);
 
     var sentimentMap = {};//has overall sentiment of the day for a particular stock
     var articleCountmap = {};//has article count of the day for a particular stock
@@ -527,7 +610,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
       
       var date = history[i].date.substr(0, 10);
-      if (!price_history[date]) {
+      if (!closing_price_history[date]) {
         var pair = getMatchingDatePair(date, sortedList);
         if (pair) {
           date = pair.date;
@@ -554,7 +637,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     var prices = [];
     for (var labelInd=0; labelInd<labels.length; labelInd++) {
       var label = labels[labelInd];
-      var price = price_history[label];
+      var price = closing_price_history[label];
       prices.push(price.toFixed(2));
     }
 

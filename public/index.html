@@ -28,7 +28,15 @@
 
 <body ng-app="stockApp" ng-controller="MainController" class="fixed-nav sticky-footer bg-dark" id="page-top">
   <div id="header">
-    <h1>Watson Stock Advisor</h1>
+    <span ng-if="stocks.length > 0">
+      <span class="pull-left"><b>{{aggrStatsDate}}</b></span><br>
+      <span class="pull-left"><i>Close:</i>&nbsp;{{close}}</span>
+      <span class="pull-right"><i>High:</i>&nbsp;{{high}}</span>
+      <br>
+      <span class="pull-left"><i>Open:</i>&nbsp;{{open}}</span>
+      <span class="pull-right"><i>Low:</i>&nbsp;&nbsp;{{low}}</span>
+    </span>
+    <h1 >Watson Stock Advisor</h1>
   </div>
   <div class="content-wrapper">
     <div ng-show="showBanner" id="alert" class="alert alert-info">

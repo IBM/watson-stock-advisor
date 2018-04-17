@@ -13,7 +13,10 @@ body.sticky-footer {
 
 body #header {
   text-align: center;
-  color: white }
+  color: white;
+  padding: 15px;
+  padding-bottom: 0px;
+}
 
 .content-wrapper {
   min-height: calc(100vh - 56px);

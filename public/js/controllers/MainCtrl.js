@@ -276,7 +276,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       return Object.keys(price_history).sort(function(a, b) {
         return avDateStringToDate(b) - avDateStringToDate(a);
       });
-    }
+    };
 
     var allStocksHaveDate = function(theDate) {
       for (var x=0; x<stocks.length; x++) {
@@ -287,7 +287,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       }
 
       return true;
-    }
+    };
 
     var triedDates = [];
     var date; //the most recent date that all stocks have price data for

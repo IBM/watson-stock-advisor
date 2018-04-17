@@ -272,34 +272,59 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       });
     }
 
-    var date;
-    var anyStock = stocks[0];
-    var anyPriceData = anyStock.price_history;
-    for (var aDate in anyPriceData) {
-      if (anyPriceData.hasOwnProperty(aDate)) {
-        if (!date || (avDateStringToDate(aDate) > avDateStringToDate(date))) {
-          date = aDate;
+    var sortedDatesFromPriceHistory = function(price_history) {
+      return Object.keys(price_history).sort(function(a, b) {
+        return avDateStringToDate(b) - avDateStringToDate(a);
+      });
+    };
+
+    var allStocksHaveDate = function(theDate) {
+      for (var x=0; x<stocks.length; x++) {
+        var aStock = stocks[x];
+        if (!aStock.price_history[theDate]) {
+          return false;
         }
       }
-    }
-    
-    if (!date) {
-      return;
+
+      return true;
+    };
+
+    var triedDates = [];
+    var date; //the most recent date that all stocks have price data for
+    for (var y=0; y<stocks.length; y++) {
+      var oneStock = stocks[y];
+      //sort from most to least recent
+      var sortedDates = sortedDatesFromPriceHistory(oneStock.price_history);
+      for (var q=0; q<sortedDates.length; q++) {
+        var aDate = sortedDates[q];
+        if (triedDates.indexOf(aDate) == -1) {
+          triedDates.push(aDate);
+          if (allStocksHaveDate(aDate)) {
+            date = aDate;
+            break;
+          }
+        }
+      }
+      if (date) {
+        break;
+      }
     }
 
     var high = 0;
     var low = 0;
     var open = 0;
     var close = 0;
-    for (var i=0; i<stocks.length; i++) {
-      var stock = stocks[i];
-      var priceData = stock.price_history;
-      var data = priceData[date];
-      if (data) {
-        high += data.High;
-        low += data.Low;
-        open += data.Open;
-        close += data.Close;
+    if (date) {
+      for (var i=0; i<stocks.length; i++) {
+        var stock = stocks[i];
+        var priceData = stock.price_history;
+        var data = priceData[date];
+        if (data) {
+          high += data.High;
+          low += data.Low;
+          open += data.Open;
+          close += data.Close;
+        }
       }
     }
 

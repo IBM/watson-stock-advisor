@@ -22,6 +22,7 @@ function prepareDocForClient(doc) {
     company : doc.company,
     ticker  : doc.ticker,
     history : doc.history || [],
+    categories : doc.categories || [],
     price_history : doc.price_history || {}
   };
 }

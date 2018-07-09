@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/IBM/watson-stock-advisor.svg)](https://travis-ci.org/IBM/watson-stock-advisor)
 
+*Read this in other languages: [日本語](README-ja.md).*
+
 # Watson Stock Advisor
 
 In this Code Pattern, we will create a web app for monitoring sentiment, price, and news for individual listed stocks, using IBM Watson Discovery and CloudantDB as well as Nodejs and Alpha Vantage.

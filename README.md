@@ -177,20 +177,22 @@ Edit the `.env` file with the necessary settings.
 #### `env.sample:`
 
 ```
-# Replace the credentials here with your own.
-# Rename this file to .env before starting the app.
+# Copy this file to .env and replace the credentials with 
+# your own before starting the app.
 
 # Watson Discovery
-DISCOVERY_USERNAME="XXXXXXXX"
-DISCOVERY_PASSWORD="XXXXXXXXX"
-DISCOVERY_VERSION="v1"
-DISCOVERY_VERSION_DATE="2017-11-07"
+DISCOVERY_VERSION_DATE="2018-03-05"
 DISCOVERY_ENV_ID="system"
+DISCOVERY_URL=<add_discovery_url>
+## Un-comment and use either username+password or IAM apikey.
+# DISCOVERY_USERNAME=<add_discovery_username>
+# DISCOVERY_PASSWORD=<add_discovery_password>
+# DISCOVERY_IAM_APIKEY=<add_discovery_iam_apikey>
 
 # Cloudant
-CLOUDANT_USERNAME="XXXXXXXXX"
-CLOUDANT_PASSWORD="XXXXXXXXXXXXXXX"
-CLOUDANT_HOST="XXXXXXXXXXXXXX-bluemix.cloudant.com"
+CLOUDANT_USERNAME=<add_cloudant_username>
+CLOUDANT_PASSWORD=<add_cloudant_password>
+CLOUDANT_HOST=<add_cloudant_host>
 DB_NAME="stock-data"
 
 # App Config

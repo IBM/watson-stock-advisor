@@ -23,7 +23,7 @@
     "express": "^4.16.3",
     "method-override": "^2.3.10",
     "request": "^2.87.0",
-    "watson-developer-cloud": "^3.4.5"
+    "watson-developer-cloud": "^3.7.1"
   },
   "devDependencies": {
     "eslint": "^4.19.1",

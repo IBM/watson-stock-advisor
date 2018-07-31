@@ -19,13 +19,12 @@ const config = require('../../config.js');
 
 var cloudant;
 
-if (config.usingEnv) {
-  console.log('Initializing cloudant from env');
+if (config.usingEnv) {  
   cloudant = Cloudant({
-    account  : config.CLOUDANT.account,
-    key      : config.CLOUDANT.key,
+    account  : config.CLOUDANT.key,    
     password : config.CLOUDANT.password
   });
+  console.log('Successfully initialized cloudant');
 } else if (config.usingVCAP) {
   console.log('Initializing cloudant from VCAP');
   console.log('credentials url: ' + config.CLOUDANT.credentialsURL);

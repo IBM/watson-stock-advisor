@@ -15,10 +15,9 @@
  */
 
 const config = require('../../config');
-const Discovery = require('watson-developer-cloud/discovery/v1');
-const discovery = new Discovery({
-  version      : config.DISCOVERY.version,
-  version_date : config.DISCOVERY.version_date
+const DiscoveryV1 = require('watson-developer-cloud/discovery/v1');
+const discovery = new DiscoveryV1({
+  version: config.DISCOVERY.version_date
 });
 
 const NUM_DOCS_TO_QUERY = 5;

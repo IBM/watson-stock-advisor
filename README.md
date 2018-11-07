@@ -32,7 +32,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 ## Included Components
 
 * [Watson Discovery](https://www.ibm.com/watson/developercloud/discovery.html): A cognitive search and content analytics engine for applications to identify patterns, trends, and actionable insights.
-* [Cloudant NoSQL DB](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db): A fully managed data layer designed for modern web and mobile applications that leverages a flexible JSON schema.
+* [Cloudant NoSQL DB](https://console.bluemix.net/catalog/services/cloudant): A fully managed data layer designed for modern web and mobile applications that leverages a flexible JSON schema.
 
 ## Featured Technologies
 
@@ -106,8 +106,8 @@ $ git clone https://github.com/ibm/watson-stock-advisor
 
 Create the following services:
 
-  * [**Watson Discovery**](https://console.ng.bluemix.net/catalog/services/discovery)
-  * [**Cloudant NoSQL DB**](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db/)
+  * [**Watson Discovery**](https://console.bluemix.net/catalog/services/discovery)
+  * [**Cloudant NoSQL DB**](https://console.bluemix.net/catalog/services/cloudant)
 
 
 ### 3. Configure Watson Discovery and get credentials

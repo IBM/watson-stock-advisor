@@ -32,7 +32,7 @@
 ## 含まれるコンポーネント
 
 * [Watson Discovery](https://www.ibm.com/watson/developercloud/discovery.html): アプリケーションにパターン、傾向、アクションにつなげることのできる洞察を認識させるコグニティブ検索とコンテンツ分析エンジン。
-* [Cloudant NoSQL DB](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db): フレキシブルなJSONスキーマを活用するモダンWebとモバイルアプリケーションのための管理不要のフル・マネージド型の データベースサービス
+* [Cloudant NoSQL DB](https://cloud.ibm.com/catalog/services/cloudant-nosql-db): フレキシブルなJSONスキーマを活用するモダンWebとモバイルアプリケーションのための管理不要のフル・マネージド型の データベースサービス
 
 ## 注目のテクノロジー
 
@@ -62,7 +62,7 @@
 
 ## IBM Cloudへのデプロイ
 
-[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor)
+[![Deploy to IBM Cloud](https://cloud.ibm.com/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-stock-advisor)
 
 1. 上の ``Deploy to IBM Cloud`` ボタンをクリックし、 その後の画面で ``デプロイ`` をクリックしてください.
 
@@ -85,7 +85,7 @@
 
 ### デプロイしたアプリの環境情報を更新する
 
-1. https://console.bluemix.net/dashboard/apps/ にアクセスします
+1. https://cloud.ibm.com/dashboard/apps/ にアクセスします
 2. 先ほど新しく作成したアプリケーションの名前をクリックします。 
 3. 左側のメニューから'ランタイム'を選択します。
 4. ページの中央の'環境変数'を選択します。
@@ -114,8 +114,8 @@ $ git clone https://github.com/ibm/watson-stock-advisor
 
 以下のサービスを作成してくださいs:
 
-  * [**Watson Discovery**](https://console.ng.bluemix.net/catalog/services/discovery)
-  * [**Cloudant NoSQL DB**](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db/)
+  * [**Watson Discovery**](https://cloud.ibm.com/catalog/services/discovery)
+  * [**Cloudant NoSQL DB**](https://cloud.ibm.com/catalog/services/cloudant-nosql-db/)
 
 
 ### 3. Watson Discoveryの構成とサービス資格情報の取得
@@ -143,7 +143,7 @@ $ git clone https://github.com/ibm/watson-stock-advisor
 ### 4. Cloudant NoSQL DBの構成とサービス資格情報の取得
 
 (日本語訳注: 2番[IBM Cloud サービスの作成](#2-IBM-Cloud-サービスの作成)で実施していればリソースの作成は不要です )
-* console.bluemix.netにアクセス
+* cloud.ibm.comにアクセス
 * ``リソースの作成`` をクリック
 * ``cloudant nosql`` を検索
 * 検索の結果として、``Data & 分析`` の下に ``Cloudant`` が表示されるので選択します。

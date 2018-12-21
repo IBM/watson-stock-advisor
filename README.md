@@ -32,7 +32,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 ## Included Components
 
 * [Watson Discovery](https://www.ibm.com/watson/developercloud/discovery.html): A cognitive search and content analytics engine for applications to identify patterns, trends, and actionable insights.
-* [Cloudant NoSQL DB](https://console.bluemix.net/catalog/services/cloudant): A fully managed data layer designed for modern web and mobile applications that leverages a flexible JSON schema.
+* [Cloudant NoSQL DB](https://cloud.ibm.com/catalog/services/cloudant): A fully managed data layer designed for modern web and mobile applications that leverages a flexible JSON schema.
 
 ## Featured Technologies
 
@@ -55,7 +55,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 
 ## Deploy to IBM Cloud
 
-[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor)
+[![Deploy to IBM Cloud](https://cloud.ibm.com/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-stock-advisor)
 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 
@@ -77,7 +77,7 @@ If you do not have an IBM Cloud account yet, you will need to create one.
 
 ### Update the Environment of your deployed app
 
-1. Navigate to https://console.bluemix.net/dashboard/apps/
+1. Navigate to https://cloud.ibm.com/dashboard/apps/
 2. Located and click on your newly created application (not the 'Route' link)
 3. Select 'Runtime' in the left menu
 4. Select the 'Environment Variables' tab in the middle of the page
@@ -106,8 +106,8 @@ $ git clone https://github.com/ibm/watson-stock-advisor
 
 Create the following services:
 
-  * [**Watson Discovery**](https://console.bluemix.net/catalog/services/discovery)
-  * [**Cloudant NoSQL DB**](https://console.bluemix.net/catalog/services/cloudant)
+  * [**Watson Discovery**](https://cloud.ibm.com/catalog/services/discovery)
+  * [**Cloudant NoSQL DB**](https://cloud.ibm.com/catalog/services/cloudant)
 
 
 ### 3. Configure Watson Discovery and get credentials
@@ -133,7 +133,7 @@ Create the following services:
 
 ### 4. Provision Cloudant NoSQL DB and Get Credentials
 
-* Navigate to console.bluemix.net
+* Navigate to cloud.ibm.com
 * Click ``Create Resource``
 * Search for ``cloudant nosql``
 * Select the only search result under ``Data & Analytics`` called ``Cloudant NoSQL DB``

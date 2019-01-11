@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/IBM/watson-stock-advisor.svg)](https://travis-ci.org/IBM/watson-stock-advisor)
+[![Build Status](https://api.travis-ci.org/IBM/watson-stock-advisor.svg)](https://travis-ci.org/IBM/watson-stock-advisor)
 
 *Read this in other languages: [日本語](README-ja.md).*
 
@@ -32,7 +32,7 @@ When the reader has completed this Code Pattern, they will understand how to:
 ## Included Components
 
 * [Watson Discovery](https://www.ibm.com/watson/developercloud/discovery.html): A cognitive search and content analytics engine for applications to identify patterns, trends, and actionable insights.
-* [Cloudant NoSQL DB](https://console.bluemix.net/catalog/services/cloudant): A fully managed data layer designed for modern web and mobile applications that leverages a flexible JSON schema.
+* [Cloudant NoSQL DB](https://cloud.ibm.com/catalog/services/cloudant): A fully managed data layer designed for modern web and mobile applications that leverages a flexible JSON schema.
 
 ## Featured Technologies
 
@@ -55,7 +55,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 
 ## Deploy to IBM Cloud
 
-[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor)
+[![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-stock-advisor)
 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 
@@ -77,7 +77,7 @@ If you do not have an IBM Cloud account yet, you will need to create one.
 
 ### Update the Environment of your deployed app
 
-1. Navigate to https://console.bluemix.net/dashboard/apps/
+1. Navigate to https://cloud.ibm.com/dashboard/apps/
 2. Located and click on your newly created application (not the 'Route' link)
 3. Select 'Runtime' in the left menu
 4. Select the 'Environment Variables' tab in the middle of the page
@@ -91,7 +91,7 @@ If you do not have an IBM Cloud account yet, you will need to create one.
 3. [Configure Watson Discovery and Get Credentials](#3-configure-watson-discovery-and-get-credentials)
 4. [Provision Cloudant NoSQL DB and Get Credentials](#4-provision-cloudant-nosql-db-and-get-credentials)
 5. [Web Portal](#5-web-portal)
-6. [Add IBM Cloud credentials to .env](#3-add-ibm-cloud-services-credentials-to-env-file)
+6. [Add IBM Cloud Services Credentials to .env file](#6-add-ibm-cloud-services-credentials-to-env-file)
 7. [Run the application](#7-run-the-application)
 
 ### 1. Clone the repo
@@ -106,8 +106,8 @@ $ git clone https://github.com/ibm/watson-stock-advisor
 
 Create the following services:
 
-  * [**Watson Discovery**](https://console.bluemix.net/catalog/services/discovery)
-  * [**Cloudant NoSQL DB**](https://console.bluemix.net/catalog/services/cloudant)
+  * [**Watson Discovery**](https://cloud.ibm.com/catalog/services/discovery)
+  * [**Cloudant NoSQL DB**](https://cloud.ibm.com/catalog/services/cloudant)
 
 
 ### 3. Configure Watson Discovery and get credentials
@@ -133,7 +133,7 @@ Create the following services:
 
 ### 4. Provision Cloudant NoSQL DB and Get Credentials
 
-* Navigate to console.bluemix.net
+* Navigate to cloud.ibm.com
 * Click ``Create Resource``
 * Search for ``cloudant nosql``
 * Select the only search result under ``Data & Analytics`` called ``Cloudant NoSQL DB``
@@ -231,12 +231,12 @@ The portal should now be accessible on port ``8080`` (or another port specified 
 
 ## Learn more
 
-* **Artificial Intelligence Code Patterns**: Enjoyed this Code Pattern? Check out our other [AI Code Patterns](https://developer.ibm.com/code/technologies/artificial-intelligence/).
+* **Artificial Intelligence Code Patterns**: Enjoyed this Code Pattern? Check out our other [AI Code Patterns](https://developer.ibm.com/technologies/artificial-intelligence/).
 * **AI and Data Code Pattern Playlist**: Bookmark our [playlist](https://www.youtube.com/playlist?list=PLzUbsvIyrNfknNewObx5N7uGZ5FKH0Fde) with all of our Code Pattern videos
 * **With Watson**: Want to take your Watson app to the next level? Looking to utilize Watson Brand assets? [Join the With Watson program](https://www.ibm.com/watson/with-watson/) to leverage exclusive brand, marketing, and tech resources to amplify and accelerate your Watson embedded commercial solution.
 
 ## License
 
-This code pattern is licensed under the Apache Software License, Version 2.  Separate third party code objects invoked within this code pattern are licensed by their respective providers pursuant to their own separate licenses. Contributions are subject to the [Developer Certificate of Origin, Version 1.1 (DCO)](https://developercertificate.org/) and the [Apache Software License, Version 2](http://www.apache.org/licenses/LICENSE-2.0.txt).
+This code pattern is licensed under the Apache Software License, Version 2.  Separate third party code objects invoked within this code pattern are licensed by their respective providers pursuant to their own separate licenses. Contributions are subject to the [Developer Certificate of Origin, Version 1.1 (DCO)](https://developercertificate.org/) and the [Apache Software License, Version 2](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
-[Apache Software License (ASL) FAQ](http://www.apache.org/foundation/license-faq.html#WhatDoesItMEAN)
+[Apache Software License (ASL) FAQ](https://www.apache.org/foundation/license-faq.html#WhatDoesItMEAN)

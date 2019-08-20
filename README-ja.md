@@ -62,7 +62,7 @@
 
 ## IBM Cloudへのデプロイ
 
-[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor)
+[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/OksanaFirtych/watson-stock-advisor.git)
 
 1. 上の ``Deploy to IBM Cloud`` ボタンをクリックし、 その後の画面で ``デプロイ`` をクリックしてください.
 
@@ -107,7 +107,7 @@
 `watson-stock-advisor` リポジトリをローカル環境にクローンします。ターミナル(コマンドウィンドウ)にて以下のコマンドを実行してください:
 
 ```
-$ git clone https://github.com/ibm/watson-stock-advisor
+$ git clone https://github.com/OksanaFirtych/watson-stock-advisor.git
 ```
 
 ### 2. IBM Cloud サービスの作成

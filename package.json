@@ -4,12 +4,12 @@
   "description": "Watson Stock Advisor",
   "main": "server.js",
   "bugs": {
-    "url": "https://github.com/IBM/watson-stock-advisor/issues"
+    "url": "https://github.com/OksanaFirtych/watson-stock-advisor.git/issues"
   },
-  "homepage": "https://github.com/IBM/watson-stock-advisor#readme",
+  "homepage": "https://github.com/OksanaFirtych/watson-stock-advisor.git#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IBM/watson-stock-advisor.git"
+    "url": "git+https://github.com/OksanaFirtych/watson-stock-advisor.git"
   },
   "license": "Apache-2.0",
   "dependencies": {

@@ -55,7 +55,7 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 
 ## Deploy to IBM Cloud
 
-[![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-stock-advisor)
+[![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/OksanaFirtych/watson-stock-advisor.git)
 
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 
@@ -99,7 +99,7 @@ If you do not have an IBM Cloud account yet, you will need to create one.
 Clone the `watson-stock-advisor` locally. In a terminal, run:
 
 ```
-$ git clone https://github.com/ibm/watson-stock-advisor
+$ git clone https://github.com/OksanaFirtych/watson-stock-advisor.git
 ```
 
 ### 2. Create IBM Cloud services

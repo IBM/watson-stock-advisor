@@ -2,3 +2,6 @@
 .env
 public/libs
 node_modules
+
+ui/node_modules
+ui/public

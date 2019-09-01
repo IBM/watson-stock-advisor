@@ -1,0 +1,87 @@
+{
+    "extends": "react-app",
+    "parser": "babel-eslint",
+    "globals": {
+        "document": false,
+        "window": false,
+        "fetch": false,
+    },
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true,
+    },
+    "rules": {
+        "linebreak-style": "off",
+        "no-console": "warn",
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "import/prefer-default-export": "off",
+        "getter-return": "off",
+        "no-trailing-spaces": "error",
+        "object-curly-newline": [
+            "error",
+            {
+                "minProperties": 2,
+                "consistent": true
+            }
+        ],
+        "array-element-newline": [
+            "error",
+            {
+                "minItems": 2
+            }
+        ],
+        "jsx-quotes": [
+            "error",
+            "prefer-double"
+        ],
+        "max-len": [
+            "warn",
+            {
+                "ignoreComments": true,
+                "ignoreStrings": true,
+                "code": 100
+            }
+        ],
+        "no-plusplus": [
+            2,
+            {
+                "allowForLoopAfterthoughts": true
+            }
+        ],
+        "no-underscore-dangle": "off",
+        "consistent-return": "error",
+        "react/no-did-mount-set-state": "error",
+        "react/prefer-stateless-function": "warn",
+        "react/jsx-first-prop-new-line": [
+            "error",
+            "multiline"
+        ],
+        "class-methods-use-this": "warn",
+        "comma-dangle": [
+            "error",
+            "always-multiline"
+        ],
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "object-property-newline": [
+            "error",
+            {
+                "allowMultiplePropertiesPerLine": false
+            }
+        ],
+        "no-debugger": "error"
+    }
+}

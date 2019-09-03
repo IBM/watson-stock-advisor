@@ -62,9 +62,14 @@
 
 ## IBM Cloudへのデプロイ
 
-[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/IBM/watson-stock-advisor)
+[![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-stock-advisor)
 
-1. 上の ``Deploy to IBM Cloud`` ボタンをクリックし、 その後の画面で ``デプロイ`` をクリックしてください.
+1. 上の ``Deploy to IBM Cloud`` ボタンをクリックします。
+- `リージョンの選択:` は`ダラス`にします。
+- ``Delivery Pipeline`` をクリックし、 `IBM Cloud API キー:`　の右側にある``作成``ボタンをクリックします。
+- `全アクセス権限を持つ新規 API キーの作成`のウィンドウが表示されるので、``作成``ボタンをクリックします。
+- 最後に右上の``作成``ボタンをクリックします。
+
 
 <!--optional step-->
 2. ツールチェーンでアプリがデプロイ状況を見るためには、``Delivery Pipeline`` をクリックします。アプリがデプロイされたら ``アプリの表示`` をクリックすると、このアプリの動作が確認できます。
@@ -85,7 +90,7 @@
 
 ### デプロイしたアプリの環境情報を更新する
 
-1. https://console.bluemix.net/dashboard/apps/ にアクセスします
+1. https://cloud.ibm.com/dashboard/apps/ にアクセスします
 2. 先ほど新しく作成したアプリケーションの名前をクリックします。 
 3. 左側のメニューから'ランタイム'を選択します。
 4. ページの中央の'環境変数'を選択します。
@@ -114,8 +119,8 @@ $ git clone https://github.com/ibm/watson-stock-advisor
 
 以下のサービスを作成してくださいs:
 
-  * [**Watson Discovery**](https://console.ng.bluemix.net/catalog/services/discovery)
-  * [**Cloudant NoSQL DB**](https://console.ng.bluemix.net/catalog/services/cloudant-nosql-db/)
+  * [**Watson Discovery**](https://cloud.ibm.com/catalog/services/discovery)
+  * [**Cloudant NoSQL DB**](https://cloud.ibm.com/catalog/services/cloudant)
 
 
 ### 3. Watson Discoveryの構成とサービス資格情報の取得
@@ -185,20 +190,22 @@ $ cp env.sample .env
 #### `env.sample:`
 
 ```
-# Replace the credentials here with your own.
-# Rename this file to .env before starting the app.
+# Copy this file to .env and replace the credentials with 
+# your own before starting the app.
 
 # Watson Discovery
-DISCOVERY_USERNAME="XXXXXXXX"
-DISCOVERY_PASSWORD="XXXXXXXXX"
-DISCOVERY_VERSION="v1"
-DISCOVERY_VERSION_DATE="2017-11-07"
+DISCOVERY_VERSION_DATE="2018-03-05"
 DISCOVERY_ENV_ID="system"
+DISCOVERY_URL=<add_discovery_url>
+## Un-comment and use either username+password or IAM apikey.
+# DISCOVERY_USERNAME=<add_discovery_username>
+# DISCOVERY_PASSWORD=<add_discovery_password>
+# DISCOVERY_IAM_APIKEY=<add_discovery_iam_apikey>
 
 # Cloudant
-CLOUDANT_USERNAME="XXXXXXXXX"
-CLOUDANT_PASSWORD="XXXXXXXXXXXXXXX"
-CLOUDANT_HOST="XXXXXXXXXXXXXX-bluemix.cloudant.com"
+CLOUDANT_USERNAME=<add_cloudant_username>
+CLOUDANT_PASSWORD=<add_cloudant_password>
+CLOUDANT_HOST=<add_cloudant_host>
 DB_NAME="stock-data"
 
 # App Config

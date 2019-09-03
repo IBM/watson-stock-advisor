@@ -64,7 +64,12 @@
 
 [![Deploy to IBM Cloud](https://cloud.ibm.com/devops/setup/deploy/button.png)](https://cloud.ibm.com/devops/setup/deploy?repository=https://github.com/IBM/watson-stock-advisor)
 
-1. 上の ``Deploy to IBM Cloud`` ボタンをクリックし、 その後の画面で ``デプロイ`` をクリックしてください.
+1. 上の ``Deploy to IBM Cloud`` ボタンをクリックします。
+- `リージョンの選択:` は`ダラス`にします。
+- ``Delivery Pipeline`` をクリックし、 `IBM Cloud API キー:`　の右側にある``作成``ボタンをクリックします。
+- `全アクセス権限を持つ新規 API キーの作成`のウィンドウが表示されるので、``作成``ボタンをクリックします。
+- 最後に右上の``作成``ボタンをクリックします。
+
 
 <!--optional step-->
 2. ツールチェーンでアプリがデプロイ状況を見るためには、``Delivery Pipeline`` をクリックします。アプリがデプロイされたら ``アプリの表示`` をクリックすると、このアプリの動作が確認できます。

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {} from 'recharts';
 import ReactResizeDetector from 'react-resize-detector';
@@ -54,10 +54,8 @@ const Container = styled.div`
 
 const CustomizedDot = (props) => {
     const {
-        cx, cy, stroke, payload, value,
+        cx, cy, payload,
     } = props;
-
-    console.log(props);
 
     if (payload.sentiment === 'negative') {
         return (
@@ -101,7 +99,7 @@ const CustomizedAxisTick = ({ x, y, stroke, payload, }) =>
             textAnchor="end"
             fill="#666"
             transform="rotate(-35)"
-            font-size="10"
+            fontSize="10"
         >{payload.value}</text>
     </g>;
 
@@ -109,55 +107,48 @@ const Trend = ({
     selectedItem,
     data,
     updatedDate,
-}) => {
-    const [activeIndex, setActiveIndex] = useState(0);
-    const onPieEnter = (data, index) => {
-        setActiveIndex(index);
-    };
-
-    return <Container>
-        <div className="heading">
-            <h2>Trend Over Time</h2>
-            <div>for {selectedItem.title || 'Your Portfolio'}</div>
-        </div>
-        <div className="chart_container">
-            <ReactResizeDetector handleWidth handleHeight>
-                {({ width, height }) => {
-                    if (!width || !height) {
-                        return <div></div>;
-                    }
-                    return <LineChart
-                        width={width}
-                        height={height}
-                        data={data}
-                        margin={{
-                            top: 10,
-                            right: 10,
-                            left: 10,
-                            bottom: 10,
-                        }}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis
-                            dataKey="date"
-                            tick={<CustomizedAxisTick />}
-                            height={80}
-                        />
-                        <YAxis />
-                        <Tooltip />
-                        <Line
-                            type="monotone"
-                            dataKey="pv"
-                            stroke={ colors.textYellow }
-                            dot={<CustomizedDot />}
-                        />
-                    </LineChart>;
-                }}
-            </ReactResizeDetector>
-        </div>
-        <div className="date">Updated: {moment(updatedDate).format('LLLL')}</div>
-    </Container>
-};
+}) => (<Container>
+    <div className="heading">
+        <h2>Trend Over Time</h2>
+        <div>for {selectedItem.title || 'Your Portfolio'}</div>
+    </div>
+    <div className="chart_container">
+        <ReactResizeDetector handleWidth handleHeight>
+            {({ width, height }) => {
+                if (!width || !height) {
+                    return <div></div>;
+                }
+                return <LineChart
+                    width={width}
+                    height={height}
+                    data={data}
+                    margin={{
+                        top: 10,
+                        right: 10,
+                        left: 10,
+                        bottom: 10,
+                    }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                        dataKey="date"
+                        tick={<CustomizedAxisTick />}
+                        height={80}
+                    />
+                    <YAxis />
+                    <Tooltip />
+                    <Line
+                        type="monotone"
+                        dataKey="pv"
+                        stroke={ colors.textYellow }
+                        dot={<CustomizedDot />}
+                    />
+                </LineChart>;
+            }}
+        </ReactResizeDetector>
+    </div>
+    <div className="date">Updated: {moment(updatedDate).format('LLLL')}</div>
+</Container>);
 
 Trend.defaultProps = {
     selectedItem: {},

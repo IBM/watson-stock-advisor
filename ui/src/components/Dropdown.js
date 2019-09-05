@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
     UncontrolledDropdown,
@@ -8,6 +8,10 @@ import {
     Input,
     Button,
 } from 'reactstrap';
+import { connect } from 'react-redux';
+
+import { addCompany } from '../actions/portfolio';
+import { getCompanyList } from '../datasources/api';
 
 import { colors } from '../constants/style';
 
@@ -35,6 +39,8 @@ const StyledDropdown = styled(UncontrolledDropdown)`
     }
 
     .dropdown-menu {
+        
+        
         .dropdown-item {
             text-transform: uppercase;
             font-size: 14px;
@@ -56,60 +62,79 @@ const StyledDropdown = styled(UncontrolledDropdown)`
                 border: 0 !important;
             }
         }
+
+        .dropdown-menu {
+            display: block;
+            max-height: 500px;
+            overflow-y: auto;
+            transform: none !important;
+        }
     }
 `;
 
 const Dropdown = ({
-    list,
     onSelectItem,
     onAdd,
 }) => {
     const [filter, setFilter] = useState('');
-    const [selectedItemId, setSelectedItemId] = useState(list[0].id);
+    const [selectedItemTicker, setSelectedItemTicker] = useState();
+    const [list, setList] = useState([]);
 
-    const selectedItem = list.find(({ id }) => id === selectedItemId);
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await getCompanyList();
+            setList(result);
+            setSelectedItemTicker(result[0].ticker);
+        };
+        fetchData();
+    }, []);
+
+    const selectedItem = list.find(({ ticker }) => ticker === selectedItemTicker) || {};
+
+    const selectItem = (ticker) => (e) => {
+        e.stopPropagation();
+        setSelectedItemTicker(ticker);
+        onSelectItem(ticker);
+    };
+
+    const addClick = () => {
+        onAdd(selectedItem);
+    };
+
     return (<Container>
         <StyledDropdown>
             <DropdownToggle caret>
-                {selectedItem.title}
+                {selectedItem.name}
             </DropdownToggle>
             <DropdownMenu>
                 <Input
                     placeholder="filter companies"
                     onChange={e => setFilter(e.target.value)}
                 />
-                {list.filter(({ title }) => title.toLowerCase().includes(filter)).map(item => (
+                {list.filter(({ name }) => name.toLowerCase().includes(filter)).map(item => (
                     <DropdownItem
-                        key={`dropdownitem_${item.id}`}
-                        onClick={() => {
-                            setSelectedItemId(item.id);
-                            onSelectItem(item.id);
-                        }}
-                    >{item.title}</DropdownItem>
+                        key={`dropdownitem_${item.ticker}`}
+                        onClick={selectItem(item.ticker)}
+                    >{item.name}</DropdownItem>
                 ))}
             </DropdownMenu>
         </StyledDropdown>
-        <Button color="info">Add</Button>
+        <Button
+            color="info"
+            onClick={addClick}
+        >Add</Button>
     </Container>);
 }
 
 Dropdown.defaultProps = {
-    list: [
-        {
-            title: 'Share 1',
-            id: '1',
-        },
-        {
-            title: 'Share 2',
-            id: '2',
-        },
-        {
-            title: 'Share 3',
-            id: '3',
-        },
-    ],
     onSelectItem: () => {},
     onAdd: () => { },
 }
 
-export default Dropdown;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = {
+    onAdd: addCompany,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dropdown);

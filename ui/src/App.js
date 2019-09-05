@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import GlobalStyle from './globalStyle';
 import { colors } from './constants/style';
 
+import { initAction } from './actions/portfolio';
+
 import Header from './components/Header';
 import Nav from './components/Nav';
-import Footer from './components/Footer';
 import SidePanel from './components/SidePanel';
 import Dashboard from './components/Dashboard';
 
@@ -26,6 +28,10 @@ const Container = styled.div`
 `;
 
 class App extends Component {
+  componentDidMount() {
+    this.props.onInit();
+  }
+
   render() {
     return (
       <Container>
@@ -42,4 +48,10 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = {
+  onInit: initAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

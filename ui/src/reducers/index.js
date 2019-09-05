@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import stock from './stock';
+import portfolio from './portfolio';
 
 export default combineReducers({
-  stock,
+  portfolio,
 });

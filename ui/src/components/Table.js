@@ -13,8 +13,17 @@ import {
     ModalFooter,
 } from 'reactstrap';
 import ReactResizeDetector from 'react-resize-detector';
+import { connect } from 'react-redux';
 
 import { colors } from '../constants/style';
+import {
+    portfolioTable,
+    selectedShareId,
+} from '../selectors/portfolio';
+import {
+    selectShare,
+    deleteCompany,
+} from '../actions/portfolio';
 
 const Container = styled.div`
     position: relative;
@@ -45,6 +54,13 @@ const Container = styled.div`
         border: 0;
         color: ${colors.textGrey};
         font-size: 14px;
+
+        .clickable_cell {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
 
         .rt-th {
             border-right: 0 !important;
@@ -128,6 +144,7 @@ const Table = ({
     onDeleteItem,
 }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const selectedItem = list.find(({ id }) => id === selectedItemId);
 
     const closeDialog = () => {
         setIsDialogOpen(false);
@@ -135,11 +152,9 @@ const Table = ({
 
     const deleteItem = () => {
         closeDialog();
-        onDeleteItem(selectedItemId);
+        onDeleteItem(selectedItem);
     };
-
-    const selectedItem = list.find(({ id }) => id === selectedItemId);
-
+    
     return (<Container>
         <div className="heading">
             <h2>Your portfolio</h2>
@@ -151,7 +166,7 @@ const Table = ({
                         showPagination={false}
                         resizable={false}
                         data={list}
-                        defaultPageSize={list.length}
+                        pageSize={list.length}
                         getTrProps={(state, { original }) => ({
                             className: original.id === selectedItemId ? 'selected' : '',
                         })}
@@ -174,17 +189,26 @@ const Table = ({
                             {
                                 Header: 'Company',
                                 accessor: 'title',
-                                Cell: props => <span>{props.value}</span>
+                                Cell: ({
+                                    value,
+                                    original,
+                                }) => (<div
+                                    className="clickable_cell"
+                                    onClick={() => { onSelectItem(original.id) }}
+                                >{value}</div>)
                             },
                             {
                                 Header: 'Sentiment',
                                 accessor: 'sentiment',
                                 Cell: ({
                                     value,
-                                    origin,
-                                }) => <span className={`sentiment_label ${value}`}>
-                                        {value}
-                                    </span>,
+                                    original,
+                                }) => (<div
+                                    className="clickable_cell"
+                                    onClick={() => { onSelectItem(original.id) }}
+                                ><span className={`sentiment_label ${value}`}>
+                                    {value}
+                                </span></div>),
                                 width: 105,
                             },
                         ]}
@@ -210,41 +234,20 @@ const Table = ({
 };
 
 Table.defaultProps = {
-    list: [
-        {
-            id: '1',
-            title: 'Share 1',
-            sentiment: 'positive',
-        },
-        {
-            id: '2',
-            title: 'Share 2',
-            sentiment: 'negative',
-        },
-        {
-            id: '3',
-            title: 'Share 3',
-            sentiment: 'neutral',
-        },
-        {
-            id: '4',
-            title: 'Share 4',
-            sentiment: 'positive',
-        },
-        {
-            id: '5',
-            title: 'Share 5',
-            sentiment: 'positive',
-        },
-        {
-            id: '6',
-            title: 'Share 6',
-            sentiment: 'positive',
-        },
-    ],
-    selectedItemId: '2',
+    list: [],
+    selectedItemId: null,
     onSelectItem: () => {},
     onDeleteItem: () => {},
 };
 
-export default Table;
+const mapStateToProps = (state) => ({
+    list: portfolioTable(state),
+    selectedItemId: selectedShareId(state),
+});
+
+const mapDispatchToProps = {
+    onSelectItem: selectShare,
+    onDeleteItem: deleteCompany,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

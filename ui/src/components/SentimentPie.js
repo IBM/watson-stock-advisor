@@ -7,8 +7,19 @@ import {
 } from 'recharts';
 import ReactResizeDetector from 'react-resize-detector';
 import moment from 'moment';
+import { connect } from 'react-redux';
 
 import { colors } from '../constants/style';
+import {
+    getSelectedCompanyName,
+    getPieChart,
+} from '../selectors/portfolio';
+
+const colorMap = {
+    'positive': colors.green,
+    'negative': colors.red,
+    'neutral': colors.textGrey,
+};
 
 const Container = styled.div`
     position: relative;
@@ -93,7 +104,7 @@ const renderActiveShape = (props) => {
 };
 
 const SentimentPie = ({
-    selectedItem,
+    selectedItemName,
     data,
     updatedDate,
 }) => {
@@ -102,10 +113,15 @@ const SentimentPie = ({
         setActiveIndex(index);
     };
 
+    const coloredData = data.map(item => ({
+        ...item,
+        fill: colorMap[item.name],
+    }));
+
     return <Container>
         <div className="heading">
             <h2>Sentiment Breakdown</h2>
-            <div>for {selectedItem.title || 'Your Portfolio'}</div>
+            <div>for {selectedItemName}</div>
         </div>
         <div className="chart_container">
             <ReactResizeDetector handleWidth handleHeight>
@@ -119,10 +135,10 @@ const SentimentPie = ({
                             height={height}
                         >
                             <Pie
-                                labels={data.map(({ name }) => name)}
+                                labels={coloredData.map(({ name }) => name)}
                                 activeIndex={activeIndex}
                                 activeShape={renderActiveShape}
-                                data={data}
+                                data={coloredData}
                                 cx={width/2}
                                 cy={height/2 - 10}
                                 innerRadius={Math.min(width, height) / 4 - 10}
@@ -141,13 +157,18 @@ const SentimentPie = ({
 };
 
 SentimentPie.defaultProps = {
-    selectedItem: {},
+    selectedItemName: 'Your Portfolio',
     data: [
         { name: 'Positive', value: 29, fill: colors.green, },
         { name: 'Negative', value: 4, fill: colors.red, },
         { name: 'Neutral', value: 6, fill: colors.textGrey, },
     ],
     updatedDate: new Date(),
-}
+};
 
-export default SentimentPie;
+const mapStateToProps = (state) => ({
+    selectedItemName: getSelectedCompanyName(state),
+    data: getPieChart(state),
+});
+
+export default connect(mapStateToProps, {})(SentimentPie);

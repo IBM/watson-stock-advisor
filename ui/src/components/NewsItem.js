@@ -143,22 +143,4 @@ const NewsItem = ({
     </Container>
 );
 
-NewsItem.defaultProps = {
-    image: 'https://isme.ie/wp-content/uploads/2018/07/banner_add_news.jpg',
-    title: 'Analysts Expect AAR Corp. (NYSE:AIR) to Post $0.52 Earnings Per Share',
-    url: 'https://google.com',
-    params: {
-        source: 'Mayfield Recorder',
-        company: '1St Source Corp ',
-        sentiment: 'positive',
-    },
-    date: new Date().getTime(),
-    tags: [
-        'company',
-        'operating systems',
-        'bankruptcy',
-        'buying and selling homes',
-    ]
-}
-
 export default NewsItem;

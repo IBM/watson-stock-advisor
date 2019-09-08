@@ -35,6 +35,7 @@ export const addCompany = (item) => async (dispatch, getState) => {
             dispatch(addCompanyFailed(item, data.error));
         } else {
             dispatch(addCompanySuccess(item, data));
+            dispatch(selectShare(data.ticker));
         }
     } catch (e) {
         alert(`Can't add ${item.name} due to service error`);
@@ -47,7 +48,6 @@ const porflolioLoaded = createAction(PORTFOLIO_LIST_LOAD_SUCCESS);
 export const initAction = () => async (dispatch, getState) => {
     try {
         const data = await getPortfolio();
-        console.log(data);
         dispatch(porflolioLoaded(data));
     } catch (e) {
         alert(`Can't load you portfolio due to service error`);
@@ -61,7 +61,6 @@ const deleteCompanySuccess = createAction(DELETE_COMPANY_SUCCESS, item => item);
 const deleteCompanyFailed = createAction(DELETE_COMPANY_FAILED, item => item);
 
 export const deleteCompany = (item) => async (dispatch, getState) => {
-    console.log('deleteCompany', item);
     dispatch(deleteCompanyIntent(item.id));
     try {
         await deleteCompanyApi(item.name);

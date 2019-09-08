@@ -11,8 +11,13 @@ import {
     CartesianGrid,
     Tooltip,
 } from 'recharts';
+import { connect } from 'react-redux';
 
 import { colors } from '../constants/style';
+import {
+    getSelectedCompanyName,
+    getTrends,
+} from '../selectors/portfolio';
 
 const Container = styled.div`
     position: relative;
@@ -57,13 +62,21 @@ const CustomizedDot = (props) => {
         cx, cy, payload,
     } = props;
 
+    const {
+        sentiment,
+        value
+    } = payload;
+
+    const radius = 2 + 4 * Math.abs(value);
+    const size = 2 * radius;
+
     if (payload.sentiment === 'negative') {
         return (
             <svg
-                x={cx - 8}
-                y={cy - 8}
-                width={16}
-                height={16}
+                x={cx - radius}
+                y={cy - radius}
+                width={size}
+                height={size}
                 fill={colors.red}
                 viewBox="0 0 1024 1024"
             >
@@ -75,10 +88,10 @@ const CustomizedDot = (props) => {
     if (payload.sentiment === 'positive') {
         return (
             <svg
-                x={cx - 8}
-                y={cy - 8}
-                width={16}
-                height={16}
+                x={cx - radius}
+                y={cy - radius}
+                width={size}
+                height={size}
                 fill={colors.green}
                 viewBox="0 0 1024 1024"
             >
@@ -104,13 +117,13 @@ const CustomizedAxisTick = ({ x, y, stroke, payload, }) =>
     </g>;
 
 const Trend = ({
-    selectedItem,
+    selectedItemName,
     data,
     updatedDate,
 }) => (<Container>
     <div className="heading">
         <h2>Trend Over Time</h2>
-        <div>for {selectedItem.title || 'Your Portfolio'}</div>
+        <div>for {selectedItemName}</div>
     </div>
     <div className="chart_container">
         <ReactResizeDetector handleWidth handleHeight>
@@ -139,7 +152,7 @@ const Trend = ({
                     <Tooltip />
                     <Line
                         type="monotone"
-                        dataKey="pv"
+                        dataKey="price"
                         stroke={ colors.textYellow }
                         dot={<CustomizedDot />}
                     />
@@ -151,37 +164,14 @@ const Trend = ({
 </Container>);
 
 Trend.defaultProps = {
-    selectedItem: {},
+    selectedItemName: 'Your portfolio',
     updatedDate: new Date(),
-    data: [
-        {
-            date: '2019-08-01', uv: 4000, pv: 2400,
-            sentiment: 'positive',
-        },
-        {
-            date: '2019-08-02', uv: 3000, pv: 1398,
-            sentiment: 'negative',
-        },
-        {
-            date: '2019-08-03', uv: 2000, pv: 9800,
-            sentiment: 'positive',
-        },
-        {
-            date: '2019-08-04', uv: 2780, pv: 3908,
-            sentiment: 'negative',
-        },
-        {
-            date: '2019-08-05', uv: 1890, pv: 4800,
-            sentiment: 'negative',
-        },
-        {
-            date: '2019-08-06', uv: 2390, pv: 3800,
-        },
-        {
-            date: '2019-08-07', uv: 3490, pv: 4300,
-            sentiment: 'positive',
-        },
-    ],
+    data: [],
 }
 
-export default Trend;
+const mapStateToProps = (state) => ({
+    selectedItemName: getSelectedCompanyName(state),
+    data: getTrends(state),
+});
+
+export default connect(mapStateToProps, {})(Trend);

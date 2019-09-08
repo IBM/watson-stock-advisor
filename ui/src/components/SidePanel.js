@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 import { colors } from '../constants/style';
+import { getSelectedCompanyName } from '../selectors/portfolio';
+import { getNewsList } from '../selectors/news';
 
 import Summary from './Summary';
 import NewsItem from './NewsItem';
@@ -46,7 +49,7 @@ const Container = styled.aside`
 `;
 
 const SidePanel = ({
-    selectedTitle,
+    selectedItemName,
     newsList,
 }) => (
     <Container>
@@ -54,7 +57,7 @@ const SidePanel = ({
         <div className="news_list" >
             <div className="heading">
                 <h2>Recent news</h2>
-                <div>for {selectedTitle}</div>
+                    <div>for {selectedItemName}</div>
             </div>
             <div className="news">
                 {newsList.map(item => <NewsItem
@@ -67,7 +70,7 @@ const SidePanel = ({
 );
 
 SidePanel.defaultProps = {
-    selectedTitle: 'Your Portfolio',
+    selectedItemName: 'Your Portfolio',
     newsList: [
         { id: '1' },
         { id: '2' },
@@ -80,4 +83,9 @@ SidePanel.defaultProps = {
     ],
 }
 
-export default SidePanel;
+const mapStateToProps = (state) => ({
+    selectedItemName: getSelectedCompanyName(state),
+    newsList: getNewsList(state),
+});
+
+export default connect(mapStateToProps, {})(SidePanel);

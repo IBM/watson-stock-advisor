@@ -225,6 +225,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     } else {
       $event.currentTarget.className += ' ' + BG_INFO_CLASSNAME;
       $scope.currentCompany = stock.company;
+      console.log(stock.closing_price_history);
       newLineChartData = getLineChartData(stock.history, stock.closing_price_history);
       newPieChartData = getPieChartData(stock.history);
       stocks = [stock];
@@ -471,6 +472,8 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
       $scope.superStockHistory.push.apply($scope.superStockHistory, stocks[i].history);
       $scope.superStockPriceHistory.push(stocks[i].closing_price_history);
     }
+
+    console.log($scope.superStockPriceHistory);
   }
 
   function updateVisualizations(newLineChartData, newPieChartData) {
@@ -772,7 +775,7 @@ angular.module('MainModule', []).controller('MainController',['$scope', 'StockSe
     return color;
   }
 
-  function makeNewChart(labels,data,price,company){
+  function makeNewChart(labels, data, price, company){
     var ctx = document.getElementById(TREND_CHART_ID);
     $scope.myLineChart = new Chart(ctx, {
       type: 'line',

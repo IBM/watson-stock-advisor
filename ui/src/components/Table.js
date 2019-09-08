@@ -154,6 +154,14 @@ const Table = ({
         closeDialog();
         onDeleteItem(selectedItem);
     };
+
+    const onItemClick = (id) => () => {
+        if (id !== selectedItemId) {
+            onSelectItem(id);
+            return;
+        }
+        onSelectItem();
+    }
     
     return (<Container>
         <div className="heading">
@@ -194,7 +202,7 @@ const Table = ({
                                     original,
                                 }) => (<div
                                     className="clickable_cell"
-                                    onClick={() => { onSelectItem(original.id) }}
+                                    onClick={onItemClick(original.id)}
                                 >{value}</div>)
                             },
                             {
@@ -205,7 +213,7 @@ const Table = ({
                                     original,
                                 }) => (<div
                                     className="clickable_cell"
-                                    onClick={() => { onSelectItem(original.id) }}
+                                    onClick={onItemClick(original.id)}
                                 ><span className={`sentiment_label ${value}`}>
                                     {value}
                                 </span></div>),

@@ -1,8 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import { connect } from 'react-redux';
 
 import { colors } from '../constants/style';
+
+import {
+    getLastDate,
+    getPriceHistory,
+    getLastPriceHistory,
+} from '../selectors/portfolio';
 
 const Container = styled.summary`
     position: absolute;
@@ -76,4 +83,21 @@ Summary.defaultProps = {
     currencySign: '$',
 };
 
-export default Summary;
+
+const mapStateToProps = (state) => {
+    const {
+        Open,
+        High,
+        Low,
+        Close,
+    } = getLastPriceHistory(state);
+    return {
+        date: getLastDate(state),
+        openPrice: Open,
+        closePrice: Close,
+        highPrice: High,
+        lowPrice: Low,
+    };
+};
+
+export default connect(mapStateToProps, {})(Summary);

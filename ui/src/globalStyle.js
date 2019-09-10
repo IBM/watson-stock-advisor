@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { isMobile } from 'react-device-detect';
 
 import { colors } from './constants/style';
 
@@ -9,7 +10,7 @@ const GlobalStyle = createGlobalStyle`
 
   html, body, #root {
     width: 100%;
-    height: 100%;
+    ${isMobile ? '' : 'height: 100%;'}
     font-family: 'Asap', sans-serif !important;
   }
 

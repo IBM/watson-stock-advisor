@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { isMobile } from 'react-device-detect';
 
 import { colors } from '../constants/style';
 import { getSelectedCompanyName } from '../selectors/portfolio';
@@ -10,18 +11,26 @@ import Summary from './Summary';
 import NewsItem from './NewsItem';
 
 const Container = styled.aside`
-    max-width: 500px;
-    width: 25%;
-    height: calc(100% - 1px);
+    ${isMobile ? `
+        width: 100%;
+    ` : `
+        max-width: 500px;
+        width: 25%;
+        height: calc(100% - 1px);
+        position: relative;
+        margin-top: 1px;
+    `}
     background-color: ${colors.white};
-    position: relative;
-    margin-top: 1px;
     display: flex;
     flex-direction: column;
 
     .news_list {
+        ${isMobile ? `
+            margin-top: 20px;
+        ` : `
+            margin-top: 140px;
+        `}
         position: relative;
-        margin-top: 140px;
         flex: 1;
         overflow-y: hidden;
         display: flex;
@@ -53,15 +62,15 @@ const SidePanel = ({
     newsList,
 }) => (
     <Container>
-        <Summary />
+        {!isMobile && <Summary />}
         <div className="news_list" >
             <div className="heading">
                 <h2>Recent news</h2>
                     <div>for {selectedItemName}</div>
             </div>
             <div className="news">
-                {newsList.map(item => <NewsItem
-                    key={`news_${item.id}`}
+                {newsList.map((item, i) => <NewsItem
+                    key={`news_${i}`}
                     {...item}
                 />)}
             </div>

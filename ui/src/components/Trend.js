@@ -12,6 +12,7 @@ import {
     Tooltip,
 } from 'recharts';
 import { connect } from 'react-redux';
+import { isMobile } from 'react-device-detect';
 
 import { colors } from '../constants/style';
 import {
@@ -46,6 +47,10 @@ const Container = styled.div`
         background-color: ${colors.white};
         flex: 1;
         padding: 20px;
+        ${isMobile ? `
+            overflow-x: auto;
+            width: 100%;
+        ` : ''}
     }
 
     .date {
@@ -120,48 +125,56 @@ const Trend = ({
     selectedItemName,
     data,
     updatedDate,
-}) => (<Container>
-    <div className="heading">
-        <h2>Trend Over Time</h2>
-        <div>for {selectedItemName}</div>
-    </div>
-    <div className="chart_container">
-        <ReactResizeDetector handleWidth handleHeight>
-            {({ width, height }) => {
-                if (!width || !height) {
-                    return <div></div>;
-                }
-                return <LineChart
-                    width={width}
-                    height={height}
-                    data={data}
-                    margin={{
-                        top: 10,
-                        right: 10,
-                        left: 10,
-                        bottom: 10,
-                    }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                        dataKey="date"
-                        tick={<CustomizedAxisTick />}
-                        height={80}
-                    />
-                    <YAxis />
-                    <Tooltip />
-                    <Line
-                        type="monotone"
-                        dataKey="price"
-                        stroke={ colors.textYellow }
-                        dot={<CustomizedDot />}
-                    />
-                </LineChart>;
+}) => {
+
+    const renderChart = ({ width, height }) => {
+        if (!width || !height) {
+            return <div></div>;
+        }
+        return <LineChart
+            width={width}
+            height={height}
+            data={data}
+            margin={{
+                top: 10,
+                right: 10,
+                left: 10,
+                bottom: 10,
             }}
-        </ReactResizeDetector>
-    </div>
-    <div className="date">Updated: {moment(updatedDate).format('LLLL')}</div>
-</Container>);
+        >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+                dataKey="date"
+                tick={<CustomizedAxisTick />}
+                height={80}
+            />
+            <YAxis />
+            <Tooltip />
+            <Line
+                type="monotone"
+                dataKey="price"
+                stroke={colors.textYellow}
+                dot={<CustomizedDot />}
+            />
+        </LineChart>;
+    };
+
+    return <Container>
+        <div className="heading">
+            <h2>Trend Over Time</h2>
+            <div>for {selectedItemName}</div>
+        </div>
+        <div className="chart_container">
+            <ReactResizeDetector handleWidth handleHeight>
+                {({ width, height }) => renderChart({
+                    width: isMobile ? 700 : width,
+                    height: isMobile ? 300 : height,
+                })}
+            </ReactResizeDetector>
+        </div>
+        <div className="date">Updated: {moment(updatedDate).format('LLLL')}</div>
+    </Container>;
+};
 
 Trend.defaultProps = {
     selectedItemName: 'Your portfolio',

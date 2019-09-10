@@ -8,6 +8,7 @@ import {
 import ReactResizeDetector from 'react-resize-detector';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import { isMobile } from 'react-device-detect';
 
 import { colors } from '../constants/style';
 import {
@@ -23,7 +24,8 @@ const colorMap = {
 
 const Container = styled.div`
     position: relative;
-    margin-left: 40px;
+    margin-left: ${isMobile ? 0 : 40}px;
+    ${isMobile ? 'height: 200px;' : ''}
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -118,6 +120,32 @@ const SentimentPie = ({
         fill: colorMap[item.name],
     }));
 
+    const renderChart = ({ width, height }) => {
+        if (!width || !height) {
+            return <div></div>;
+        }
+        return (<div>
+            <PieChart
+                width={width}
+                height={height}
+            >
+                <Pie
+                    labels={coloredData.map(({ name }) => name)}
+                    activeIndex={activeIndex}
+                    activeShape={renderActiveShape}
+                    data={coloredData}
+                    cx={width / 2}
+                    cy={height / 2 - 10}
+                    innerRadius={Math.min(width, height) / 4 - 10}
+                    outerRadius={Math.min(width, height) / 4 + 10}
+                    fill="#8884d8"
+                    dataKey="value"
+                    onMouseEnter={onPieEnter}
+                />
+            </PieChart>
+        </div>)
+    };
+
     return <Container>
         <div className="heading">
             <h2>Sentiment Breakdown</h2>
@@ -125,31 +153,10 @@ const SentimentPie = ({
         </div>
         <div className="chart_container">
             <ReactResizeDetector handleWidth handleHeight>
-                {({ width, height }) => {
-                    if (!width || !height) {
-                        return <div></div>;
-                    }
-                    return (<div>
-                        <PieChart
-                            width={width}
-                            height={height}
-                        >
-                            <Pie
-                                labels={coloredData.map(({ name }) => name)}
-                                activeIndex={activeIndex}
-                                activeShape={renderActiveShape}
-                                data={coloredData}
-                                cx={width/2}
-                                cy={height/2 - 10}
-                                innerRadius={Math.min(width, height) / 4 - 10}
-                                outerRadius={Math.min(width, height) / 4 + 10}
-                                fill="#8884d8"
-                                dataKey="value"
-                                onMouseEnter={onPieEnter}
-                            />
-                        </PieChart>
-                    </div>);
-                }}
+                {({ width, height }) => renderChart({
+                    width,
+                    height: isMobile ? 200 : height,
+                })}
             </ReactResizeDetector>
         </div>
         <div className="date">Updated: {moment(updatedDate).format('LLLL')}</div>

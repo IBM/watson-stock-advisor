@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import {
     UncontrolledDropdown,
@@ -9,6 +10,7 @@ import {
     Button,
 } from 'reactstrap';
 import { connect } from 'react-redux';
+import { isMobile } from 'react-device-detect';
 
 import { addCompany } from '../actions/portfolio';
 import { getCompanyList } from '../datasources/api';
@@ -17,12 +19,22 @@ import { colors } from '../constants/style';
 
 const Container = styled.div`
     display: flex;
+    flex-direction: ${isMobile ? 'column' : 'row'};
+
+    > button {
+        width: 100px;
+        align-self: ${isMobile ? 'flex-end' : 'start'}
+    }
 `;
 
 const StyledDropdown = styled(UncontrolledDropdown)`
     margin-right: 10px;
     
     .dropdown-toggle {
+        width: 100%;
+        ${isMobile ? `overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;` : ''}
         padding: 6px 0px;
         color: ${colors.textGrey};
         background: transparent;
@@ -39,8 +51,6 @@ const StyledDropdown = styled(UncontrolledDropdown)`
     }
 
     .dropdown-menu {
-        
-        
         .dropdown-item {
             text-transform: uppercase;
             font-size: 14px;
@@ -79,7 +89,7 @@ const Dropdown = ({
     const [filter, setFilter] = useState('');
     const [selectedItemTicker, setSelectedItemTicker] = useState();
     const [list, setList] = useState([]);
-
+    
     useEffect(() => {
         const fetchData = async () => {
             const result = await getCompanyList();
@@ -101,12 +111,14 @@ const Dropdown = ({
         onAdd(selectedItem);
     };
 
+    const appRoot = document.getElementById('root');
+
     return (<Container>
         <StyledDropdown>
             <DropdownToggle caret>
                 {selectedItem.name}
             </DropdownToggle>
-            <DropdownMenu>
+            {ReactDOM.createPortal(<DropdownMenu>
                 <Input
                     placeholder="filter companies"
                     onChange={e => setFilter(e.target.value)}
@@ -117,7 +129,7 @@ const Dropdown = ({
                         onClick={selectItem(item.ticker)}
                     >{item.name}</DropdownItem>
                 ))}
-            </DropdownMenu>
+            </DropdownMenu>, appRoot)}
         </StyledDropdown>
         <Button
             color="info"

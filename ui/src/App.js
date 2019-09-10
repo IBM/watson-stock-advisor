@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { isMobile } from 'react-device-detect';
 
 import GlobalStyle from './globalStyle';
 import { colors } from './constants/style';
@@ -21,8 +22,9 @@ const Container = styled.div`
 
   main {
     flex: 1;
+    flex-direction: ${isMobile ? 'column' : 'row'};
     width: 100%;
-    height: calc(100% - 50px);
+    ${isMobile ? '' : 'height: calc(100% - 50px);'}
     display: flex;
   }
 `;
@@ -38,7 +40,7 @@ class App extends Component {
         <GlobalStyle />
         <Header />
         <main>
-          <Nav />
+          {!isMobile && <Nav />}
           <Dashboard />
           <SidePanel />
         </main>

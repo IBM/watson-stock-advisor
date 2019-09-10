@@ -1,26 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
+import { isMobile } from 'react-device-detect';
 
 import Dropdown from './Dropdown';
 import Table from './Table';
 import SentimentPie from './SentimentPie';
 import Trend from './Trend';
+import Summary from './Summary';
 
 const Container = styled.section`
     flex: 1;
-    height: 100%;
+    ${isMobile ? '' : 'height: 100%;'};
     display: flex;
     flex-direction: column;
-    padding: 40px;
+    padding: ${isMobile ? 10 : 40}px;
     aling-items: stretch;
 
     .top {
         display: flex;
+        flex-direction: ${isMobile ? 'column' : 'row'};
 
         h1 {
-            margin-top: -5px;
+            ${isMobile ? 'margin-top: 0;' : 'margin-top: -5px;'}
             margin-right: 20px;
             font-weight: 600;
+            ${isMobile ? 'font-size: 30px;' : ''}
         }
     }
 
@@ -30,10 +34,11 @@ const Container = styled.section`
         overflow-y: auto;
 
         .portfolio {
-            min-height: 300px;
+            ${isMobile ? '' : 'min-height: 300px;'}
             flex: 1;
+            flex-direction: ${isMobile ? 'column' : 'row'};
             display: flex;
-            margin-top: 40px;
+            margin-top: ${isMobile ? 10 : 40}px;
 
             > div {
                 flex: 1;
@@ -43,6 +48,7 @@ const Container = styled.section`
                 }
 
                 &.pie {
+                    margin-top: ${isMobile ? '20px' : '0'};
                 }
             }
         }
@@ -51,7 +57,7 @@ const Container = styled.section`
             min-height: 300px;
             flex: 1;
             display: flex;
-            margin-top: 60px;
+            margin-top: ${isMobile ? 20 : 60}px;
         }
     }
 `;
@@ -60,6 +66,7 @@ const Dashboard = () => (
     <Container>
         <div className="top">
             <h1>Overview</h1>
+            {isMobile && <Summary />}
             <div className="shares_list">
                 <Dropdown />
             </div>

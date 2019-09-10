@@ -14,6 +14,7 @@ import {
 } from 'reactstrap';
 import ReactResizeDetector from 'react-resize-detector';
 import { connect } from 'react-redux';
+import { isMobile } from 'react-device-detect';
 
 import { colors } from '../constants/style';
 import {
@@ -162,67 +163,72 @@ const Table = ({
         }
         onSelectItem();
     }
+
+    const renderTable = ({ height } = {}) => {
+        return <ReactTable
+            showPagination={false}
+            resizable={false}
+            data={list}
+            pageSize={list.length}
+            getTrProps={(state, { original }) => ({
+                className: original.id === selectedItemId ? 'selected' : '',
+            })}
+            style={height ? {
+                height: `${height}px`,
+            } : {
+                maxHeight: '300px',
+            }}
+            columns={[
+                {
+                    accessor: 'id',
+                    Cell: props => <TrashCell><FontAwesomeIcon
+                        icon={faTrashAlt}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onSelectItem(props.value);
+                            setIsDialogOpen(true);
+                        }}
+                    /></TrashCell>,
+                    width: 30,
+                },
+                {
+                    Header: 'Company',
+                    accessor: 'title',
+                    Cell: ({
+                        value,
+                        original,
+                    }) => (<div
+                        className="clickable_cell"
+                        onClick={onItemClick(original.id)}
+                    >{value}</div>)
+                },
+                {
+                    Header: 'Sentiment',
+                    accessor: 'sentiment',
+                    Cell: ({
+                        value,
+                        original,
+                    }) => (<div
+                        className="clickable_cell"
+                        onClick={onItemClick(original.id)}
+                    ><span className={`sentiment_label ${value}`}>
+                            {value}
+                        </span></div>),
+                    width: 105,
+                },
+            ]}
+        />
+    }
     
     return (<Container>
         <div className="heading">
             <h2>Your portfolio</h2>
         </div>
         <div className="table_container">
+            {isMobile ? renderTable() :
             <ReactResizeDetector handleHeight>
-                {({height}) => (
-                    <ReactTable
-                        showPagination={false}
-                        resizable={false}
-                        data={list}
-                        pageSize={list.length}
-                        getTrProps={(state, { original }) => ({
-                            className: original.id === selectedItemId ? 'selected' : '',
-                        })}
-                        style={{
-                            height: `${height}px`,
-                        }}
-                        columns={[
-                            {
-                                accessor: 'id',
-                                Cell: props => <TrashCell><FontAwesomeIcon
-                                    icon={faTrashAlt}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onSelectItem(props.value);
-                                        setIsDialogOpen(true);
-                                    }}
-                                /></TrashCell>,
-                                width: 30,
-                            },
-                            {
-                                Header: 'Company',
-                                accessor: 'title',
-                                Cell: ({
-                                    value,
-                                    original,
-                                }) => (<div
-                                    className="clickable_cell"
-                                    onClick={onItemClick(original.id)}
-                                >{value}</div>)
-                            },
-                            {
-                                Header: 'Sentiment',
-                                accessor: 'sentiment',
-                                Cell: ({
-                                    value,
-                                    original,
-                                }) => (<div
-                                    className="clickable_cell"
-                                    onClick={onItemClick(original.id)}
-                                ><span className={`sentiment_label ${value}`}>
-                                    {value}
-                                </span></div>),
-                                width: 105,
-                            },
-                        ]}
-                    />
-                )}
-            </ReactResizeDetector>
+                {renderTable}
+            </ReactResizeDetector>}
         </div>
         <Modal
             isOpen={isDialogOpen}

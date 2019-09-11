@@ -22,7 +22,7 @@ const config = require('./config');
 
 const port = config.APP.port; // set our port
 
-const publicRoot = __dirname + '/public/';
+const publicRoot = __dirname + '/ui/build/';
 
 // parse application/json
 app.use(bodyParser.json());

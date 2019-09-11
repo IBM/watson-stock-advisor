@@ -12,7 +12,7 @@ const portfolio = state => state.portfolio;
 
 export const portfolioList = createSelector(
     portfolio,
-    items => items.portfolioList,
+    items => items.portfolioList.filter(({ isLoading }) => !isLoading),
 );
 
 export const portfolioTable = createSelector(

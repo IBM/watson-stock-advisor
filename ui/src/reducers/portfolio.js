@@ -39,7 +39,7 @@ const portfolio = (state = getInitialState(), {type, payload, meta}) => {
 
           return {
             ...item,
-            data: payload.data,
+            ...payload.data,
             isLoading: false,
           }
         }),

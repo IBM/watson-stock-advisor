@@ -51,6 +51,14 @@ const StyledDropdown = styled(UncontrolledDropdown)`
     }
 
     .dropdown-menu {
+        ${isMobile ? `
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            max-height: none !important;
+        ` : ''}
         .dropdown-item {
             text-transform: uppercase;
             font-size: 14px;
@@ -83,7 +91,6 @@ const StyledDropdown = styled(UncontrolledDropdown)`
 `;
 
 const Dropdown = ({
-    onSelectItem,
     onAdd,
 }) => {
     const [filter, setFilter] = useState('');
@@ -104,7 +111,6 @@ const Dropdown = ({
     const selectItem = (ticker) => (e) => {
         e.stopPropagation();
         setSelectedItemTicker(ticker);
-        onSelectItem(ticker);
     };
 
     const addClick = () => {
@@ -113,23 +119,25 @@ const Dropdown = ({
 
     const appRoot = document.getElementById('root');
 
+    const menu = (<DropdownMenu>
+        <Input
+            placeholder="filter companies"
+            onChange={e => setFilter(e.target.value)}
+        />
+        {list.filter(({ name }) => name.toLowerCase().includes(filter)).map(item => (
+            <DropdownItem
+                key={`dropdownitem_${item.ticker}`}
+                onClick={() => { setSelectedItemTicker(item.ticker); }}
+            >{item.name}</DropdownItem>
+        ))}
+    </DropdownMenu>);
+
     return (<Container>
         <StyledDropdown>
             <DropdownToggle caret>
                 {selectedItem.name}
             </DropdownToggle>
-            {ReactDOM.createPortal(<DropdownMenu>
-                <Input
-                    placeholder="filter companies"
-                    onChange={e => setFilter(e.target.value)}
-                />
-                {list.filter(({ name }) => name.toLowerCase().includes(filter)).map(item => (
-                    <DropdownItem
-                        key={`dropdownitem_${item.ticker}`}
-                        onClick={selectItem(item.ticker)}
-                    >{item.name}</DropdownItem>
-                ))}
-            </DropdownMenu>, appRoot)}
+            {menu}
         </StyledDropdown>
         <Button
             color="info"
@@ -139,7 +147,6 @@ const Dropdown = ({
 }
 
 Dropdown.defaultProps = {
-    onSelectItem: () => {},
     onAdd: () => { },
 }
 

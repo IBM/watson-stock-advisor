@@ -3,7 +3,6 @@ node_js:
  - "node"
 
 script:
- - npm run lint
  - cd ui/
  - npm run build
  - cd ../

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 import {
     UncontrolledDropdown,
@@ -108,16 +107,9 @@ const Dropdown = ({
 
     const selectedItem = list.find(({ ticker }) => ticker === selectedItemTicker) || {};
 
-    const selectItem = (ticker) => (e) => {
-        e.stopPropagation();
-        setSelectedItemTicker(ticker);
-    };
-
     const addClick = () => {
         onAdd(selectedItem);
     };
-
-    const appRoot = document.getElementById('root');
 
     const menu = (<DropdownMenu>
         <Input

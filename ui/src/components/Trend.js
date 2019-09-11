@@ -68,7 +68,6 @@ const CustomizedDot = (props) => {
     } = props;
 
     const {
-        sentiment,
         value
     } = payload;
 

@@ -8,7 +8,6 @@ import { colors } from '../constants/style';
 
 import {
     getLastDate,
-    getPriceHistory,
     getLastPriceHistory,
 } from '../selectors/portfolio';
 

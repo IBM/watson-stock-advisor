@@ -56,7 +56,7 @@ const getMatchingDatePair = (date, priceList) => {
     const numPairs = priceList.length;
     for (var i = 0; i < numPairs; i++) {
         var thisPair = priceList[i];
-        if (thisPair.date == date) {
+        if (thisPair.date === date) {
             return thisPair;
         }
         var thisDate = avDateStringToDate(thisPair.date);

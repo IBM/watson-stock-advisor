@@ -16,6 +16,8 @@ import {
     getPortfolio,
 } from '../datasources/api';
 
+export const selectShare = createAction(SELECT_SHARE);
+
 const addCompanyIntent = createAction(ADD_COMPANY_INTENT, item => item);
 const addCompanySuccess = createAction(ADD_COMPANY_SUCCESS, (item, data) => ({
     item,
@@ -53,8 +55,6 @@ export const initAction = () => async (dispatch, getState) => {
         alert(`Can't load you portfolio due to service error`);
     }
 };
-
-export const selectShare = createAction(SELECT_SHARE);
 
 const deleteCompanyIntent = createAction(DELETE_COMPANY_INTENT, item => item);
 const deleteCompanySuccess = createAction(DELETE_COMPANY_SUCCESS, item => item);

@@ -60,7 +60,9 @@ Use the ``Deploy to IBM Cloud`` button **OR** create the services and run locall
 1. Press the above ``Deploy to IBM Cloud`` button and then click on ``Deploy``.
 
 <!--optional step-->
-2. In Toolchains, click on ``Delivery Pipeline`` to watch while the app is deployed. Once deployed, the app can be viewed by clicking ``View app``.
+2. In Toolchains, click on ``Delivery Pipeline`` to watch while the app is deployed. (Note, if you get an 
+error on the first time you deploy such as `Server error, status code: 409, error code: 60016, message: An operation for service instance wsa-discovery is in progress.`, just click on the re-deploy button again, and it should work).
+ Once deployed, the app can be viewed by clicking ``View app``.
 
 <p align="center">
   <img width="80%" height="80%" src="doc/source/images/toolchain-pipeline.png">

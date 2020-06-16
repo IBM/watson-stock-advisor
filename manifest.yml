@@ -4,8 +4,8 @@ declared-services:
     label: discovery
     plan: lite
   wsa-cloudant:
-    label: cloudantNoSQLDB
-    plan: Lite
+    label: cloudantnosqldb
+    plan: lite
 applications:
 - path: .
   name: watsonstockadvisor

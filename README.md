@@ -2,6 +2,10 @@
 
 *Read this in other languages: [日本語](README-ja.md).*
 
+# WARNING: This repository is no longer maintained :warning:
+
+> This repository will not be updated. The repository will be kept available in read-only mode. 
+
 # Watson Stock Advisor
 
 In this Code Pattern, we will create a web app for monitoring sentiment, price, and news for individual listed stocks, using IBM Watson Discovery and CloudantDB as well as Nodejs and Alpha Vantage.
